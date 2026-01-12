@@ -14,7 +14,7 @@ from emails.email_service.utils import (
 )
 
 
-def send_sales_order_email(sales_order_name, to_email=None, cc=None, bcc=None, custom_message=None):
+def send_sales_order_email(sales_order_name, to_email=None, cc=None, bcc=None, custom_message=None, skip_communication=False):
     """Send Sales Order confirmation email via Resend."""
     settings = get_email_settings()
 
@@ -96,15 +96,16 @@ def send_sales_order_email(sales_order_name, to_email=None, cc=None, bcc=None, c
             ]
         )
 
-        create_communication_log(
-            doctype="Sales Order",
-            docname=sales_order_name,
-            recipient=to_email,
-            subject=template_data["subject"],
-            content=f"Sales Order confirmation email sent via Resend",
-            status="Sent",
-            message_id=result.get("message_id")
-        )
+        if not skip_communication:
+            create_communication_log(
+                doctype="Sales Order",
+                docname=sales_order_name,
+                recipient=to_email,
+                subject=template_data["subject"],
+                content=f"Sales Order confirmation email sent via Resend",
+                status="Sent",
+                message_id=result.get("message_id")
+            )
 
         return {
             "success": True,
@@ -114,15 +115,16 @@ def send_sales_order_email(sales_order_name, to_email=None, cc=None, bcc=None, c
         }
 
     except ResendError as e:
-        create_communication_log(
-            doctype="Sales Order",
-            docname=sales_order_name,
-            recipient=to_email,
-            subject=template_data["subject"],
-            content=f"Sales Order email failed",
-            status="Error",
-            error_msg=str(e)
-        )
+        if not skip_communication:
+            create_communication_log(
+                doctype="Sales Order",
+                docname=sales_order_name,
+                recipient=to_email,
+                subject=template_data["subject"],
+                content=f"Sales Order email failed",
+                status="Error",
+                error_msg=str(e)
+            )
 
         if settings.fallback_to_erpnext:
             return _send_fallback_email(sales_order, to_email, template_data, attachments)

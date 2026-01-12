@@ -14,7 +14,7 @@ from emails.email_service.utils import (
 )
 
 
-def send_quotation_email(quotation_name, to_email=None, cc=None, bcc=None, custom_message=None):
+def send_quotation_email(quotation_name, to_email=None, cc=None, bcc=None, custom_message=None, skip_communication=False):
     """Send Quotation email via Resend."""
     settings = get_email_settings()
 
@@ -98,15 +98,16 @@ def send_quotation_email(quotation_name, to_email=None, cc=None, bcc=None, custo
             ]
         )
 
-        create_communication_log(
-            doctype="Quotation",
-            docname=quotation_name,
-            recipient=to_email,
-            subject=template_data["subject"],
-            content=f"Quotation email sent via Resend",
-            status="Sent",
-            message_id=result.get("message_id")
-        )
+        if not skip_communication:
+            create_communication_log(
+                doctype="Quotation",
+                docname=quotation_name,
+                recipient=to_email,
+                subject=template_data["subject"],
+                content=f"Quotation email sent via Resend",
+                status="Sent",
+                message_id=result.get("message_id")
+            )
 
         return {
             "success": True,
@@ -116,15 +117,16 @@ def send_quotation_email(quotation_name, to_email=None, cc=None, bcc=None, custo
         }
 
     except ResendError as e:
-        create_communication_log(
-            doctype="Quotation",
-            docname=quotation_name,
-            recipient=to_email,
-            subject=template_data["subject"],
-            content=f"Quotation email failed",
-            status="Error",
-            error_msg=str(e)
-        )
+        if not skip_communication:
+            create_communication_log(
+                doctype="Quotation",
+                docname=quotation_name,
+                recipient=to_email,
+                subject=template_data["subject"],
+                content=f"Quotation email failed",
+                status="Error",
+                error_msg=str(e)
+            )
 
         if settings.fallback_to_erpnext:
             return _send_fallback_email(quotation, to_email, template_data, attachments)

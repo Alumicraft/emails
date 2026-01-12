@@ -18,6 +18,13 @@ DOCTYPE_EMAIL_HANDLERS = {
 
 def before_communication_insert(doc, method):
     """Hook called before Communication document is inserted."""
+    # Prevent recursion - skip if already being handled
+    if getattr(doc.flags, "resend_handled", False):
+        return
+
+    if getattr(doc.flags, "from_resend", False):
+        return
+
     if doc.communication_medium != "Email":
         return
 
@@ -46,12 +53,14 @@ def before_communication_insert(doc, method):
 
         handler = frappe.get_attr(handler_path)
 
+        # Pass skip_communication=True to prevent creating duplicate communication
         result = handler(
             doc.reference_name,
             to_email=to_email,
             cc=cc,
             bcc=bcc,
-            custom_message=doc.content
+            custom_message=doc.content,
+            skip_communication=True
         )
 
         if result.get("success"):
