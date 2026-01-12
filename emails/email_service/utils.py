@@ -276,9 +276,13 @@ def should_use_resend(doctype):
         if not settings.enabled:
             return False
 
-        template_id = settings.get_template_id(doctype)
+        # Check if API key is configured
+        if not settings.get_password("resend_api_key"):
+            return False
 
-        return bool(template_id)
+        # Check if this is a supported doctype
+        supported_doctypes = ["Sales Invoice", "Quotation", "Sales Order"]
+        return doctype in supported_doctypes
 
     except Exception:
         return False

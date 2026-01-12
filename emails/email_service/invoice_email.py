@@ -31,9 +31,7 @@ def send_invoice_email(invoice_name, to_email=None, cc=None, bcc=None, custom_me
 
     company_info = get_company_info(invoice.company)
 
-    template_id = settings.invoice_template_id
-    if not template_id:
-        frappe.throw("Invoice template ID not configured in Email Service Settings")
+    template_id = settings.invoice_template_id or ""
 
     template_data = {
         "document_type": "Invoice",

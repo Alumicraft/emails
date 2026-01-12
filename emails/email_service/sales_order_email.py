@@ -31,9 +31,7 @@ def send_sales_order_email(sales_order_name, to_email=None, cc=None, bcc=None, c
 
     company_info = get_company_info(sales_order.company)
 
-    template_id = settings.sales_order_template_id
-    if not template_id:
-        frappe.throw("Sales Order template ID not configured in Email Service Settings")
+    template_id = settings.sales_order_template_id or ""
 
     template_data = {
         "document_type": "Sales Order",

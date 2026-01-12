@@ -34,9 +34,7 @@ def send_quotation_email(quotation_name, to_email=None, cc=None, bcc=None, custo
 
     company_info = get_company_info(quotation.company)
 
-    template_id = settings.quotation_template_id
-    if not template_id:
-        frappe.throw("Quotation template ID not configured in Email Service Settings")
+    template_id = settings.quotation_template_id or ""
 
     valid_until = ""
     if quotation.valid_till:
