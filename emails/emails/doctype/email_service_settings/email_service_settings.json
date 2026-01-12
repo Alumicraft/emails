@@ -1,0 +1,182 @@
+{
+    "actions": [],
+    "creation": "2024-01-01 00:00:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "general_section",
+        "enabled",
+        "column_break_1",
+        "log_all_attempts",
+        "resend_section",
+        "resend_api_key",
+        "column_break_2",
+        "default_sender_email",
+        "default_sender_name",
+        "templates_section",
+        "invoice_template_id",
+        "quotation_template_id",
+        "column_break_3",
+        "sales_order_template_id",
+        "delivery_note_template_id",
+        "column_break_4",
+        "receipt_template_id",
+        "purchase_order_template_id",
+        "error_section",
+        "fallback_to_erpnext",
+        "column_break_5",
+        "max_retry_attempts"
+    ],
+    "fields": [
+        {
+            "fieldname": "general_section",
+            "fieldtype": "Section Break",
+            "label": "General Settings"
+        },
+        {
+            "default": "0",
+            "fieldname": "enabled",
+            "fieldtype": "Check",
+            "label": "Enabled",
+            "description": "Enable Resend email service"
+        },
+        {
+            "fieldname": "column_break_1",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "1",
+            "fieldname": "log_all_attempts",
+            "fieldtype": "Check",
+            "label": "Log All Attempts",
+            "description": "Log both successful and failed email sends"
+        },
+        {
+            "fieldname": "resend_section",
+            "fieldtype": "Section Break",
+            "label": "Resend Configuration"
+        },
+        {
+            "fieldname": "resend_api_key",
+            "fieldtype": "Password",
+            "label": "Resend API Key",
+            "description": "Your Resend API key (starts with re_)",
+            "reqd": 1
+        },
+        {
+            "fieldname": "column_break_2",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "default_sender_email",
+            "fieldtype": "Data",
+            "label": "Default Sender Email",
+            "options": "Email",
+            "description": "e.g. no-reply@yourdomain.com",
+            "reqd": 1
+        },
+        {
+            "fieldname": "default_sender_name",
+            "fieldtype": "Data",
+            "label": "Default Sender Name",
+            "description": "Display name for sender (e.g. Your Company)"
+        },
+        {
+            "fieldname": "templates_section",
+            "fieldtype": "Section Break",
+            "label": "Template IDs",
+            "collapsible": 1
+        },
+        {
+            "fieldname": "invoice_template_id",
+            "fieldtype": "Data",
+            "label": "Invoice Template ID",
+            "description": "Resend template ID for Sales Invoice"
+        },
+        {
+            "fieldname": "quotation_template_id",
+            "fieldtype": "Data",
+            "label": "Quotation Template ID",
+            "description": "Resend template ID for Quotation"
+        },
+        {
+            "fieldname": "column_break_3",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "sales_order_template_id",
+            "fieldtype": "Data",
+            "label": "Sales Order Template ID",
+            "description": "Resend template ID for Sales Order"
+        },
+        {
+            "fieldname": "delivery_note_template_id",
+            "fieldtype": "Data",
+            "label": "Delivery Note Template ID",
+            "description": "Resend template ID for Delivery Note"
+        },
+        {
+            "fieldname": "column_break_4",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "receipt_template_id",
+            "fieldtype": "Data",
+            "label": "Receipt Template ID",
+            "description": "Resend template ID for Payment Entry/Receipt"
+        },
+        {
+            "fieldname": "purchase_order_template_id",
+            "fieldtype": "Data",
+            "label": "Purchase Order Template ID",
+            "description": "Resend template ID for Purchase Order"
+        },
+        {
+            "fieldname": "error_section",
+            "fieldtype": "Section Break",
+            "label": "Error Handling",
+            "collapsible": 1
+        },
+        {
+            "default": "1",
+            "fieldname": "fallback_to_erpnext",
+            "fieldtype": "Check",
+            "label": "Fallback to ERPNext Email",
+            "description": "Use ERPNext's default email if Resend fails"
+        },
+        {
+            "fieldname": "column_break_5",
+            "fieldtype": "Column Break"
+        },
+        {
+            "default": "3",
+            "fieldname": "max_retry_attempts",
+            "fieldtype": "Int",
+            "label": "Max Retry Attempts",
+            "description": "Number of times to retry failed sends"
+        }
+    ],
+    "index_web_pages_for_search": 1,
+    "issingle": 1,
+    "links": [],
+    "modified": "2024-01-01 00:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "Emails",
+    "name": "Email Service Settings",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "print": 1,
+            "read": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 1
+}
