@@ -75,42 +75,31 @@ def make_communication_email(
                 )
 
                 if result.get("success"):
-                    # Call original make with send_email=False to create Communication only
-                    comm = frappe_email.make(
-                        doctype=doctype,
-                        name=name,
-                        content=content,
-                        subject=subject,
-                        sent_or_received=sent_or_received,
-                        sender=sender,
-                        sender_full_name=sender_full_name,
-                        recipients=recipients,
-                        communication_medium=communication_medium,
-                        send_email=False,  # Don't let ERPNext send email
-                        print_html=print_html,
-                        print_format=print_format,
-                        attachments=attachments,
-                        send_me_a_copy=False,  # We handle this via Resend
-                        cc=cc,
-                        bcc=bcc,
-                        read_receipt=read_receipt,
-                        print_letterhead=print_letterhead,
-                        email_template=email_template,
-                        communication_type=communication_type,
-                    )
+                    # Create Communication directly - bypass frappe_email.make entirely
+                    # to avoid email account validation
+                    settings = get_email_settings()
 
-                    # Update the Communication with Resend message ID
-                    if comm and result.get("message_id"):
-                        frappe.db.set_value(
-                            "Communication",
-                            comm.name,
-                            {
-                                "message_id": result.get("message_id"),
-                                "email_status": "Open",
-                                "delivery_status": "Sent"
-                            },
-                            update_modified=False
-                        )
+                    comm = frappe.get_doc({
+                        "doctype": "Communication",
+                        "communication_type": communication_type or "Communication",
+                        "communication_medium": "Email",
+                        "sent_or_received": "Sent",
+                        "subject": subject or f"Email for {doctype} {name}",
+                        "content": content or "",
+                        "sender": sender or settings.default_sender_email,
+                        "sender_full_name": sender_full_name or settings.default_sender_name,
+                        "recipients": recipients,
+                        "cc": cc,
+                        "bcc": bcc,
+                        "reference_doctype": doctype,
+                        "reference_name": name,
+                        "message_id": result.get("message_id"),
+                        "email_status": "Open",
+                        "delivery_status": "Sent",
+                        "status": "Linked",
+                    })
+                    comm.insert(ignore_permissions=True)
+                    frappe.db.commit()
 
                     frappe.msgprint(
                         _("Email sent successfully via Resend"),
@@ -128,17 +117,41 @@ def make_communication_email(
 
                 # Check if we should fallback to ERPNext
                 try:
-                    settings = get_email_settings()
-                    if not settings.fallback_to_erpnext:
+                    settings = frappe.get_single("Email Service Settings")
+                    if settings.fallback_to_erpnext:
+                        frappe.msgprint(
+                            _("Resend failed, falling back to ERPNext email"),
+                            indicator="orange",
+                            alert=True
+                        )
+                        # Fall through to original make below
+                    else:
                         frappe.throw(_("Email sending failed: {0}").format(str(e)))
                 except Exception:
-                    pass
+                    frappe.throw(_("Email sending failed: {0}").format(str(e)))
 
-                # Fall through to original make (will use ERPNext email)
-                frappe.msgprint(
-                    _("Resend failed, falling back to ERPNext email"),
-                    indicator="orange",
-                    alert=True
+                # Only reaches here if fallback is enabled
+                return frappe_email.make(
+                    doctype=doctype,
+                    name=name,
+                    content=content,
+                    subject=subject,
+                    sent_or_received=sent_or_received,
+                    sender=sender,
+                    sender_full_name=sender_full_name,
+                    recipients=recipients,
+                    communication_medium=communication_medium,
+                    send_email=send_email,
+                    print_html=print_html,
+                    print_format=print_format,
+                    attachments=attachments,
+                    send_me_a_copy=send_me_a_copy,
+                    cc=cc,
+                    bcc=bcc,
+                    read_receipt=read_receipt,
+                    print_letterhead=print_letterhead,
+                    email_template=email_template,
+                    communication_type=communication_type,
                 )
 
             except Exception as e:
@@ -146,7 +159,7 @@ def make_communication_email(
                     title="Email Override Error",
                     message=frappe.get_traceback()
                 )
-                # Fall through to original make
+                frappe.throw(_("Email sending failed. Check Error Log for details."))
 
     # For non-Resend cases or fallback, call the original function
     return frappe_email.make(
