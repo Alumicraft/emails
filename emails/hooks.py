@@ -23,3 +23,11 @@ fixtures = [
         "filters": [["module", "=", "Emails"]]
     }
 ]
+
+# Website Route for Resend Webhook
+website_route_rules = [
+    {
+        "from_route": "/api/method/emails.email_service.webhooks.handle_resend_webhook",
+        "to_route": "emails.email_service.webhooks.handle_resend_webhook"
+    }
+]
