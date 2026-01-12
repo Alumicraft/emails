@@ -200,7 +200,7 @@ def create_communication_log(
         "reference_doctype": doctype,
         "reference_name": docname,
         "status": "Linked" if status == "Sent" else "Open",
-        "email_status": status,
+        "email_status": "Open",
     })
 
     if message_id:

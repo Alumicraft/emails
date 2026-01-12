@@ -65,7 +65,7 @@ def before_communication_insert(doc, method):
 
         if result.get("success"):
             doc.message_id = result.get("message_id")
-            doc.email_status = "Sent"
+            doc.email_status = "Open"
             doc.flags.skip_email_sending = True
 
             frappe.msgprint(
