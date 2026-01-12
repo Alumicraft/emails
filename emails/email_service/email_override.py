@@ -1,9 +1,13 @@
 """
 Email Override Module - Intercepts ERPNext email sending for specific doctypes.
+
+This module overrides frappe.core.doctype.communication.email.make to intercept
+email sending BEFORE ERPNext queues its own email, preventing duplicate sends.
 """
 
 import frappe
 from frappe import _
+from frappe.core.doctype.communication import email as frappe_email
 
 from emails.email_service.utils import should_use_resend, get_email_settings
 from emails.email_service.resend_client import ResendError
@@ -16,88 +20,157 @@ DOCTYPE_EMAIL_HANDLERS = {
 }
 
 
-def before_communication_insert(doc, method):
-    """Hook called before Communication document is inserted."""
-    # Prevent recursion - skip if already being handled
-    if getattr(doc.flags, "resend_handled", False):
-        return
+@frappe.whitelist()
+def make_communication_email(
+    doctype=None,
+    name=None,
+    content=None,
+    subject=None,
+    sent_or_received="Sent",
+    sender=None,
+    sender_full_name=None,
+    recipients=None,
+    communication_medium="Email",
+    send_email=False,
+    print_html=None,
+    print_format=None,
+    attachments=None,
+    send_me_a_copy=False,
+    cc=None,
+    bcc=None,
+    read_receipt=None,
+    print_letterhead=True,
+    email_template=None,
+    communication_type=None,
+):
+    """
+    Override for frappe.core.doctype.communication.email.make
 
-    if getattr(doc.flags, "from_resend", False):
-        return
+    Intercepts email sending to route through Resend for supported doctypes,
+    preventing ERPNext from sending duplicate emails.
+    """
+    # Check if this should be handled by Resend
+    if (
+        send_email
+        and sent_or_received == "Sent"
+        and communication_medium == "Email"
+        and doctype
+        and name
+        and should_use_resend(doctype)
+    ):
+        handler_path = DOCTYPE_EMAIL_HANDLERS.get(doctype)
 
-    if doc.communication_medium != "Email":
-        return
+        if handler_path and recipients:
+            try:
+                handler = frappe.get_attr(handler_path)
 
-    if doc.sent_or_received != "Sent":
-        return
+                # Send via Resend
+                result = handler(
+                    name,
+                    to_email=recipients,
+                    cc=cc,
+                    bcc=bcc,
+                    custom_message=content,
+                    skip_communication=True  # We'll create it via the original make
+                )
 
-    if not doc.reference_doctype or not doc.reference_name:
-        return
+                if result.get("success"):
+                    # Call original make with send_email=False to create Communication only
+                    comm = frappe_email.make(
+                        doctype=doctype,
+                        name=name,
+                        content=content,
+                        subject=subject,
+                        sent_or_received=sent_or_received,
+                        sender=sender,
+                        sender_full_name=sender_full_name,
+                        recipients=recipients,
+                        communication_medium=communication_medium,
+                        send_email=False,  # Don't let ERPNext send email
+                        print_html=print_html,
+                        print_format=print_format,
+                        attachments=attachments,
+                        send_me_a_copy=False,  # We handle this via Resend
+                        cc=cc,
+                        bcc=bcc,
+                        read_receipt=read_receipt,
+                        print_letterhead=print_letterhead,
+                        email_template=email_template,
+                        communication_type=communication_type,
+                    )
 
-    if not should_use_resend(doc.reference_doctype):
-        return
+                    # Update the Communication with Resend message ID
+                    if comm and result.get("message_id"):
+                        frappe.db.set_value(
+                            "Communication",
+                            comm.name,
+                            {
+                                "message_id": result.get("message_id"),
+                                "email_status": "Open",
+                                "delivery_status": "Sent"
+                            },
+                            update_modified=False
+                        )
 
-    handler_path = DOCTYPE_EMAIL_HANDLERS.get(doc.reference_doctype)
-    if not handler_path:
-        return
+                    frappe.msgprint(
+                        _("Email sent successfully via Resend"),
+                        indicator="green",
+                        alert=True
+                    )
 
-    try:
-        doc.flags.resend_handled = True
+                    return comm
 
-        to_email = doc.recipients
-        if not to_email:
-            return
+            except ResendError as e:
+                frappe.log_error(
+                    title="Resend Email Failed",
+                    message=f"DocType: {doctype}\nDocument: {name}\nError: {str(e)}"
+                )
 
-        cc = doc.cc if hasattr(doc, "cc") and doc.cc else None
-        bcc = doc.bcc if hasattr(doc, "bcc") and doc.bcc else None
+                # Check if we should fallback to ERPNext
+                try:
+                    settings = get_email_settings()
+                    if not settings.fallback_to_erpnext:
+                        frappe.throw(_("Email sending failed: {0}").format(str(e)))
+                except Exception:
+                    pass
 
-        handler = frappe.get_attr(handler_path)
+                # Fall through to original make (will use ERPNext email)
+                frappe.msgprint(
+                    _("Resend failed, falling back to ERPNext email"),
+                    indicator="orange",
+                    alert=True
+                )
 
-        # Pass skip_communication=True to prevent creating duplicate communication
-        result = handler(
-            doc.reference_name,
-            to_email=to_email,
-            cc=cc,
-            bcc=bcc,
-            custom_message=doc.content,
-            skip_communication=True
-        )
+            except Exception as e:
+                frappe.log_error(
+                    title="Email Override Error",
+                    message=frappe.get_traceback()
+                )
+                # Fall through to original make
 
-        if result.get("success"):
-            doc.message_id = result.get("message_id")
-            doc.email_status = "Open"
-            doc.flags.skip_email_sending = True
-
-            frappe.msgprint(
-                _("Email sent successfully via Resend"),
-                indicator="green",
-                alert=True
-            )
-        else:
-            frappe.msgprint(
-                _("Email sending failed. Check Error Log for details."),
-                indicator="red",
-                alert=True
-            )
-
-    except ResendError as e:
-        frappe.log_error(
-            title="Resend Email Override Failed",
-            message=f"DocType: {doc.reference_doctype}\nDocument: {doc.reference_name}\nError: {str(e)}"
-        )
-
-        try:
-            settings = get_email_settings()
-            if not settings.fallback_to_erpnext:
-                frappe.throw(f"Email sending failed: {str(e)}")
-        except Exception:
-            pass
-
-    except Exception as e:
-        frappe.log_error(
-            title="Email Override Error",
-            message=frappe.get_traceback()
-        )
+    # For non-Resend cases or fallback, call the original function
+    return frappe_email.make(
+        doctype=doctype,
+        name=name,
+        content=content,
+        subject=subject,
+        sent_or_received=sent_or_received,
+        sender=sender,
+        sender_full_name=sender_full_name,
+        recipients=recipients,
+        communication_medium=communication_medium,
+        send_email=send_email,
+        print_html=print_html,
+        print_format=print_format,
+        attachments=attachments,
+        send_me_a_copy=send_me_a_copy,
+        cc=cc,
+        bcc=bcc,
+        read_receipt=read_receipt,
+        print_letterhead=print_letterhead,
+        email_template=email_template,
+        communication_type=communication_type,
+    )
 
 
 def on_communication_update(doc, method):

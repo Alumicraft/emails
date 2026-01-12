@@ -8,10 +8,14 @@ app_license = "MIT"
 # Apps
 required_apps = ["frappe", "erpnext"]
 
-# Document Events - Intercept Communication creation for email override
+# Override the communication email make function to intercept BEFORE email is queued
+override_whitelisted_methods = {
+    "frappe.core.doctype.communication.email.make": "emails.email_service.email_override.make_communication_email"
+}
+
+# Document Events - for webhook status updates
 doc_events = {
     "Communication": {
-        "before_insert": "emails.email_service.email_override.before_communication_insert",
         "on_update": "emails.email_service.email_override.on_communication_update"
     }
 }
