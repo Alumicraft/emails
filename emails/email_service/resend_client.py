@@ -197,7 +197,7 @@ def send_template_email(
     if bcc and isinstance(bcc, str):
         bcc = [bcc]
 
-    # Build request payload for template
+    # Build request payload
     payload = {
         "from": sender,
         "to": to_email,
@@ -216,9 +216,34 @@ def send_template_email(
     if tags:
         payload["tags"] = tags
 
-    # Build HTML from template data
-    html_content = build_html_from_template_data(template_id, template_data)
-    if html_content:
+    # Use Resend template if template_id is provided, otherwise build HTML locally
+    if template_id:
+        # Convert template_data keys to valid Resend variable names (ASCII letters, numbers, underscores only)
+        variables = {}
+        for key, value in template_data.items():
+            # Resend variable keys: ASCII letters, numbers, underscores, max 50 chars
+            clean_key = ''.join(c if c.isalnum() or c == '_' else '_' for c in key)[:50]
+            # Resend variable values: strings max 2000 chars
+            if isinstance(value, str):
+                variables[clean_key] = value[:2000]
+            elif isinstance(value, (int, float)):
+                variables[clean_key] = value
+            elif isinstance(value, list):
+                # Convert lists to JSON string for template
+                variables[clean_key] = json.dumps(value)[:2000]
+            elif value is not None:
+                variables[clean_key] = str(value)[:2000]
+
+        payload["template"] = {
+            "id": template_id,
+            "variables": variables
+        }
+
+        if not subject:
+            payload["subject"] = template_data.get("subject", "Document from ERPNext")
+    else:
+        # Fallback to locally-built HTML if no template_id
+        html_content = build_html_from_template_data(None, template_data)
         payload["html"] = html_content
         if not subject:
             payload["subject"] = template_data.get("subject", "Document from ERPNext")
