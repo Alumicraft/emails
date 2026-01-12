@@ -85,8 +85,8 @@ def send_invoice_email(invoice_name, to_email=None, cc=None, bcc=None, custom_me
             bcc=bcc,
             attachments=attachments,
             tags=[
-                {"name": "doctype", "value": "Sales Invoice"},
-                {"name": "document", "value": invoice_name}
+                {"name": "doctype", "value": "sales_invoice"},
+                {"name": "document", "value": invoice_name.replace("-", "_").replace(" ", "_")}
             ]
         )
 

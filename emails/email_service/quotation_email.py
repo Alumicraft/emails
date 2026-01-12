@@ -93,8 +93,8 @@ def send_quotation_email(quotation_name, to_email=None, cc=None, bcc=None, custo
             bcc=bcc,
             attachments=attachments,
             tags=[
-                {"name": "doctype", "value": "Quotation"},
-                {"name": "document", "value": quotation_name}
+                {"name": "doctype", "value": "quotation"},
+                {"name": "document", "value": quotation_name.replace("-", "_").replace(" ", "_")}
             ]
         )
 

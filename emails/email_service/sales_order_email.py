@@ -91,8 +91,8 @@ def send_sales_order_email(sales_order_name, to_email=None, cc=None, bcc=None, c
             bcc=bcc,
             attachments=attachments,
             tags=[
-                {"name": "doctype", "value": "Sales Order"},
-                {"name": "document", "value": sales_order_name}
+                {"name": "doctype", "value": "sales_order"},
+                {"name": "document", "value": sales_order_name.replace("-", "_").replace(" ", "_")}
             ]
         )
 
