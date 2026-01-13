@@ -59,6 +59,7 @@ def send_payment_request_email(payment_request_name, to_email=None, cc=None, bcc
         "document_number": payment_request.name,
         "transaction_date": formatdate(payment_request.transaction_date) if payment_request.transaction_date else "",
         "document_date": formatdate(payment_request.transaction_date) if payment_request.transaction_date else "",
+        "due_date": formatdate(payment_request.transaction_date) if payment_request.transaction_date else "",
         "grand_total": format_currency_amount(payment_request.grand_total, payment_request.currency),
         "total_amount": format_currency_amount(payment_request.grand_total, payment_request.currency),
         "currency": payment_request.currency,
