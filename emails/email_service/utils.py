@@ -285,7 +285,6 @@ def should_use_resend(doctype):
             "Sales Invoice",
             "Quotation",
             "Sales Order",
-            "Delivery Note",
             "Payment Entry",
             "Purchase Order",
             "Payment Request",

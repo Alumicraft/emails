@@ -18,7 +18,6 @@
         "quotation_template_id",
         "column_break_3",
         "sales_order_template_id",
-        "delivery_note_template_id",
         "column_break_4",
         "receipt_template_id",
         "purchase_order_template_id",
@@ -109,12 +108,6 @@
             "fieldtype": "Data",
             "label": "Sales Order Template ID",
             "description": "Resend template ID for Sales Order"
-        },
-        {
-            "fieldname": "delivery_note_template_id",
-            "fieldtype": "Data",
-            "label": "Delivery Note Template ID",
-            "description": "Resend template ID for Delivery Note"
         },
         {
             "fieldname": "column_break_4",

@@ -7,7 +7,6 @@ emails.SUPPORTED_DOCTYPES = [
     "Sales Invoice",
     "Quotation",
     "Sales Order",
-    "Delivery Note",
     "Payment Entry",
     "Purchase Order",
     "Payment Request"

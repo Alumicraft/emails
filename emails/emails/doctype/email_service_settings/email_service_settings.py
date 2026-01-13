@@ -21,7 +21,6 @@ class EmailServiceSettings(Document):
             "Sales Invoice": self.invoice_template_id,
             "Quotation": self.quotation_template_id,
             "Sales Order": self.sales_order_template_id,
-            "Delivery Note": self.delivery_note_template_id,
             "Payment Entry": self.receipt_template_id,
             "Purchase Order": self.purchase_order_template_id,
             "Payment Request": self.payment_request_template_id,
