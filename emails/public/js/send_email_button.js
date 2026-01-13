@@ -4,7 +4,6 @@
 frappe.provide("emails");
 
 emails.SUPPORTED_DOCTYPES = [
-    "Sales Invoice",
     "Quotation",
     "Sales Order",
     "Payment Entry",
