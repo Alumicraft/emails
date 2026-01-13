@@ -281,7 +281,15 @@ def should_use_resend(doctype):
             return False
 
         # Check if this is a supported doctype
-        supported_doctypes = ["Sales Invoice", "Quotation", "Sales Order"]
+        supported_doctypes = [
+            "Sales Invoice",
+            "Quotation",
+            "Sales Order",
+            "Delivery Note",
+            "Payment Entry",
+            "Purchase Order",
+            "Payment Request",
+        ]
         return doctype in supported_doctypes
 
     except Exception:

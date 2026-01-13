@@ -22,6 +22,7 @@
         "column_break_4",
         "receipt_template_id",
         "purchase_order_template_id",
+        "payment_request_template_id",
         "error_section",
         "fallback_to_erpnext",
         "column_break_5",
@@ -130,6 +131,12 @@
             "fieldtype": "Data",
             "label": "Purchase Order Template ID",
             "description": "Resend template ID for Purchase Order"
+        },
+        {
+            "fieldname": "payment_request_template_id",
+            "fieldtype": "Data",
+            "label": "Payment Request Template ID",
+            "description": "Resend template ID for Payment Request"
         },
         {
             "fieldname": "error_section",

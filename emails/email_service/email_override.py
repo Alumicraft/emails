@@ -17,6 +17,7 @@ DOCTYPE_EMAIL_HANDLERS = {
     "Sales Invoice": "emails.email_service.invoice_email.send_invoice_email",
     "Quotation": "emails.email_service.quotation_email.send_quotation_email",
     "Sales Order": "emails.email_service.sales_order_email.send_sales_order_email",
+    "Payment Request": "emails.email_service.payment_request_email.send_payment_request_email",
 }
 
 
@@ -219,6 +220,7 @@ def check_resend_status():
                 "Sales Invoice": bool(settings.invoice_template_id),
                 "Quotation": bool(settings.quotation_template_id),
                 "Sales Order": bool(settings.sales_order_template_id),
+                "Payment Request": bool(settings.payment_request_template_id),
             }
         }
     except Exception as e:

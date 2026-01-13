@@ -107,12 +107,47 @@ def send_sales_order_email(sales_order_name, to_email=None, cc=None, bcc=None, c
 
 
 @frappe.whitelist()
+def send_payment_request_email(payment_request_name, to_email=None, cc=None, bcc=None, custom_message=None):
+    """Send Payment Request email via Resend."""
+    try:
+        frappe.has_permission("Payment Request", "email", payment_request_name, throw=True)
+
+        from emails.email_service.payment_request_email import send_payment_request_email as _send
+
+        result = _send(
+            payment_request_name,
+            to_email=to_email,
+            cc=cc,
+            bcc=bcc,
+            custom_message=custom_message
+        )
+
+        return result
+
+    except frappe.PermissionError:
+        return {
+            "success": False,
+            "message": _("You don't have permission to send email for this payment request")
+        }
+    except Exception as e:
+        frappe.log_error(
+            title="Send Payment Request Email API Error",
+            message=frappe.get_traceback()
+        )
+        return {
+            "success": False,
+            "message": str(e)
+        }
+
+
+@frappe.whitelist()
 def send_document_email(doctype, docname, to_email=None, cc=None, bcc=None, custom_message=None):
     """Generic method to send email for any supported document type."""
     handlers = {
         "Sales Invoice": send_invoice_email,
         "Quotation": send_quotation_email,
         "Sales Order": send_sales_order_email,
+        "Payment Request": send_payment_request_email,
     }
 
     handler = handlers.get(doctype)
@@ -227,3 +262,72 @@ def send_test_email(to_email):
             "success": False,
             "message": str(e)
         }
+
+
+@frappe.whitelist()
+def check_doctype_email_enabled(doctype):
+    """Check if email sending is enabled for a doctype (Resend enabled AND template configured)."""
+    try:
+        settings = frappe.get_single("Email Service Settings")
+
+        if not settings.enabled:
+            return {"enabled": False}
+
+        if not settings.get_password("resend_api_key"):
+            return {"enabled": False}
+
+        template_id = settings.get_template_id(doctype)
+
+        # Only enabled if template is configured
+        return {
+            "enabled": bool(template_id),
+            "has_template": bool(template_id)
+        }
+
+    except Exception:
+        return {"enabled": False}
+
+
+@frappe.whitelist()
+def get_document_recipient(doctype, docname):
+    """Get default recipient email for a document."""
+    try:
+        from emails.email_service.utils import (
+            get_customer_primary_email,
+            get_supplier_primary_email
+        )
+
+        doc = frappe.get_doc(doctype, docname)
+        email = None
+
+        # Customer-based documents
+        if hasattr(doc, "customer") and doc.customer:
+            email = get_customer_primary_email(doc.customer)
+
+        # Quotation special handling
+        elif doctype == "Quotation":
+            if doc.quotation_to == "Customer" and doc.party_name:
+                email = get_customer_primary_email(doc.party_name)
+            elif hasattr(doc, "contact_email") and doc.contact_email:
+                email = doc.contact_email
+
+        # Payment Request special handling
+        elif doctype == "Payment Request":
+            if hasattr(doc, "email_to") and doc.email_to:
+                email = doc.email_to
+            elif doc.party_type == "Customer" and doc.party:
+                email = get_customer_primary_email(doc.party)
+
+        # Supplier-based documents (Purchase Order)
+        elif hasattr(doc, "supplier") and doc.supplier:
+            email = get_supplier_primary_email(doc.supplier)
+
+        # Fallback to contact_email field
+        if not email and hasattr(doc, "contact_email") and doc.contact_email:
+            email = doc.contact_email
+
+        return {"email": email} if email else {"email": None}
+
+    except Exception as e:
+        frappe.log_error(title="Get Document Recipient Error", message=str(e))
+        return {"email": None}

@@ -24,6 +24,7 @@ class EmailServiceSettings(Document):
             "Delivery Note": self.delivery_note_template_id,
             "Payment Entry": self.receipt_template_id,
             "Purchase Order": self.purchase_order_template_id,
+            "Payment Request": self.payment_request_template_id,
         }
         return template_map.get(doctype)
 
