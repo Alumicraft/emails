@@ -1,8 +1,53 @@
 import json
+import re
 import frappe
 import requests
 
 RESEND_API_URL = "https://api.resend.com/emails"
+
+
+def clean_email_list(emails):
+    """
+    Clean and validate email addresses.
+
+    Args:
+        emails: String or list of email addresses
+
+    Returns:
+        list: Cleaned list of valid email addresses
+    """
+    if not emails:
+        return []
+
+    # Convert to list if string
+    if isinstance(emails, str):
+        # Split by comma if multiple emails in one string
+        emails = [e.strip() for e in emails.split(",")]
+
+    cleaned = []
+    email_pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+    name_email_pattern = re.compile(r'^.+\s*<([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})>$')
+
+    for email in emails:
+        if not email:
+            continue
+
+        email = email.strip()
+
+        # Check if it's a simple email
+        if email_pattern.match(email):
+            cleaned.append(email)
+        # Check if it's "Name <email>" format
+        elif name_email_pattern.match(email):
+            cleaned.append(email)
+        # Try to extract email from malformed input
+        else:
+            # Look for email pattern within the string
+            match = re.search(r'([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})', email)
+            if match:
+                cleaned.append(match.group(1))
+
+    return cleaned
 
 
 class ResendError(Exception):
@@ -72,13 +117,13 @@ def send_email(
     else:
         sender = from_email
 
-    # Normalize recipients to lists
-    if isinstance(to_email, str):
-        to_email = [to_email]
-    if cc and isinstance(cc, str):
-        cc = [cc]
-    if bcc and isinstance(bcc, str):
-        bcc = [bcc]
+    # Clean and validate recipients
+    to_email = clean_email_list(to_email)
+    cc = clean_email_list(cc) if cc else None
+    bcc = clean_email_list(bcc) if bcc else None
+
+    if not to_email:
+        raise ResendError("No valid recipient email addresses provided")
 
     # Build request payload
     payload = {
@@ -189,13 +234,13 @@ def send_template_email(
     else:
         sender = from_email
 
-    # Normalize recipients to lists
-    if isinstance(to_email, str):
-        to_email = [to_email]
-    if cc and isinstance(cc, str):
-        cc = [cc]
-    if bcc and isinstance(bcc, str):
-        bcc = [bcc]
+    # Clean and validate recipients
+    to_email = clean_email_list(to_email)
+    cc = clean_email_list(cc) if cc else None
+    bcc = clean_email_list(bcc) if bcc else None
+
+    if not to_email:
+        raise ResendError("No valid recipient email addresses provided")
 
     # Build request payload
     payload = {
