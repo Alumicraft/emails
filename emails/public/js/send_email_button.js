@@ -11,22 +11,25 @@ emails.SUPPORTED_DOCTYPES = [
     "Payment Request"
 ];
 
-emails.check_email_sent = function(frm, callback) {
-    // Check if an email was already sent for this document via Resend
-    frappe.call({
-        method: "frappe.client.get_count",
-        args: {
-            doctype: "Communication",
-            filters: {
-                reference_doctype: frm.doctype,
-                reference_name: frm.doc.name,
-                communication_medium: "Email",
-                sent_or_received: "Sent"
+emails.check_email_sent = function(frm) {
+    // Check if an email was already sent for this document
+    return new Promise((resolve) => {
+        frappe.call({
+            method: "frappe.client.get_count",
+            args: {
+                doctype: "Communication",
+                filters: {
+                    reference_doctype: frm.doctype,
+                    reference_name: frm.doc.name,
+                    communication_medium: "Email",
+                    sent_or_received: "Sent"
+                }
+            },
+            async: false,
+            callback: function(r) {
+                resolve(r.message > 0);
             }
-        },
-        callback: function(r) {
-            callback(r.message > 0);
-        }
+        });
     });
 };
 
@@ -41,20 +44,39 @@ emails.setup_send_email_button = function(frm) {
         return;
     }
 
+    // Remove existing Send/Resend Email buttons first
+    frm.remove_custom_button(__("Send Email"));
+    frm.remove_custom_button(__("Resend Email"));
+
     // Check if Resend is enabled and template is configured for this doctype
     frappe.call({
         method: "emails.api.check_doctype_email_enabled",
         args: {
             doctype: frm.doctype
         },
+        async: false,
         callback: function(r) {
             if (r.message && r.message.enabled) {
                 // Check if email was already sent
-                emails.check_email_sent(frm, function(email_sent) {
-                    let button_label = email_sent ? __("Resend Email") : __("Send Email");
-                    frm.add_custom_button(button_label, function() {
-                        emails.show_send_email_dialog(frm);
-                    });
+                frappe.call({
+                    method: "frappe.client.get_count",
+                    args: {
+                        doctype: "Communication",
+                        filters: {
+                            reference_doctype: frm.doctype,
+                            reference_name: frm.doc.name,
+                            communication_medium: "Email",
+                            sent_or_received: "Sent"
+                        }
+                    },
+                    async: false,
+                    callback: function(count_r) {
+                        let email_sent = count_r.message > 0;
+                        let button_label = email_sent ? __("Resend Email") : __("Send Email");
+                        frm.add_custom_button(button_label, function() {
+                            emails.show_send_email_dialog(frm);
+                        });
+                    }
                 });
             }
         }
