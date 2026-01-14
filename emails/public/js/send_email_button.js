@@ -1,5 +1,5 @@
 // Send Email Button for supported doctypes
-// This adds a "Send Email" button for submitted documents with configured templates
+// Shows popup after submit, and "Send Email" or "Resend Email" button based on status
 
 frappe.provide("emails");
 
@@ -10,6 +10,25 @@ emails.SUPPORTED_DOCTYPES = [
     "Purchase Order",
     "Payment Request"
 ];
+
+emails.check_email_sent = function(frm, callback) {
+    // Check if an email was already sent for this document via Resend
+    frappe.call({
+        method: "frappe.client.get_count",
+        args: {
+            doctype: "Communication",
+            filters: {
+                reference_doctype: frm.doctype,
+                reference_name: frm.doc.name,
+                communication_medium: "Email",
+                sent_or_received: "Sent"
+            }
+        },
+        callback: function(r) {
+            callback(r.message > 0);
+        }
+    });
+};
 
 emails.setup_send_email_button = function(frm) {
     // Only show for submitted documents
@@ -30,9 +49,42 @@ emails.setup_send_email_button = function(frm) {
         },
         callback: function(r) {
             if (r.message && r.message.enabled) {
-                frm.add_custom_button(__("Send Email"), function() {
-                    emails.show_send_email_dialog(frm);
+                // Check if email was already sent
+                emails.check_email_sent(frm, function(email_sent) {
+                    let button_label = email_sent ? __("Resend Email") : __("Send Email");
+                    frm.add_custom_button(button_label, function() {
+                        emails.show_send_email_dialog(frm);
+                    });
                 });
+            }
+        }
+    });
+};
+
+emails.prompt_send_email_after_submit = function(frm) {
+    // Check if this doctype is supported
+    if (!emails.SUPPORTED_DOCTYPES.includes(frm.doctype)) {
+        return;
+    }
+
+    // Check if Resend is enabled and template is configured
+    frappe.call({
+        method: "emails.api.check_doctype_email_enabled",
+        args: {
+            doctype: frm.doctype
+        },
+        callback: function(r) {
+            if (r.message && r.message.enabled) {
+                frappe.confirm(
+                    __("Would you like to send an email to the customer?"),
+                    function() {
+                        // Yes - show send email dialog
+                        emails.show_send_email_dialog(frm);
+                    },
+                    function() {
+                        // No - do nothing, button will be available
+                    }
+                );
             }
         }
     });
@@ -102,7 +154,7 @@ emails.send_document_email = function(frm, values) {
                     message: __("Email sent successfully"),
                     indicator: "green"
                 });
-                // Reload to show new communication in timeline
+                // Reload to show new communication in timeline and update button
                 frm.reload_doc();
             } else {
                 frappe.msgprint({
@@ -121,6 +173,9 @@ $(document).ready(function() {
         frappe.ui.form.on(doctype, {
             refresh: function(frm) {
                 emails.setup_send_email_button(frm);
+            },
+            after_submit: function(frm) {
+                emails.prompt_send_email_after_submit(frm);
             }
         });
     });

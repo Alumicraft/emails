@@ -128,36 +128,4 @@ def send_quotation_email(quotation_name, to_email=None, cc=None, bcc=None, custo
                 error_msg=str(e)
             )
 
-        if settings.fallback_to_erpnext:
-            return _send_fallback_email(quotation, to_email, template_data, attachments)
-
-        raise
-
-
-def _send_fallback_email(quotation, to_email, template_data, attachments):
-    """Send email using ERPNext's default email system as fallback."""
-    try:
-        frappe.sendmail(
-            recipients=[to_email],
-            subject=template_data["subject"],
-            message=f"""
-                <p>Dear {template_data['customer_name']},</p>
-                <p>Please find attached your quotation {template_data['quotation_number']}.</p>
-                <p>Total Amount: {template_data['total_amount']}</p>
-                <p>Valid Until: {template_data['valid_until']}</p>
-                <p>Best regards,<br>{template_data['company_name']}</p>
-            """,
-            reference_doctype="Quotation",
-            reference_name=quotation.name,
-        )
-
-        return {
-            "success": True,
-            "message": "Quotation email sent via ERPNext fallback",
-            "fallback": True,
-            "recipient": to_email
-        }
-
-    except Exception as e:
-        frappe.log_error(title="Fallback Email Failed", message=str(e))
         raise

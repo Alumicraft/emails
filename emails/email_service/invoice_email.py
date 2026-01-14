@@ -120,36 +120,4 @@ def send_invoice_email(invoice_name, to_email=None, cc=None, bcc=None, custom_me
                 error_msg=str(e)
             )
 
-        if settings.fallback_to_erpnext:
-            return _send_fallback_email(invoice, to_email, template_data, attachments)
-
-        raise
-
-
-def _send_fallback_email(invoice, to_email, template_data, attachments):
-    """Send email using ERPNext's default email system as fallback."""
-    try:
-        frappe.sendmail(
-            recipients=[to_email],
-            subject=template_data["subject"],
-            message=f"""
-                <p>Dear {template_data['customer_name']},</p>
-                <p>Please find attached your invoice {template_data['invoice_number']}.</p>
-                <p>Total Amount: {template_data['total_amount']}</p>
-                <p>Due Date: {template_data['due_date']}</p>
-                <p>Best regards,<br>{template_data['company_name']}</p>
-            """,
-            reference_doctype="Sales Invoice",
-            reference_name=invoice.name,
-        )
-
-        return {
-            "success": True,
-            "message": "Invoice email sent via ERPNext fallback",
-            "fallback": True,
-            "recipient": to_email
-        }
-
-    except Exception as e:
-        frappe.log_error(title="Fallback Email Failed", message=str(e))
         raise

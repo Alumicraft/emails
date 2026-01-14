@@ -21,11 +21,7 @@
         "column_break_4",
         "receipt_template_id",
         "purchase_order_template_id",
-        "payment_request_template_id",
-        "error_section",
-        "fallback_to_erpnext",
-        "column_break_5",
-        "max_retry_attempts"
+        "payment_request_template_id"
     ],
     "fields": [
         {
@@ -130,30 +126,6 @@
             "fieldtype": "Data",
             "label": "Payment Request Template ID",
             "description": "Resend template ID for Payment Request"
-        },
-        {
-            "fieldname": "error_section",
-            "fieldtype": "Section Break",
-            "label": "Error Handling",
-            "collapsible": 1
-        },
-        {
-            "default": "1",
-            "fieldname": "fallback_to_erpnext",
-            "fieldtype": "Check",
-            "label": "Fallback to ERPNext Email",
-            "description": "Use ERPNext's default email if Resend fails"
-        },
-        {
-            "fieldname": "column_break_5",
-            "fieldtype": "Column Break"
-        },
-        {
-            "default": "3",
-            "fieldname": "max_retry_attempts",
-            "fieldtype": "Int",
-            "label": "Max Retry Attempts",
-            "description": "Number of times to retry failed sends"
         }
     ],
     "index_web_pages_for_search": 1,

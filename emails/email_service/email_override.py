@@ -115,45 +115,7 @@ def make_communication_email(
                     title="Resend Email Failed",
                     message=f"DocType: {doctype}\nDocument: {name}\nError: {str(e)}"
                 )
-
-                # Check if we should fallback to ERPNext
-                try:
-                    settings = frappe.get_single("Email Service Settings")
-                    if settings.fallback_to_erpnext:
-                        frappe.msgprint(
-                            _("Resend failed, falling back to ERPNext email"),
-                            indicator="orange",
-                            alert=True
-                        )
-                        # Fall through to original make below
-                    else:
-                        frappe.throw(_("Email sending failed: {0}").format(str(e)))
-                except Exception:
-                    frappe.throw(_("Email sending failed: {0}").format(str(e)))
-
-                # Only reaches here if fallback is enabled
-                return frappe_email.make(
-                    doctype=doctype,
-                    name=name,
-                    content=content,
-                    subject=subject,
-                    sent_or_received=sent_or_received,
-                    sender=sender,
-                    sender_full_name=sender_full_name,
-                    recipients=recipients,
-                    communication_medium=communication_medium,
-                    send_email=send_email,
-                    print_html=print_html,
-                    print_format=print_format,
-                    attachments=attachments,
-                    send_me_a_copy=send_me_a_copy,
-                    cc=cc,
-                    bcc=bcc,
-                    read_receipt=read_receipt,
-                    print_letterhead=print_letterhead,
-                    email_template=email_template,
-                    communication_type=communication_type,
-                )
+                frappe.throw(_("Email sending failed: {0}").format(str(e)))
 
             except Exception as e:
                 frappe.log_error(

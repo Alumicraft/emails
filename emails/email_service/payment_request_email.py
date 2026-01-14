@@ -144,39 +144,4 @@ def send_payment_request_email(payment_request_name, to_email=None, cc=None, bcc
                 error_msg=str(e)
             )
 
-        if settings.fallback_to_erpnext:
-            return _send_fallback_email(payment_request, to_email, template_data, attachments)
-
-        raise
-
-
-def _send_fallback_email(payment_request, to_email, template_data, attachments):
-    """Send email using ERPNext's default email system as fallback."""
-    try:
-        payment_url = template_data.get("stripe_invoice_url") or template_data.get("payment_url", "")
-        payment_link = f'<p><a href="{payment_url}">Click here to pay</a></p>' if payment_url else ""
-
-        frappe.sendmail(
-            recipients=[to_email],
-            subject=template_data["subject"],
-            message=f"""
-                <p>Dear {template_data['customer_name']},</p>
-                <p>Please find your payment request {template_data['payment_request_number']}.</p>
-                <p>Amount Due: {template_data['total_amount']}</p>
-                {payment_link}
-                <p>Best regards,<br>{template_data['company_name']}</p>
-            """,
-            reference_doctype="Payment Request",
-            reference_name=payment_request.name,
-        )
-
-        return {
-            "success": True,
-            "message": "Payment Request email sent via ERPNext fallback",
-            "fallback": True,
-            "recipient": to_email
-        }
-
-    except Exception as e:
-        frappe.log_error(title="Fallback Email Failed", message=str(e))
         raise

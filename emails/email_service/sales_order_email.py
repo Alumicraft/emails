@@ -126,9 +126,6 @@ def send_sales_order_email(sales_order_name, to_email=None, cc=None, bcc=None, c
                 error_msg=str(e)
             )
 
-        if settings.fallback_to_erpnext:
-            return _send_fallback_email(sales_order, to_email, template_data, attachments)
-
         raise
 
 
@@ -149,32 +146,3 @@ def get_formatted_address(address):
     if address.country:
         parts.append(address.country)
     return ", ".join(parts)
-
-
-def _send_fallback_email(sales_order, to_email, template_data, attachments):
-    """Send email using ERPNext's default email system as fallback."""
-    try:
-        frappe.sendmail(
-            recipients=[to_email],
-            subject=template_data["subject"],
-            message=f"""
-                <p>Dear {template_data['customer_name']},</p>
-                <p>Thank you for your order! Please find attached your order confirmation {template_data['sales_order_number']}.</p>
-                <p>Total Amount: {template_data['total_amount']}</p>
-                <p>Expected Delivery: {template_data['delivery_date']}</p>
-                <p>Best regards,<br>{template_data['company_name']}</p>
-            """,
-            reference_doctype="Sales Order",
-            reference_name=sales_order.name,
-        )
-
-        return {
-            "success": True,
-            "message": "Sales Order email sent via ERPNext fallback",
-            "fallback": True,
-            "recipient": to_email
-        }
-
-    except Exception as e:
-        frappe.log_error(title="Fallback Email Failed", message=str(e))
-        raise
