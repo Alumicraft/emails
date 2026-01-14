@@ -282,7 +282,6 @@ def should_use_resend(doctype):
 
         # Check if this is a supported doctype
         supported_doctypes = [
-            "Sales Invoice",
             "Quotation",
             "Sales Order",
             "Payment Entry",

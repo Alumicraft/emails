@@ -88,16 +88,29 @@ def send_payment_request_email(payment_request_name, to_email=None, cc=None, bcc
         "message": payment_request.message or "",
     }
 
-    # Attempt to get PDF
+    # Add Sales Invoice details if reference is a Sales Invoice
+    if payment_request.reference_doctype == "Sales Invoice" and payment_request.reference_name:
+        try:
+            invoice = frappe.get_doc("Sales Invoice", payment_request.reference_name)
+            template_data["invoice_number"] = invoice.name
+            template_data["invoice_date"] = formatdate(invoice.posting_date)
+            template_data["invoice_due_date"] = formatdate(invoice.due_date) if invoice.due_date else ""
+            template_data["invoice_total"] = format_currency_amount(invoice.grand_total, invoice.currency)
+            template_data["outstanding_amount"] = format_currency_amount(invoice.outstanding_amount, invoice.currency)
+        except Exception as e:
+            frappe.log_error(title="Failed to get Sales Invoice details", message=str(e))
+
+    # Attempt to get Sales Invoice PDF (from reference document)
     attachments = None
-    try:
-        pdf_bytes, filename = get_document_pdf("Payment Request", payment_request_name)
-        attachments = [{
-            "filename": filename,
-            "content": pdf_to_base64(pdf_bytes)
-        }]
-    except Exception as e:
-        frappe.log_error(title="Payment Request PDF Generation Failed", message=str(e))
+    if payment_request.reference_doctype == "Sales Invoice" and payment_request.reference_name:
+        try:
+            pdf_bytes, filename = get_document_pdf("Sales Invoice", payment_request.reference_name)
+            attachments = [{
+                "filename": filename,
+                "content": pdf_to_base64(pdf_bytes)
+            }]
+        except Exception as e:
+            frappe.log_error(title="Sales Invoice PDF Generation Failed", message=str(e))
 
     try:
         result = send_template_email(

@@ -5,40 +5,6 @@ from frappe import _
 
 
 @frappe.whitelist()
-def send_invoice_email(invoice_name, to_email=None, cc=None, bcc=None, custom_message=None):
-    """Send Sales Invoice email via Resend."""
-    try:
-        frappe.has_permission("Sales Invoice", "email", invoice_name, throw=True)
-
-        from emails.email_service.invoice_email import send_invoice_email as _send
-
-        result = _send(
-            invoice_name,
-            to_email=to_email,
-            cc=cc,
-            bcc=bcc,
-            custom_message=custom_message
-        )
-
-        return result
-
-    except frappe.PermissionError:
-        return {
-            "success": False,
-            "message": _("You don't have permission to send email for this invoice")
-        }
-    except Exception as e:
-        frappe.log_error(
-            title="Send Invoice Email API Error",
-            message=frappe.get_traceback()
-        )
-        return {
-            "success": False,
-            "message": str(e)
-        }
-
-
-@frappe.whitelist()
 def send_quotation_email(quotation_name, to_email=None, cc=None, bcc=None, custom_message=None):
     """Send Quotation email via Resend."""
     try:
@@ -144,7 +110,6 @@ def send_payment_request_email(payment_request_name, to_email=None, cc=None, bcc
 def send_document_email(doctype, docname, to_email=None, cc=None, bcc=None, custom_message=None):
     """Generic method to send email for any supported document type."""
     handlers = {
-        "Sales Invoice": send_invoice_email,
         "Quotation": send_quotation_email,
         "Sales Order": send_sales_order_email,
         "Payment Request": send_payment_request_email,

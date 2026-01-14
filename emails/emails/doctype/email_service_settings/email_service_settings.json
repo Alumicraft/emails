@@ -14,7 +14,6 @@
         "default_sender_email",
         "default_sender_name",
         "templates_section",
-        "invoice_template_id",
         "quotation_template_id",
         "column_break_3",
         "sales_order_template_id",
@@ -82,12 +81,6 @@
             "fieldtype": "Section Break",
             "label": "Template IDs",
             "collapsible": 1
-        },
-        {
-            "fieldname": "invoice_template_id",
-            "fieldtype": "Data",
-            "label": "Invoice Template ID",
-            "description": "Resend template ID for Sales Invoice"
         },
         {
             "fieldname": "quotation_template_id",

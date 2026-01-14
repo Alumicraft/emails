@@ -18,7 +18,6 @@ class EmailServiceSettings(Document):
     def get_template_id(self, doctype):
         """Get template ID for a given doctype"""
         template_map = {
-            "Sales Invoice": self.invoice_template_id,
             "Quotation": self.quotation_template_id,
             "Sales Order": self.sales_order_template_id,
             "Payment Entry": self.receipt_template_id,
