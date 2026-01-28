@@ -280,15 +280,73 @@ def should_use_resend(doctype):
         if not settings.get_password("resend_api_key"):
             return False
 
-        # Check if this is a supported doctype
-        supported_doctypes = [
-            "Quotation",
-            "Sales Order",
-            "Payment Entry",
-            "Purchase Order",
-            "Payment Request",
-        ]
-        return doctype in supported_doctypes
+        # Check if doctype is supported via child table or legacy config
+        return settings.is_doctype_supported(doctype)
 
     except Exception:
         return False
+
+
+def get_party_email_by_doctype(doctype, party_name):
+    """
+    Get email for a party by doctype.
+
+    Args:
+        doctype: The party doctype (e.g., 'Customer', 'Supplier')
+        party_name: The party name
+
+    Returns:
+        str: Email address or None
+    """
+    if doctype == "Customer":
+        return get_customer_primary_email(party_name)
+    elif doctype == "Supplier":
+        return get_supplier_primary_email(party_name)
+    else:
+        # Generic lookup for other party types (like Loan Applicant)
+        return get_generic_party_email(doctype, party_name)
+
+
+def get_generic_party_email(doctype, party_name):
+    """
+    Get email for any party type by checking common email fields and Contact links.
+
+    Args:
+        doctype: The party doctype
+        party_name: The party name
+
+    Returns:
+        str: Email address or None
+    """
+    try:
+        party = frappe.get_doc(doctype, party_name)
+
+        # Try common email field names
+        for field in ["email_id", "email", "contact_email", "primary_email", "email_address"]:
+            email = getattr(party, field, None)
+            if email:
+                return email
+
+        # Try to find via Contact link
+        contact_name = frappe.db.get_value(
+            "Dynamic Link",
+            {"link_doctype": doctype, "link_name": party_name, "parenttype": "Contact"},
+            "parent",
+        )
+
+        if contact_name:
+            contact = frappe.get_doc("Contact", contact_name)
+            if contact.email_id:
+                return contact.email_id
+
+            # Check email_ids child table
+            if contact.email_ids:
+                for email_row in contact.email_ids:
+                    if email_row.is_primary:
+                        return email_row.email_id
+                return contact.email_ids[0].email_id
+
+    except Exception:
+        pass
+
+    return None

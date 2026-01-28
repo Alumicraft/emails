@@ -13,6 +13,9 @@
         "column_break_2",
         "default_sender_email",
         "default_sender_name",
+        "doctype_configuration_section",
+        "auto_detect_modules",
+        "supported_doctypes",
         "templates_section",
         "quotation_template_id",
         "column_break_3",
@@ -77,10 +80,30 @@
             "description": "Display name for sender (e.g. Your Company)"
         },
         {
+            "fieldname": "doctype_configuration_section",
+            "fieldtype": "Section Break",
+            "label": "Supported Document Types"
+        },
+        {
+            "default": "1",
+            "fieldname": "auto_detect_modules",
+            "fieldtype": "Check",
+            "label": "Auto-detect Installed Modules",
+            "description": "Automatically detect available doctypes based on installed apps"
+        },
+        {
+            "fieldname": "supported_doctypes",
+            "fieldtype": "Table",
+            "label": "Configured Doctypes",
+            "options": "Email Doctype Configuration",
+            "description": "Configure which document types can send emails via Resend"
+        },
+        {
             "fieldname": "templates_section",
             "fieldtype": "Section Break",
-            "label": "Template IDs",
-            "collapsible": 1
+            "label": "Legacy Template IDs (Deprecated)",
+            "collapsible": 1,
+            "description": "These fields are deprecated. Use the Configured Doctypes table above instead."
         },
         {
             "fieldname": "quotation_template_id",

@@ -1,0 +1,129 @@
+{
+    "actions": [],
+    "creation": "2024-01-01 00:00:00.000000",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "doctype_name",
+        "enabled",
+        "source_app",
+        "column_break_config",
+        "resend_template_id",
+        "require_submit",
+        "recipient_section",
+        "recipient_field",
+        "recipient_doctype",
+        "column_break_recipient",
+        "email_field_path",
+        "display_section",
+        "subject_template",
+        "column_break_display",
+        "print_format"
+    ],
+    "fields": [
+        {
+            "fieldname": "doctype_name",
+            "fieldtype": "Link",
+            "in_list_view": 1,
+            "label": "Document Type",
+            "options": "DocType",
+            "reqd": 1
+        },
+        {
+            "default": "1",
+            "fieldname": "enabled",
+            "fieldtype": "Check",
+            "in_list_view": 1,
+            "label": "Enabled"
+        },
+        {
+            "fieldname": "source_app",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Source App",
+            "read_only": 1,
+            "description": "Auto-detected app that provides this doctype"
+        },
+        {
+            "fieldname": "column_break_config",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "resend_template_id",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "label": "Resend Template ID",
+            "description": "Template ID from Resend dashboard (optional - will use default template if not set)"
+        },
+        {
+            "default": "1",
+            "fieldname": "require_submit",
+            "fieldtype": "Check",
+            "label": "Require Submitted Document",
+            "description": "Only allow sending email for submitted documents (docstatus = 1)"
+        },
+        {
+            "fieldname": "recipient_section",
+            "fieldtype": "Section Break",
+            "label": "Recipient Configuration"
+        },
+        {
+            "fieldname": "recipient_field",
+            "fieldtype": "Data",
+            "label": "Recipient Link Field",
+            "description": "Field on the document containing the party link (e.g., 'customer', 'applicant', 'party_name')"
+        },
+        {
+            "fieldname": "recipient_doctype",
+            "fieldtype": "Link",
+            "label": "Recipient DocType",
+            "options": "DocType",
+            "description": "DocType of the linked party (e.g., 'Customer', 'Supplier', 'Loan Applicant')"
+        },
+        {
+            "fieldname": "column_break_recipient",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "email_field_path",
+            "fieldtype": "Data",
+            "label": "Email Field Path",
+            "description": "Direct path to email field (e.g., 'email_id' or 'contact_email'). Leave blank to auto-resolve from recipient."
+        },
+        {
+            "fieldname": "display_section",
+            "fieldtype": "Section Break",
+            "label": "Display Options",
+            "collapsible": 1
+        },
+        {
+            "fieldname": "subject_template",
+            "fieldtype": "Data",
+            "label": "Email Subject Template",
+            "description": "Jinja template for subject line. Variables: {{doc.name}}, {{doc.doctype}}, {{company}}. Leave blank for default."
+        },
+        {
+            "fieldname": "column_break_display",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "print_format",
+            "fieldtype": "Link",
+            "label": "Print Format",
+            "options": "Print Format",
+            "description": "Specific print format to use for PDF attachment. Leave blank for default."
+        }
+    ],
+    "index_web_pages_for_search": 0,
+    "istable": 1,
+    "links": [],
+    "modified": "2024-01-01 00:00:00.000000",
+    "modified_by": "Administrator",
+    "module": "Emails",
+    "name": "Email Doctype Configuration",
+    "owner": "Administrator",
+    "permissions": [],
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "track_changes": 0
+}
