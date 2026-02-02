@@ -14,6 +14,10 @@ import frappe
 def execute():
     """Migrate existing Email Service Settings to new child table structure."""
 
+    # Reload doctypes to ensure new fields/tables are available during migration
+    frappe.reload_doc("emails", "doctype", "email_doctype_configuration")
+    frappe.reload_doc("emails", "doctype", "email_service_settings")
+
     # Legacy field to doctype mapping with default configurations
     legacy_mapping = [
         {
