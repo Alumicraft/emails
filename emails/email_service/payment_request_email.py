@@ -59,7 +59,6 @@ def send_payment_request_email(payment_request_name, to_email=None, cc=None, bcc
         "document_number": payment_request.name,
         "transaction_date": formatdate(payment_request.transaction_date) if payment_request.transaction_date else "",
         "document_date": formatdate(payment_request.transaction_date) if payment_request.transaction_date else "",
-        "due_date": formatdate(payment_request.transaction_date) if payment_request.transaction_date else "",
         "grand_total": format_currency_amount(payment_request.grand_total, payment_request.currency),
         "total_amount": format_currency_amount(payment_request.grand_total, payment_request.currency),
         "currency": payment_request.currency,
@@ -99,6 +98,14 @@ def send_payment_request_email(payment_request_name, to_email=None, cc=None, bcc
             template_data["outstanding_amount"] = format_currency_amount(invoice.outstanding_amount, invoice.currency)
         except Exception as e:
             frappe.log_error(title="Failed to get Sales Invoice details", message=str(e))
+
+    # Set due_date with proper fallback
+    if template_data.get("invoice_due_date"):
+        template_data["due_date"] = template_data["invoice_due_date"]
+    elif payment_request.transaction_date:
+        template_data["due_date"] = formatdate(payment_request.transaction_date)
+    else:
+        template_data["due_date"] = formatdate(frappe.utils.today())
 
     # Attempt to get Sales Invoice PDF (from reference document)
     attachments = None
