@@ -8,6 +8,7 @@
         "enabled",
         "column_break_1",
         "log_all_attempts",
+        "fallback_to_erpnext",
         "resend_section",
         "resend_api_key",
         "column_break_2",
@@ -48,6 +49,13 @@
             "fieldtype": "Check",
             "label": "Log All Attempts",
             "description": "Log both successful and failed email sends"
+        },
+        {
+            "default": "1",
+            "fieldname": "fallback_to_erpnext",
+            "fieldtype": "Check",
+            "label": "Fallback to ERPNext Email",
+            "description": "If Resend fails, fallback to ERPNext's default email system"
         },
         {
             "fieldname": "resend_section",
