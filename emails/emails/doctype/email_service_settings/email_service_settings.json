@@ -21,15 +21,7 @@
         "handle_system_emails",
         "doctype_configuration_section",
         "auto_detect_modules",
-        "supported_doctypes",
-        "templates_section",
-        "quotation_template_id",
-        "column_break_3",
-        "sales_order_template_id",
-        "column_break_4",
-        "receipt_template_id",
-        "purchase_order_template_id",
-        "payment_request_template_id"
+        "supported_doctypes"
     ],
     "fields": [
         {
@@ -139,51 +131,6 @@
             "label": "Configured Doctypes",
             "options": "Email Doctype Configuration",
             "description": "Configure which document types can send emails via Resend"
-        },
-        {
-            "fieldname": "templates_section",
-            "fieldtype": "Section Break",
-            "label": "Legacy Template IDs (Deprecated)",
-            "collapsible": 1,
-            "description": "These fields are deprecated. Use the Configured Doctypes table above instead."
-        },
-        {
-            "fieldname": "quotation_template_id",
-            "fieldtype": "Data",
-            "label": "Quotation Template ID",
-            "description": "Resend template ID for Quotation"
-        },
-        {
-            "fieldname": "column_break_3",
-            "fieldtype": "Column Break"
-        },
-        {
-            "fieldname": "sales_order_template_id",
-            "fieldtype": "Data",
-            "label": "Sales Order Template ID",
-            "description": "Resend template ID for Sales Order"
-        },
-        {
-            "fieldname": "column_break_4",
-            "fieldtype": "Column Break"
-        },
-        {
-            "fieldname": "receipt_template_id",
-            "fieldtype": "Data",
-            "label": "Receipt Template ID",
-            "description": "Resend template ID for Payment Entry/Receipt"
-        },
-        {
-            "fieldname": "purchase_order_template_id",
-            "fieldtype": "Data",
-            "label": "Purchase Order Template ID",
-            "description": "Resend template ID for Purchase Order"
-        },
-        {
-            "fieldname": "payment_request_template_id",
-            "fieldtype": "Data",
-            "label": "Payment Request Template ID",
-            "description": "Resend template ID for Payment Request"
         }
     ],
     "index_web_pages_for_search": 1,

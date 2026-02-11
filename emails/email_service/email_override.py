@@ -238,19 +238,6 @@ def check_resend_status():
                 if row.enabled:
                     templates_configured[row.doctype_name] = bool(row.resend_template_id)
 
-        # Also check legacy fields for backward compatibility
-        legacy_templates = {
-            "Sales Invoice": bool(getattr(settings, "invoice_template_id", None)),
-            "Quotation": bool(settings.quotation_template_id),
-            "Sales Order": bool(settings.sales_order_template_id),
-            "Payment Request": bool(getattr(settings, "payment_request_template_id", None)),
-        }
-
-        # Merge, preferring child table config
-        for doctype, has_template in legacy_templates.items():
-            if doctype not in templates_configured:
-                templates_configured[doctype] = has_template
-
         return {
             "enabled": settings.enabled,
             "configured": bool(settings.get_password("resend_api_key")),

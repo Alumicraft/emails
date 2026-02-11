@@ -144,21 +144,7 @@ class EmailServiceSettings(Document):
         if config and config.resend_template_id:
             return config.resend_template_id
 
-        # Fallback to legacy fields for backward compatibility
-        return self._get_legacy_template_id(doctype)
-
-    def _get_legacy_template_id(self, doctype):
-        """Fallback to old hardcoded fields for migration period."""
-        legacy_map = {
-            "Sales Invoice": getattr(self, "invoice_template_id", None),
-            "Quotation": self.quotation_template_id,
-            "Sales Order": self.sales_order_template_id,
-            "Delivery Note": getattr(self, "delivery_note_template_id", None),
-            "Payment Entry": getattr(self, "receipt_template_id", None),
-            "Purchase Order": getattr(self, "purchase_order_template_id", None),
-            "Payment Request": getattr(self, "payment_request_template_id", None),
-        }
-        return legacy_map.get(doctype)
+        return None
 
     def get_doctype_config(self, doctype):
         """Get full configuration for a doctype from the child table."""
