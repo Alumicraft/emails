@@ -127,6 +127,12 @@ def patched_sendmail(
     # Determine template type based on Frappe template name
     template_type = _get_system_template(template, args)
 
+    # DEBUG: Log what we received
+    frappe.log_error(
+        title="Sendmail Debug",
+        message=f"template={template}\nargs={args}\nsubject={subject}\ndetected_type={template_type}"
+    )
+
     # Build data for template based on Frappe args
     template_args = args or {}
     template_data = _build_template_data(template_type, template_args, subject, html_content)
