@@ -14,6 +14,8 @@ from frappe import _
 from frappe.utils import formatdate, fmt_money, get_url
 
 from emails.email_service.resend_client import send_template_email, ResendError
+from emails.email_service.vercel_client import send_email as vercel_send_email, VercelEmailError
+from emails.email_service.branding import get_company_branding
 from emails.email_service.utils import (
     get_email_settings,
     get_company_info,
@@ -85,9 +87,6 @@ def send_document_email(
     )
     company_info = get_company_info(company_name) if company_name else get_default_company_info()
 
-    # Get template ID
-    template_id = settings.get_template_id(doctype) or ""
-
     # Build template data dynamically
     template_data = build_template_data(doc, doctype, company_info, config, custom_message)
 
@@ -101,7 +100,132 @@ def send_document_email(
     print_format = config.print_format if config else None
     attachments = generate_pdf_attachment(doctype, docname, print_format)
 
-    # Send email
+    # Check if Vercel service is configured
+    use_vercel = bool(getattr(settings, "vercel_service_url", None))
+
+    if use_vercel:
+        # Send via Vercel react-email service
+        return _send_via_vercel(
+            doctype=doctype,
+            docname=docname,
+            to_email=to_email,
+            subject=subject,
+            template_data=template_data,
+            company_name=company_name,
+            cc=cc,
+            bcc=bcc,
+            attachments=attachments,
+            skip_communication=skip_communication,
+            settings=settings,
+        )
+    else:
+        # Fall back to direct Resend template
+        return _send_via_resend(
+            doctype=doctype,
+            docname=docname,
+            to_email=to_email,
+            subject=subject,
+            template_data=template_data,
+            cc=cc,
+            bcc=bcc,
+            attachments=attachments,
+            skip_communication=skip_communication,
+            settings=settings,
+            doc=doc,
+        )
+
+
+def _send_via_vercel(
+    doctype,
+    docname,
+    to_email,
+    subject,
+    template_data,
+    company_name,
+    cc,
+    bcc,
+    attachments,
+    skip_communication,
+    settings,
+):
+    """Send email via Vercel react-email service with branding."""
+    # Get branding
+    branding = get_company_branding(company_name)
+
+    try:
+        result = vercel_send_email(
+            template="document",  # Universal document template
+            to_email=to_email,
+            subject=subject,
+            data=template_data,
+            branding=branding,
+            cc=cc,
+            bcc=bcc,
+            attachments=attachments,
+            tags=[
+                {"name": "doctype", "value": frappe.scrub(doctype)},
+                {"name": "document", "value": docname.replace("-", "_").replace(" ", "_")},
+            ],
+        )
+
+        if not skip_communication:
+            create_communication_log(
+                doctype=doctype,
+                docname=docname,
+                recipient=to_email,
+                subject=subject,
+                content=_("{0} email sent via Vercel").format(doctype),
+                status="Sent",
+                message_id=result.get("message_id"),
+            )
+
+        return {
+            "success": True,
+            "message": _("{0} email sent successfully").format(doctype),
+            "message_id": result.get("message_id"),
+            "recipient": to_email,
+        }
+
+    except VercelEmailError as e:
+        if not skip_communication:
+            create_communication_log(
+                doctype=doctype,
+                docname=docname,
+                recipient=to_email,
+                subject=subject,
+                content=_("{0} email failed").format(doctype),
+                status="Error",
+                error_msg=str(e),
+            )
+
+        if settings.fallback_to_erpnext:
+            return send_fallback_email(
+                frappe.get_doc(doctype, docname),
+                doctype,
+                docname,
+                to_email,
+                template_data
+            )
+
+        raise
+
+
+def _send_via_resend(
+    doctype,
+    docname,
+    to_email,
+    subject,
+    template_data,
+    cc,
+    bcc,
+    attachments,
+    skip_communication,
+    settings,
+    doc,
+):
+    """Send email via direct Resend template (legacy fallback)."""
+    template_id = settings.get_template_id(doctype) or ""
+
     try:
         result = send_template_email(
             template_id=template_id,

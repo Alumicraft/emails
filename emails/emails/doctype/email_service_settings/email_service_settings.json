@@ -14,6 +14,11 @@
         "column_break_2",
         "default_sender_email",
         "default_sender_name",
+        "vercel_section",
+        "vercel_service_url",
+        "column_break_vercel",
+        "vercel_service_key",
+        "handle_system_emails",
         "doctype_configuration_section",
         "auto_detect_modules",
         "supported_doctypes",
@@ -86,6 +91,35 @@
             "fieldtype": "Data",
             "label": "Default Sender Name",
             "description": "Display name for sender (e.g. Your Company)"
+        },
+        {
+            "fieldname": "vercel_section",
+            "fieldtype": "Section Break",
+            "label": "Vercel Email Service",
+            "description": "Configure the Vercel-hosted react-email service for branded templates"
+        },
+        {
+            "fieldname": "vercel_service_url",
+            "fieldtype": "Data",
+            "label": "Vercel Service URL",
+            "description": "e.g., https://your-project.vercel.app"
+        },
+        {
+            "fieldname": "column_break_vercel",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "vercel_service_key",
+            "fieldtype": "Password",
+            "label": "Vercel Service API Key",
+            "description": "Secret key for authenticating with the Vercel service"
+        },
+        {
+            "fieldname": "handle_system_emails",
+            "fieldtype": "Check",
+            "label": "Route System Emails Through Vercel",
+            "default": "1",
+            "description": "Send password reset, welcome, and notification emails via Vercel with branding"
         },
         {
             "fieldname": "doctype_configuration_section",

@@ -23,11 +23,18 @@ doc_events = {
     }
 }
 
-# Fixtures - Export Email Service Settings
+# Session creation hook - override sendmail for system emails
+on_session_creation = "emails.email_service.sendmail_override.override_sendmail"
+
+# Fixtures - Export Email Service Settings and Email Branding
 fixtures = [
     {
         "dt": "Custom Field",
         "filters": [["module", "=", "Emails"]]
+    },
+    {
+        "dt": "Email Branding",
+        "filters": []
     }
 ]
 
