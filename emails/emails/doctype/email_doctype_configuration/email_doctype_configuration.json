@@ -8,6 +8,7 @@
         "enabled",
         "source_app",
         "column_break_config",
+        "vercel_template",
         "resend_template_id",
         "require_submit",
         "recipient_section",
@@ -47,6 +48,15 @@
         {
             "fieldname": "column_break_config",
             "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "vercel_template",
+            "fieldtype": "Select",
+            "in_list_view": 1,
+            "label": "Vercel Template",
+            "options": "document\nquote\norder\nstatement\ndelivery\nnotification\nauth",
+            "default": "document",
+            "description": "Template to use when sending via Vercel react-email service"
         },
         {
             "fieldname": "resend_template_id",

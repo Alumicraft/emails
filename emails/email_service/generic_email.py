@@ -117,6 +117,7 @@ def send_document_email(
             attachments=attachments,
             skip_communication=skip_communication,
             settings=settings,
+            config=config,
         )
     else:
         # Fall back to direct Resend template
@@ -147,14 +148,20 @@ def _send_via_vercel(
     attachments,
     skip_communication,
     settings,
+    config=None,
 ):
     """Send email via Vercel react-email service with branding."""
     # Get branding
     branding = get_company_branding(company_name)
 
+    # Determine template from config or default to "document"
+    template = "document"
+    if config and getattr(config, "vercel_template", None):
+        template = config.vercel_template
+
     try:
         result = vercel_send_email(
-            template="document",  # Universal document template
+            template=template,
             to_email=to_email,
             subject=subject,
             data=template_data,
