@@ -19,27 +19,14 @@ from frappe import _
 # Store reference to original sendmail
 _original_sendmail = None
 
-# Keywords that indicate auth-related emails (password reset, verification, etc.)
-AUTH_SUBJECTS = [
-    "password",
-    "reset",
-    "verify",
-    "verification",
-    "2fa",
-    "otp",
-    "welcome",
-    "authenticate",
-]
-
-# Keywords that indicate magic link / passwordless login emails
-MAGIC_LINK_SUBJECTS = [
-    "magic link",
-    "login link",
-    "sign in link",
-    "passwordless",
-    "login to",
-    "sign in to",
-]
+# Map Frappe template names to Vercel templates
+TEMPLATE_MAP = {
+    "login_with_email_link": "magic-link",
+    "password_reset": "auth",
+    "new_user": "auth",
+    "verification_code": "auth",
+    "user_invitation": "auth",
+}
 
 
 def override_sendmail():
@@ -137,31 +124,12 @@ def patched_sendmail(
             is_notification, inline_images, **kwargs
         )
 
-    # Determine template type based on subject
-    template_type = _get_system_template(subject, html_content)
+    # Determine template type based on Frappe template name
+    template_type = _get_system_template(template, args)
 
-    # Build data for template
-    template_data = {
-        "message": html_content,
-        "title": subject or "",
-    }
-
-    # For magic-link emails, extract the login link
-    if template_type == "magic-link":
-        action_link = _extract_action_link(html_content)
-        if action_link:
-            template_data["magic_link"] = action_link
-            template_data["button_text"] = "Sign In"
-            template_data["title"] = "Sign in to your account"
-            template_data["message"] = "Click the button below to securely sign in. No password required."
-
-    # For auth emails, try to extract action link
-    elif template_type == "auth":
-        action_link = _extract_action_link(html_content)
-        if action_link:
-            template_data["reset_link"] = action_link
-            template_data["action_link"] = action_link
-            template_data["action_label"] = _get_action_label(subject)
+    # Build data for template based on Frappe args
+    template_args = args or {}
+    template_data = _build_template_data(template_type, template_args, subject, html_content)
 
     # Send via Vercel
     try:
@@ -248,55 +216,72 @@ def _get_company_from_context(reference_doctype, reference_name) -> str:
     return company_name
 
 
-def _get_system_template(subject: str, content: str) -> str:
+def _get_system_template(template: str, args: dict) -> str:
     """
-    Determine which template to use based on email subject/content.
+    Determine which Vercel template to use based on Frappe template name.
+
+    Args:
+        template: Frappe template path (e.g., "login_with_email_link")
+        args: Template arguments from Frappe
 
     Returns:
-        "magic-link" for passwordless login / magic link emails
-        "auth" for password reset, welcome, 2FA, etc.
-        "notification" for everything else
+        Vercel template name ("magic-link", "auth", "notification")
     """
-    subject_lower = (subject or "").lower()
-    content_lower = (content or "").lower()
+    if template:
+        # Extract template name from path (e.g., "templates/emails/foo.html" -> "foo")
+        template_name = template.replace(".html", "").split("/")[-1]
+        if template_name in TEMPLATE_MAP:
+            return TEMPLATE_MAP[template_name]
 
-    # Check for magic link / passwordless login first
-    if any(kw in subject_lower for kw in MAGIC_LINK_SUBJECTS):
-        return "magic-link"
-    if any(kw in content_lower for kw in ["magic link", "passwordless", "click to sign in", "click to login"]):
-        return "magic-link"
-
-    # Check for auth-related emails (password reset, verification, etc.)
-    if any(kw in subject_lower for kw in AUTH_SUBJECTS):
-        return "auth"
-    if any(kw in content_lower for kw in ["reset your password", "verify your email", "one-time password"]):
-        return "auth"
-
+    # Fallback to notification for unrecognized templates
     return "notification"
 
 
-def _extract_action_link(html_content: str) -> str:
-    """Extract the primary action link from HTML content."""
-    import re
+def _build_template_data(template_type: str, args: dict, subject: str, html_content: str) -> dict:
+    """
+    Build template data by mapping Frappe variables to our Vercel template props.
 
-    if not html_content:
-        return None
+    Args:
+        template_type: The Vercel template type
+        args: Template arguments from Frappe
+        subject: Email subject
+        html_content: Rendered HTML content (fallback)
 
-    # Look for common link patterns
-    patterns = [
-        r'href=["\']([^"\']*reset[^"\']*)["\']',
-        r'href=["\']([^"\']*verify[^"\']*)["\']',
-        r'href=["\']([^"\']*confirm[^"\']*)["\']',
-        r'href=["\']([^"\']*login[^"\']*)["\']',
-        r'href=["\']([^"\']*action[^"\']*)["\']',
-    ]
+    Returns:
+        dict: Data for the Vercel template
+    """
+    data = {
+        "title": subject or "",
+        "message": html_content,
+    }
 
-    for pattern in patterns:
-        match = re.search(pattern, html_content, re.IGNORECASE)
-        if match:
-            return match.group(1)
+    if template_type == "magic-link":
+        # login_with_email_link provides: link, minutes, app_name
+        data["magic_link"] = args.get("link", "")
+        data["expiry_time"] = f"{args.get('minutes', 15)} minutes"
+        data["button_text"] = "Sign In"
+        data["title"] = f"Sign in to {args.get('app_name', 'your account')}"
+        data["message"] = "Click the button below to securely sign in. No password required."
 
-    return None
+    elif template_type == "auth":
+        # password_reset provides: link
+        # new_user provides: link, first_name, last_name, site_url
+        # verification_code has OTP in content
+        data["action_link"] = args.get("link", "")
+        data["reset_link"] = args.get("link", "")
+
+        # Build user name if available
+        first_name = args.get("first_name", "")
+        last_name = args.get("last_name", "")
+        if first_name or last_name:
+            data["user_name"] = f"{first_name} {last_name}".strip()
+
+        # Determine action label from subject
+        data["action_label"] = _get_action_label(subject)
+
+    # Notification template just uses message and title (already set)
+
+    return data
 
 
 def _get_action_label(subject: str) -> str:
