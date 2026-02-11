@@ -61,6 +61,7 @@ class EmailBranding(Document):
 
             # Logo
             "logo_url": self.logo_url or "",
+            "logo_url_secondary": self.logo_url_secondary or self.logo_url or "",
             "logo_height": self.logo_height or 40,
             "logo_alt": self.logo_alt_text or self.company or "",
 

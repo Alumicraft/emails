@@ -43,6 +43,7 @@ def get_default_branding() -> dict:
     return {
         "company": "",
         "logo_url": "",
+        "logo_url_secondary": "",
         "logo_height": 40,
         "logo_alt": "",
         "primary_color": "#0066cc",

@@ -11,6 +11,7 @@
         "column_break_general",
         "logo_section",
         "logo_url",
+        "logo_url_secondary",
         "column_break_logo",
         "logo_alt_text",
         "logo_height",
@@ -72,9 +73,16 @@
         {
             "fieldname": "logo_url",
             "fieldtype": "Data",
-            "label": "Logo URL",
+            "label": "Primary Logo URL",
             "options": "URL",
-            "description": "Public URL to your logo (e.g., CDN link). Required for logo to display in emails."
+            "description": "Main logo shown in email header"
+        },
+        {
+            "fieldname": "logo_url_secondary",
+            "fieldtype": "Data",
+            "label": "Secondary Logo URL",
+            "options": "URL",
+            "description": "Footer logo (optional, defaults to primary)"
         },
         {
             "fieldname": "column_break_logo",
