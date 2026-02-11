@@ -54,7 +54,7 @@
             "fieldtype": "Select",
             "in_list_view": 1,
             "label": "Vercel Template",
-            "options": "document\nquote\norder\nstatement\ndelivery\nnotification\nauth",
+            "options": "document\nquote\norder\nstatement\ndelivery\nnotification\nauth\nmagic-link",
             "default": "document",
             "description": "Template to use when sending via Vercel react-email service"
         },
