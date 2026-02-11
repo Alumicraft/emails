@@ -19,7 +19,7 @@ from frappe import _
 # Store reference to original sendmail
 _original_sendmail = None
 
-# Keywords that indicate auth-related emails
+# Keywords that indicate auth-related emails (password reset, verification, etc.)
 AUTH_SUBJECTS = [
     "password",
     "reset",
@@ -28,9 +28,17 @@ AUTH_SUBJECTS = [
     "2fa",
     "otp",
     "welcome",
-    "login",
-    "sign in",
     "authenticate",
+]
+
+# Keywords that indicate magic link / passwordless login emails
+MAGIC_LINK_SUBJECTS = [
+    "magic link",
+    "login link",
+    "sign in link",
+    "passwordless",
+    "login to",
+    "sign in to",
 ]
 
 
@@ -138,8 +146,17 @@ def patched_sendmail(
         "title": subject or "",
     }
 
+    # For magic-link emails, extract the login link
+    if template_type == "magic-link":
+        action_link = _extract_action_link(html_content)
+        if action_link:
+            template_data["magic_link"] = action_link
+            template_data["button_text"] = "Sign In"
+            template_data["title"] = "Sign in to your account"
+            template_data["message"] = "Click the button below to securely sign in. No password required."
+
     # For auth emails, try to extract action link
-    if template_type == "auth":
+    elif template_type == "auth":
         action_link = _extract_action_link(html_content)
         if action_link:
             template_data["reset_link"] = action_link
@@ -236,16 +253,22 @@ def _get_system_template(subject: str, content: str) -> str:
     Determine which template to use based on email subject/content.
 
     Returns:
+        "magic-link" for passwordless login / magic link emails
         "auth" for password reset, welcome, 2FA, etc.
         "notification" for everything else
     """
     subject_lower = (subject or "").lower()
+    content_lower = (content or "").lower()
 
+    # Check for magic link / passwordless login first
+    if any(kw in subject_lower for kw in MAGIC_LINK_SUBJECTS):
+        return "magic-link"
+    if any(kw in content_lower for kw in ["magic link", "passwordless", "click to sign in", "click to login"]):
+        return "magic-link"
+
+    # Check for auth-related emails (password reset, verification, etc.)
     if any(kw in subject_lower for kw in AUTH_SUBJECTS):
         return "auth"
-
-    # Also check content for auth-related patterns
-    content_lower = (content or "").lower()
     if any(kw in content_lower for kw in ["reset your password", "verify your email", "one-time password"]):
         return "auth"
 
