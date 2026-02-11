@@ -2,9 +2,9 @@
 # For license information, please see license.txt
 
 """
-Email Branding DocType
+Email Branding DocType (Single)
 
-Stores per-company branding configuration for emails including:
+Stores global branding configuration for emails including:
 - Logo (light and dark mode)
 - Colors (light and dark mode)
 - Typography
@@ -19,55 +19,7 @@ from frappe.model.document import Document
 
 class EmailBranding(Document):
     def validate(self):
-        self.validate_logo_file()
-        self.validate_default_branding()
         self.set_defaults()
-
-    def validate_logo_file(self):
-        """Ensure logo is valid image under 100KB."""
-        for field in ["logo", "logo_dark"]:
-            logo_url = getattr(self, field, None)
-            if not logo_url:
-                continue
-
-            file_doc = frappe.db.get_value(
-                "File",
-                {"file_url": logo_url},
-                ["file_size", "file_name"],
-                as_dict=True
-            )
-
-            if not file_doc:
-                continue
-
-            # Check file size
-            if file_doc.file_size and file_doc.file_size > 100 * 1024:
-                frappe.throw(
-                    _("{0} file size must be under 100KB for optimal email delivery. "
-                      "Current size: {1}KB").format(
-                        field.replace("_", " ").title(),
-                        round(file_doc.file_size / 1024, 1)
-                    )
-                )
-
-            # Check file type
-            allowed_types = (".png", ".jpg", ".jpeg", ".gif")
-            if not logo_url.lower().endswith(allowed_types):
-                frappe.throw(
-                    _("{0} must be one of: {1}. SVG is not recommended for email.").format(
-                        field.replace("_", " ").title(),
-                        ", ".join(allowed_types)
-                    )
-                )
-
-    def validate_default_branding(self):
-        """Ensure only one branding is marked as default."""
-        if self.is_default:
-            frappe.db.sql("""
-                UPDATE `tabEmail Branding`
-                SET is_default = 0
-                WHERE is_default = 1 AND name != %s
-            """, self.name)
 
     def set_defaults(self):
         """Set sensible defaults for optional fields."""
@@ -108,6 +60,7 @@ class EmailBranding(Document):
             "company": self.company or "",
 
             # Logo
+            "logo_url": self.logo_url or "",
             "logo_height": self.logo_height or 40,
             "logo_alt": self.logo_alt_text or self.company or "",
 
@@ -151,12 +104,9 @@ class EmailBranding(Document):
 
 
 @frappe.whitelist()
-def send_test_email(branding_name: str):
+def send_test_email():
     """
-    Send a test email to the current user using the specified branding.
-
-    Args:
-        branding_name: Name of the Email Branding document
+    Send a test email to the current user using the configured branding.
 
     Returns:
         dict: Success status and message
@@ -164,8 +114,8 @@ def send_test_email(branding_name: str):
     from emails.email_service.branding import get_company_branding
     from emails.email_service.vercel_client import send_email, VercelEmailError
 
-    branding_doc = frappe.get_doc("Email Branding", branding_name)
-    branding = get_company_branding(branding_doc.company)
+    branding_doc = frappe.get_single("Email Branding")
+    branding = get_company_branding()
 
     user = frappe.session.user
     user_email = frappe.db.get_value("User", user, "email")
@@ -177,7 +127,7 @@ def send_test_email(branding_name: str):
         result = send_email(
             template="document",
             to_email=user_email,
-            subject=_("Test Email - {0} Branding").format(branding_doc.company),
+            subject=_("Test Email - {0} Branding").format(branding_doc.company or "Email"),
             data={
                 "document_type": "Test Email",
                 "document_number": "TEST-001",
@@ -197,7 +147,6 @@ def send_test_email(branding_name: str):
             branding=branding,
             tags=[
                 {"name": "type", "value": "test"},
-                {"name": "branding", "value": branding_name},
             ],
         )
 

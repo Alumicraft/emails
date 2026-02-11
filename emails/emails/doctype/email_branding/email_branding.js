@@ -3,12 +3,10 @@
 
 frappe.ui.form.on("Email Branding", {
     refresh: function(frm) {
-        // Add "Send Test Email" button if document is saved
-        if (!frm.is_new()) {
-            frm.add_custom_button(__("Send Test Email"), function() {
-                frm.trigger("send_test_email");
-            }, __("Actions"));
-        }
+        // Add "Send Test Email" button
+        frm.add_custom_button(__("Send Test Email"), function() {
+            frm.trigger("send_test_email");
+        }, __("Actions"));
 
         // Show helper text for footer template
         if (frm.fields_dict.footer_text) {
@@ -29,9 +27,6 @@ frappe.ui.form.on("Email Branding", {
             function() {
                 frappe.call({
                     method: "emails.emails.doctype.email_branding.email_branding.send_test_email",
-                    args: {
-                        branding_name: frm.doc.name
-                    },
                     freeze: true,
                     freeze_message: __("Sending test email..."),
                     callback: function(r) {
@@ -53,14 +48,5 @@ frappe.ui.form.on("Email Branding", {
                 });
             }
         );
-    },
-
-    is_default: function(frm) {
-        if (frm.doc.is_default) {
-            frappe.show_alert({
-                message: __("This branding will be used for system emails and as fallback."),
-                indicator: "blue"
-            });
-        }
     }
 });

@@ -3,17 +3,14 @@
     "creation": "2024-01-01 00:00:00.000000",
     "doctype": "DocType",
     "engine": "InnoDB",
-    "naming_rule": "By fieldname",
-    "autoname": "field:company",
+    "issingle": 1,
     "field_order": [
         "general_section",
         "company",
         "enabled",
         "column_break_general",
-        "is_default",
         "logo_section",
-        "logo",
-        "logo_dark",
+        "logo_url",
         "column_break_logo",
         "logo_alt_text",
         "logo_height",
@@ -54,9 +51,7 @@
             "fieldtype": "Link",
             "label": "Company",
             "options": "Company",
-            "reqd": 1,
-            "unique": 1,
-            "in_list_view": 1
+            "description": "Company name to display in emails"
         },
         {
             "fieldname": "enabled",
@@ -70,27 +65,16 @@
             "fieldtype": "Column Break"
         },
         {
-            "fieldname": "is_default",
-            "fieldtype": "Check",
-            "label": "Is Default",
-            "description": "Use for system emails and as fallback when no company-specific branding exists"
-        },
-        {
             "fieldname": "logo_section",
             "fieldtype": "Section Break",
             "label": "Logo"
         },
         {
-            "fieldname": "logo",
-            "fieldtype": "Attach Image",
-            "label": "Logo",
-            "description": "Recommended: PNG, max 100KB, transparent background"
-        },
-        {
-            "fieldname": "logo_dark",
-            "fieldtype": "Attach Image",
-            "label": "Logo (Dark Mode)",
-            "description": "Optional: Alternative logo for dark mode email clients"
+            "fieldname": "logo_url",
+            "fieldtype": "Data",
+            "label": "Logo URL",
+            "options": "URL",
+            "description": "Public URL to your logo (e.g., CDN link). Required for logo to display in emails."
         },
         {
             "fieldname": "column_break_logo",
