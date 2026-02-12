@@ -73,6 +73,7 @@ class EmailBranding(Document):
             # Light mode colors
             "primary_color": self.primary_color or "#0066cc",
             "secondary_color": self.secondary_color or "",
+            "tertiary_color": self.tertiary_color or "#6b7280",
             "text_color": self.text_color or "#333333",
             "background_color": self.background_color or "#f8f9fa",
 

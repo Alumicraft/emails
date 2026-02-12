@@ -19,6 +19,7 @@
         "colors_light_section",
         "primary_color",
         "secondary_color",
+        "tertiary_color",
         "column_break_colors_light",
         "text_color",
         "background_color",
@@ -126,6 +127,13 @@
             "fieldtype": "Color",
             "label": "Secondary Color",
             "description": "Used for accents (optional)"
+        },
+        {
+            "fieldname": "tertiary_color",
+            "fieldtype": "Color",
+            "label": "Tertiary Color",
+            "default": "#6b7280",
+            "description": "Used for muted text, icons, and dividers"
         },
         {
             "fieldname": "column_break_colors_light",

@@ -49,6 +49,7 @@ def get_default_branding() -> dict:
         "background_image_url": "",
         "primary_color": "#0066cc",
         "secondary_color": "",
+        "tertiary_color": "#6b7280",
         "text_color": "#333333",
         "background_color": "#f8f9fa",
         "primary_color_dark": "#4d9fff",
