@@ -15,6 +15,7 @@
         "column_break_logo",
         "logo_alt_text",
         "logo_height",
+        "background_image_url",
         "colors_light_section",
         "primary_color",
         "secondary_color",
@@ -100,6 +101,13 @@
             "label": "Logo Height (px)",
             "default": "40",
             "description": "Height in pixels (width auto-scales)"
+        },
+        {
+            "fieldname": "background_image_url",
+            "fieldtype": "Data",
+            "label": "Background Image URL",
+            "options": "URL",
+            "description": "Public URL for email background image (optional)"
         },
         {
             "fieldname": "colors_light_section",

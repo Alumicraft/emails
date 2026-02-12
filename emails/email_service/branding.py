@@ -46,6 +46,7 @@ def get_default_branding() -> dict:
         "logo_url_secondary": "",
         "logo_height": 40,
         "logo_alt": "",
+        "background_image_url": "",
         "primary_color": "#0066cc",
         "secondary_color": "",
         "text_color": "#333333",
@@ -57,6 +58,9 @@ def get_default_branding() -> dict:
         "font_family": "Arial, Helvetica, sans-serif",
         "footer_text": "",
         "preheader": "",
+        "company_email": "",
+        "company_phone": "",
+        "mailing_address": "",
         "website_url": "",
         "social_links": [],
     }

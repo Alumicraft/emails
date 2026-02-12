@@ -41,11 +41,10 @@ class EmailBranding(Document):
         Return branding as dict for Vercel API payload.
 
         Includes both light and dark mode colors, logo info,
-        and rendered footer text.
+        contact info from Company, and rendered footer text.
         """
         social_links = []
         platforms = [
-            ("website", self.website_url),
             ("facebook", self.facebook_url),
             ("linkedin", self.linkedin_url),
             ("twitter", self.twitter_url),
@@ -54,6 +53,9 @@ class EmailBranding(Document):
         for platform, url in platforms:
             if url:
                 social_links.append({"platform": platform, "url": url})
+
+        # Get contact info from Company
+        company_email, company_phone, mailing_address = self._get_company_contact_info()
 
         return {
             # Company
@@ -64,6 +66,7 @@ class EmailBranding(Document):
             "logo_url_secondary": self.logo_url_secondary or self.logo_url or "",
             "logo_height": self.logo_height or 40,
             "logo_alt": self.logo_alt_text or self.company or "",
+            "background_image_url": getattr(self, "background_image_url", "") or "",
 
             # Light mode colors
             "primary_color": self.primary_color or "#0066cc",
@@ -84,10 +87,67 @@ class EmailBranding(Document):
             "footer_text": self.render_footer(),
             "preheader": self.preheader_text or "",
 
+            # Contact info (from Company)
+            "company_email": company_email,
+            "company_phone": company_phone,
+            "mailing_address": mailing_address,
+
             # Social
             "website_url": self.website_url or "",
             "social_links": social_links,
         }
+
+    def _get_company_contact_info(self) -> tuple:
+        """
+        Fetch contact info from the linked Company record.
+
+        Returns:
+            tuple: (company_email, company_phone, mailing_address)
+        """
+        company_email = ""
+        company_phone = ""
+        mailing_address = ""
+
+        if not self.company:
+            return company_email, company_phone, mailing_address
+
+        try:
+            # Get Company details
+            company_doc = frappe.get_doc("Company", self.company)
+            company_email = company_doc.email or ""
+            company_phone = company_doc.phone_no or ""
+
+            # Get primary address
+            address_name = frappe.db.get_value(
+                "Dynamic Link",
+                {
+                    "link_doctype": "Company",
+                    "link_name": self.company,
+                    "parenttype": "Address"
+                },
+                "parent"
+            )
+
+            if address_name:
+                address = frappe.get_doc("Address", address_name)
+                address_parts = []
+                if address.address_line1:
+                    address_parts.append(address.address_line1)
+                if address.address_line2:
+                    address_parts.append(address.address_line2)
+                if address.city:
+                    city_line = address.city
+                    if address.state:
+                        city_line += f", {address.state}"
+                    if address.pincode:
+                        city_line += f" {address.pincode}"
+                    address_parts.append(city_line)
+                mailing_address = ", ".join(address_parts)
+
+        except Exception:
+            pass
+
+        return company_email, company_phone, mailing_address
 
     def render_footer(self) -> str:
         """Render Jinja footer template with company and year variables."""
