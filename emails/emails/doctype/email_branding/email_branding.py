@@ -44,11 +44,13 @@ class EmailBranding(Document):
         contact info from Company, and rendered footer text.
         """
         social_links = []
+        # Order: instagram, tiktok, facebook, youtube, x
         platforms = [
-            ("facebook", self.facebook_url),
-            ("linkedin", self.linkedin_url),
-            ("twitter", self.twitter_url),
-            ("instagram", self.instagram_url),
+            ("instagram", getattr(self, "instagram_url", None)),
+            ("tiktok", getattr(self, "tiktok_url", None)),
+            ("facebook", getattr(self, "facebook_url", None)),
+            ("youtube", getattr(self, "youtube_url", None)),
+            ("twitter", getattr(self, "twitter_url", None)),
         ]
         for platform, url in platforms:
             if url:
