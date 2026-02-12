@@ -98,6 +98,11 @@ class EmailBranding(Document):
             # Social
             "website_url": self.website_url or "",
             "social_links": social_links,
+            "instagram_url": getattr(self, "instagram_url", "") or "",
+            "tiktok_url": getattr(self, "tiktok_url", "") or "",
+            "facebook_url": getattr(self, "facebook_url", "") or "",
+            "youtube_url": getattr(self, "youtube_url", "") or "",
+            "twitter_url": getattr(self, "twitter_url", "") or "",
         }
 
     def _format_phone_number(self, phone: str) -> str:
