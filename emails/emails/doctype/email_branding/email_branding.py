@@ -168,9 +168,23 @@ class EmailBranding(Document):
 
 
 @frappe.whitelist()
-def send_test_email():
+def get_available_templates():
+    """Return list of available email templates."""
+    return [
+        {"value": "magic-link", "label": "Magic Link"},
+        {"value": "document", "label": "Document"},
+        {"value": "notification", "label": "Notification"},
+        {"value": "auth", "label": "Authentication"},
+    ]
+
+
+@frappe.whitelist()
+def send_test_email(template="magic-link"):
     """
     Send a test email to the current user using the configured branding.
+
+    Args:
+        template: The email template to use (magic-link, document, notification, auth)
 
     Returns:
         dict: Success status and message
@@ -183,20 +197,28 @@ def send_test_email():
 
     user = frappe.session.user
     user_email = frappe.db.get_value("User", user, "email")
+    user_name = frappe.db.get_value("User", user, "full_name") or user
 
     if not user_email:
         frappe.throw(_("No email address found for current user"))
 
-    try:
-        result = send_email(
-            template="document",
-            to_email=user_email,
-            subject=_("Test Email - {0} Branding").format(branding_doc.company or "Email"),
-            data={
-                "document_type": "Test Email",
-                "document_number": "TEST-001",
+    # Template-specific data and subjects
+    template_configs = {
+        "magic-link": {
+            "subject": _("Sign in to {0}").format(branding_doc.company or "Your Account"),
+            "data": {
+                "magic_link": "https://example.com/auth/verify?token=test123",
+                "user_name": user_name,
+                "expiry_time": "10 minutes",
+            },
+        },
+        "document": {
+            "subject": _("Test Document - {0}").format(branding_doc.company or "Email"),
+            "data": {
+                "document_type": "Test Invoice",
+                "document_number": "INV-TEST-001",
                 "document_date": frappe.utils.formatdate(frappe.utils.today()),
-                "customer_name": frappe.db.get_value("User", user, "full_name") or user,
+                "customer_name": user_name,
                 "total_amount": "$1,234.56",
                 "custom_message": _(
                     "This is a test email to preview your email branding. "
@@ -208,15 +230,47 @@ def send_test_email():
                     {"item_name": "Sample Item 2", "qty": 1, "rate": "$500.00", "amount": "$500.00"},
                 ],
             },
+        },
+        "notification": {
+            "subject": _("Notification from {0}").format(branding_doc.company or "System"),
+            "data": {
+                "title": "Test Notification",
+                "message": _(
+                    "This is a test notification email to preview your email branding. "
+                    "Notifications can be used for alerts, updates, and general communications."
+                ),
+                "action_url": "https://example.com",
+                "action_text": "View Details",
+            },
+        },
+        "auth": {
+            "subject": _("Verify your email - {0}").format(branding_doc.company or "Account"),
+            "data": {
+                "user_name": user_name,
+                "verification_code": "123456",
+                "expiry_time": "15 minutes",
+            },
+        },
+    }
+
+    config = template_configs.get(template, template_configs["magic-link"])
+
+    try:
+        result = send_email(
+            template=template,
+            to_email=user_email,
+            subject=config["subject"],
+            data=config["data"],
             branding=branding,
             tags=[
                 {"name": "type", "value": "test"},
+                {"name": "template", "value": template},
             ],
         )
 
         return {
             "success": True,
-            "message": _("Test email sent to {0}").format(user_email),
+            "message": _("Test email ({0}) sent to {1}").format(template, user_email),
             "message_id": result.get("message_id"),
         }
 

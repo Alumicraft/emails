@@ -22,11 +22,39 @@ frappe.ui.form.on("Email Branding", {
             return;
         }
 
-        frappe.confirm(
-            __("Send a test email to {0}?", [frappe.session.user_email]),
-            function() {
+        // Show dialog with template selection
+        let d = new frappe.ui.Dialog({
+            title: __("Send Test Email"),
+            fields: [
+                {
+                    label: __("Email Template"),
+                    fieldname: "template",
+                    fieldtype: "Select",
+                    options: [
+                        {"value": "magic-link", "label": __("Magic Link")},
+                        {"value": "document", "label": __("Document")},
+                        {"value": "notification", "label": __("Notification")},
+                        {"value": "auth", "label": __("Authentication")}
+                    ],
+                    default: "magic-link",
+                    reqd: 1
+                },
+                {
+                    label: __("Send To"),
+                    fieldname: "send_to",
+                    fieldtype: "Data",
+                    default: frappe.session.user_email,
+                    read_only: 1
+                }
+            ],
+            primary_action_label: __("Send"),
+            primary_action: function(values) {
+                d.hide();
                 frappe.call({
                     method: "emails.emails.doctype.email_branding.email_branding.send_test_email",
+                    args: {
+                        template: values.template
+                    },
                     freeze: true,
                     freeze_message: __("Sending test email..."),
                     callback: function(r) {
@@ -47,6 +75,7 @@ frappe.ui.form.on("Email Branding", {
                     }
                 });
             }
-        );
+        });
+        d.show();
     }
 });
