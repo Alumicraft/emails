@@ -100,6 +100,33 @@ class EmailBranding(Document):
             "social_links": social_links,
         }
 
+    def _format_phone_number(self, phone: str) -> str:
+        """
+        Format phone number to +1 (XXX) XXX-XXXX format.
+
+        Args:
+            phone: Raw phone number string
+
+        Returns:
+            str: Formatted phone number or original if can't format
+        """
+        if not phone:
+            return ""
+
+        # Remove all non-digit characters
+        digits = "".join(c for c in phone if c.isdigit())
+
+        # Handle 10-digit US numbers
+        if len(digits) == 10:
+            return f"+1 ({digits[:3]}) {digits[3:6]}-{digits[6:]}"
+
+        # Handle 11-digit numbers starting with 1
+        if len(digits) == 11 and digits[0] == "1":
+            return f"+1 ({digits[1:4]}) {digits[4:7]}-{digits[7:]}"
+
+        # Return original if can't format
+        return phone
+
     def _get_company_contact_info(self) -> tuple:
         """
         Fetch contact info from the linked Company record.
@@ -118,7 +145,7 @@ class EmailBranding(Document):
             # Get Company details
             company_doc = frappe.get_doc("Company", self.company)
             company_email = company_doc.email or ""
-            company_phone = company_doc.phone_no or ""
+            company_phone = self._format_phone_number(company_doc.phone_no or "")
 
             # Get primary address
             address_name = frappe.db.get_value(
