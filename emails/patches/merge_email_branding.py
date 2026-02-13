@@ -40,10 +40,9 @@ def execute():
 
     # Read values from Email Branding singles table
     branding_values = {}
-    for row in frappe.db.get_all(
-        "Singles",
-        filters={"doctype": "Email Branding"},
-        fields=["field", "value"],
+    for row in frappe.db.sql(
+        "SELECT field, value FROM tabSingles WHERE doctype = 'Email Branding'",
+        as_dict=True,
     ):
         branding_values[row.field] = row.value
 

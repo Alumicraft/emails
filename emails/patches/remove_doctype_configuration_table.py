@@ -10,12 +10,8 @@ def execute():
     resolution and DOCTYPE_TEMPLATE_MAP for template selection.
     """
     # Clear child table data from the singles table
-    frappe.db.delete(
-        "Singles",
-        filters={
-            "doctype": "Email Service Settings",
-            "field": ["in", ["supported_doctypes", "auto_detect_modules"]],
-        },
+    frappe.db.sql(
+        "DELETE FROM tabSingles WHERE doctype = 'Email Service Settings' AND field IN ('supported_doctypes', 'auto_detect_modules')"
     )
 
     # Drop the child table if it exists
