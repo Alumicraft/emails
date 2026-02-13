@@ -13,6 +13,7 @@ import { PasswordResetEmail } from "../emails/password-reset";
 import { EmailVerificationEmail } from "../emails/email-verification";
 import { WelcomeEmail } from "../emails/welcome";
 import { PaymentRequestEmail } from "../emails/payment-request";
+import { DocumentEmail } from "../emails/document";
 import { Branding } from "../emails/shared";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -51,6 +52,7 @@ const templates: Record<string, React.FC<any>> = {
   "email-verification": EmailVerificationEmail,
   "welcome": WelcomeEmail,
   "payment-request": PaymentRequestEmail,
+  "document": DocumentEmail,
 };
 
 // ============================================================================
