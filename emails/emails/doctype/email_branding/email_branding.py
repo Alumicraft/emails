@@ -306,8 +306,6 @@ def send_test_email(template="magic-link"):
             "subject": _("Payment Request from {0}").format(branding_doc.company or "Company"),
             "data": {
                 "reference_number": "PR-TEST-001",
-                "request_date": today,
-                "terms": "Net 15",
                 "due_date": due_date,
                 "project_name": "Test Project",
                 "customer_name": user_name,
