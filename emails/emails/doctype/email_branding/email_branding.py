@@ -80,6 +80,7 @@ class EmailBranding(Document):
             # Dark mode colors
             "primary_color_dark": self.primary_color_dark or self.primary_color or "#0066cc",
             "secondary_color_dark": self.secondary_color_dark or self.secondary_color or "",
+            "tertiary_color_dark": getattr(self, "tertiary_color_dark", None) or self.tertiary_color or "#9ca3af",
             "text_color_dark": self.text_color_dark or "#ffffff",
             "background_color_dark": self.background_color_dark or "#1a1a1a",
 
