@@ -473,9 +473,15 @@ def build_template_data(doc, doctype, company_info, config, custom_message=None)
     data["party_name"] = data["customer_name"]
 
     # Build default subject
-    data["subject"] = _("{0} {1} from {2}").format(
-        doctype, doc.name, company_info.get("company_name", "Company")
-    )
+    if doctype == "Payment Request" and hasattr(doc, "reference_name") and doc.reference_name:
+        # Use reference document number for Payment Request subject
+        data["subject"] = _("Invoice {0} from {1}").format(
+            doc.reference_name, company_info.get("company_name", "Company")
+        )
+    else:
+        data["subject"] = _("{0} {1} from {2}").format(
+            doctype, doc.name, company_info.get("company_name", "Company")
+        )
 
     # Include all standard document fields for template flexibility
     meta = frappe.get_meta(doctype)

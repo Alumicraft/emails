@@ -303,7 +303,7 @@ def send_test_email(template="magic-link"):
             },
         },
         "payment-request": {
-            "subject": _("Payment Request from {0}").format(branding_doc.company or "Company"),
+            "subject": _("Invoice {0} from {1}").format("SO-TEST-001", branding_doc.company or "Company"),
             "data": {
                 "reference_number": "PR-TEST-001",
                 "due_date": due_date,
