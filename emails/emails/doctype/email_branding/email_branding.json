@@ -26,6 +26,7 @@
         "colors_dark_section",
         "primary_color_dark",
         "secondary_color_dark",
+        "tertiary_color_dark",
         "column_break_colors_dark",
         "text_color_dark",
         "background_color_dark",
@@ -169,6 +170,12 @@
             "fieldname": "secondary_color_dark",
             "fieldtype": "Color",
             "label": "Secondary Color (Dark)"
+        },
+        {
+            "fieldname": "tertiary_color_dark",
+            "fieldtype": "Color",
+            "label": "Tertiary Color (Dark)",
+            "description": "Muted text color for dark mode"
         },
         {
             "fieldname": "column_break_colors_dark",
