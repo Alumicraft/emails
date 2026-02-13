@@ -507,6 +507,20 @@ def build_template_data(doc, doctype, company_info, config, custom_message=None)
     data["items"] = extract_items_summary(doc, currency)
     data["items_count"] = len(doc.items) if hasattr(doc, "items") else 0
 
+    # Special handling for Payment Request - use reference document as reference_number
+    if doctype == "Payment Request":
+        if hasattr(doc, "reference_name") and doc.reference_name:
+            data["reference_number"] = doc.reference_name
+        # Also try to get project from the reference document
+        if hasattr(doc, "reference_doctype") and hasattr(doc, "reference_name"):
+            if doc.reference_doctype and doc.reference_name:
+                try:
+                    ref_doc = frappe.get_doc(doc.reference_doctype, doc.reference_name)
+                    if hasattr(ref_doc, "project") and ref_doc.project:
+                        data["project_name"] = ref_doc.project
+                except Exception:
+                    pass
+
     return data
 
 
