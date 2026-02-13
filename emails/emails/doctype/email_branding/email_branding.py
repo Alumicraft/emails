@@ -260,9 +260,9 @@ def send_test_email(template="magic-link"):
                 "invoice_number": "SINV-TEST-001",
                 "invoice_date": today,
                 "due_date": due_date,
+                "project_name": "Test Project",
                 "customer_name": user_name,
                 "amount_due": "$1,234.56",
-                "document_link": "https://example.com/invoice/test",
             },
         },
         "quotation": {
@@ -273,7 +273,6 @@ def send_test_email(template="magic-link"):
                 "valid_until": due_date,
                 "customer_name": user_name,
                 "total_amount": "$2,500.00",
-                "document_link": "https://example.com/quotation/test",
             },
         },
         "sales-order": {
@@ -281,10 +280,9 @@ def send_test_email(template="magic-link"):
             "data": {
                 "order_number": "SO-TEST-001",
                 "order_date": today,
-                "expected_delivery": due_date,
+                "project_name": "Test Project",
                 "customer_name": user_name,
                 "order_total": "$1,500.00",
-                "document_link": "https://example.com/order/test",
             },
         },
         "purchase-order": {
@@ -292,10 +290,7 @@ def send_test_email(template="magic-link"):
             "data": {
                 "po_number": "PO-TEST-001",
                 "po_date": today,
-                "required_by": due_date,
                 "supplier_name": user_name,
-                "po_total": "$3,000.00",
-                "document_link": "https://example.com/po/test",
             },
         },
         "request-for-quotation": {
@@ -303,7 +298,6 @@ def send_test_email(template="magic-link"):
             "data": {
                 "rfq_number": "RFQ-TEST-001",
                 "rfq_date": today,
-                "required_by": due_date,
                 "supplier_name": user_name,
                 "document_link": "https://example.com/rfq/test",
             },
@@ -313,7 +307,9 @@ def send_test_email(template="magic-link"):
             "data": {
                 "reference_number": "PR-TEST-001",
                 "request_date": today,
+                "terms": "Net 15",
                 "due_date": due_date,
+                "project_name": "Test Project",
                 "customer_name": user_name,
                 "amount_requested": "$500.00",
                 "stripe_payment_url": "https://example.com/pay/test",
