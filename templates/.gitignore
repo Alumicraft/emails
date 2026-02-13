@@ -1,0 +1,8 @@
+node_modules/
+.react-email/
+dist/
+.vercel/
+*.log
+.DS_Store
+.env
+.env.local

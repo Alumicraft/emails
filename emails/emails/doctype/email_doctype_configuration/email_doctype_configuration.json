@@ -54,8 +54,8 @@
             "fieldtype": "Select",
             "in_list_view": 1,
             "label": "Vercel Template",
-            "options": "document\nquote\norder\nstatement\ndelivery\nnotification\nauth\nmagic-link",
-            "default": "document",
+            "options": "\nsales-invoice\nquotation\nsales-order\npurchase-order\nrequest-for-quotation\npayment-request\npassword-reset\nemail-verification\nwelcome\nmagic-link",
+            "default": "",
             "description": "Template to use when sending via Vercel react-email service"
         },
         {

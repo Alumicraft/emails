@@ -1,1 +1,2 @@
 emails.patches.migrate_to_doctype_configuration
+emails.patches.merge_email_branding

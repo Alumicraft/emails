@@ -13,19 +13,24 @@ Falls back to Frappe's default email system if:
 - Vercel service fails and fallback_to_erpnext is enabled
 """
 
+import threading
+
 import frappe
 from frappe import _
 
 # Store reference to original sendmail
 _original_sendmail = None
 
+# Guard against recursive calls from fallback
+_sending_lock = threading.local()
+
 # Map Frappe template names to Vercel templates
 TEMPLATE_MAP = {
     "login_with_email_link": "magic-link",
-    "password_reset": "auth",
-    "new_user": "auth",
-    "verification_code": "auth",
-    "user_invitation": "auth",
+    "password_reset": "password-reset",
+    "new_user": "welcome",
+    "verification_code": "email-verification",
+    "user_invitation": "welcome",
 }
 
 
@@ -73,12 +78,48 @@ def patched_sendmail(
     **kwargs
 ):
     """
-    Patched sendmail that routes system emails through Vercel.
+    Patched sendmail that routes emails through Vercel.
 
-    If Vercel is configured and handle_system_emails is enabled, emails are
-    sent via the Vercel react-email service. Otherwise, falls back to the
-    original frappe.sendmail.
+    PATH 1: Document emails for configured doctypes (e.g., Payment Request Send button)
+    PATH 2: System emails (password reset, welcome, etc.) if handle_system_emails is enabled
+    Falls back to original frappe.sendmail if Vercel is not configured or fails.
     """
+    # Guard against recursive calls from fallback
+    if getattr(_sending_lock, 'in_progress', False):
+        return _call_original(
+            recipients, sender, subject, message, content,
+            reference_doctype, reference_name, add_unsubscribe_link,
+            attachments, reply_to, cc, bcc, delayed, communication,
+            now, print_html, print_format, send_me_a_copy, header,
+            with_container, as_markdown, template, args,
+            is_notification, inline_images, **kwargs
+        )
+
+    # PATH 1: Document emails for configured doctypes
+    if reference_doctype and reference_name and _should_route_document_email(reference_doctype):
+        _sending_lock.in_progress = True
+        try:
+            return _handle_document_email(
+                reference_doctype, reference_name, recipients,
+                cc=cc, bcc=bcc, message=message or content,
+            )
+        except Exception as e:
+            frappe.log_error(title="Document email via Vercel failed", message=str(e))
+            settings = frappe.get_single("Email Service Settings")
+            if getattr(settings, "fallback_to_erpnext", True):
+                return _call_original(
+                    recipients, sender, subject, message, content,
+                    reference_doctype, reference_name, add_unsubscribe_link,
+                    attachments, reply_to, cc, bcc, delayed, communication,
+                    now, print_html, print_format, send_me_a_copy, header,
+                    with_container, as_markdown, template, args,
+                    is_notification, inline_images, **kwargs
+                )
+            raise
+        finally:
+            _sending_lock.in_progress = False
+
+    # PATH 2: System emails (existing logic)
     # Check if we should use Vercel
     use_vercel = _should_use_vercel()
 
@@ -273,21 +314,35 @@ def _build_template_data(template_type: str, args: dict, subject: str, html_cont
             if first_name:
                 data["user_name"] = first_name
 
-    elif template_type == "auth":
+    elif template_type == "password-reset":
         # password_reset provides: link
-        # new_user provides: link, first_name, last_name, site_url
-        # verification_code has OTP in content
-        data["action_link"] = args.get("link", "")
         data["reset_link"] = args.get("link", "")
+        data["action_link"] = args.get("link", "")
+        data["action_label"] = _("Reset Password")
 
-        # Build user name if available
+        # Get user's first name from email
+        recipient_email = args.get("recipient") or args.get("email")
+        if not recipient_email and recipients:
+            recipient_email = recipients[0] if isinstance(recipients, list) else recipients
+        if recipient_email:
+            first_name = frappe.db.get_value("User", recipient_email, "first_name")
+            if first_name:
+                data["user_name"] = first_name
+
+    elif template_type == "welcome":
+        # new_user / user_invitation provides: link, first_name, last_name, site_url
+        data["action_link"] = args.get("link", "")
+        data["action_label"] = _("Get Started")
+
         first_name = args.get("first_name", "")
         last_name = args.get("last_name", "")
         if first_name or last_name:
             data["user_name"] = f"{first_name} {last_name}".strip()
 
-        # Determine action label from subject
-        data["action_label"] = _get_action_label(subject)
+    elif template_type == "email-verification":
+        # verification_code has OTP in content
+        data["action_link"] = args.get("link", "")
+        data["action_label"] = _("Verify Email")
 
     # Notification template just uses message and title (already set)
 
@@ -310,6 +365,32 @@ def _get_action_label(subject: str) -> str:
         return _("Sign In")
 
     return _("Continue")
+
+
+def _should_route_document_email(reference_doctype):
+    """Check if a document email should be routed through Vercel."""
+    try:
+        settings = frappe.get_single("Email Service Settings")
+        if not settings.enabled or not getattr(settings, "vercel_service_url", None):
+            return False
+        return settings.is_doctype_supported(reference_doctype)
+    except Exception:
+        return False
+
+
+def _handle_document_email(reference_doctype, reference_name, recipients, cc=None, bcc=None, message=None):
+    """Route a document email through the generic email handler."""
+    from emails.email_service.generic_email import send_document_email
+
+    to_email = recipients[0] if isinstance(recipients, list) and recipients else recipients
+    return send_document_email(
+        doctype=reference_doctype,
+        docname=reference_name,
+        to_email=to_email,
+        cc=cc,
+        bcc=bcc,
+        custom_message=message,
+    )
 
 
 def _call_original(

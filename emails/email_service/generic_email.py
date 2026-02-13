@@ -28,6 +28,17 @@ from emails.email_service.utils import (
     get_email_recipients_from_doc,
 )
 
+# Map ERPNext doctypes to Vercel react-email template names
+DOCTYPE_TEMPLATE_MAP = {
+    "Sales Invoice": "sales-invoice",
+    "Quotation": "quotation",
+    "Sales Order": "sales-order",
+    "Purchase Order": "purchase-order",
+    "Request for Quotation": "request-for-quotation",
+    "Payment Request": "payment-request",
+    "Payment Entry": "payment-request",
+}
+
 
 def send_document_email(
     doctype,
@@ -154,8 +165,8 @@ def _send_via_vercel(
     # Get branding
     branding = get_company_branding(company_name)
 
-    # Determine template from config or default to "document"
-    template = "document"
+    # Determine template from DOCTYPE_TEMPLATE_MAP, with config override
+    template = DOCTYPE_TEMPLATE_MAP.get(doctype, "sales-invoice")
     if config and getattr(config, "vercel_template", None):
         template = config.vercel_template
 
@@ -526,6 +537,30 @@ def build_template_data(doc, doctype, company_info, config, custom_message=None)
                         data["project_name"] = ref_doc.project
                 except Exception:
                     pass
+
+    # Per-doctype prop mapping: map ERPNext field names to React template prop names
+    if doctype == "Payment Request":
+        data["amount_requested"] = data.get("total_amount", "")
+        data["stripe_payment_url"] = getattr(doc, "payment_url", "") or ""
+    elif doctype == "Sales Invoice":
+        data["invoice_number"] = doc.name
+        data["invoice_date"] = formatdate(getattr(doc, "posting_date", "")) if getattr(doc, "posting_date", None) else ""
+        data["due_date"] = formatdate(getattr(doc, "due_date", "")) if getattr(doc, "due_date", None) else ""
+        data["amount_due"] = data.get("total_amount", "")
+    elif doctype == "Quotation":
+        data["quotation_number"] = doc.name
+        data["quotation_date"] = formatdate(getattr(doc, "transaction_date", "")) if getattr(doc, "transaction_date", None) else ""
+        data["valid_until"] = formatdate(getattr(doc, "valid_till", "")) if getattr(doc, "valid_till", None) else ""
+    elif doctype == "Sales Order":
+        data["order_number"] = doc.name
+        data["order_date"] = formatdate(getattr(doc, "transaction_date", "")) if getattr(doc, "transaction_date", None) else ""
+        data["order_total"] = data.get("total_amount", "")
+    elif doctype == "Purchase Order":
+        data["po_number"] = doc.name
+        data["po_date"] = formatdate(getattr(doc, "transaction_date", "")) if getattr(doc, "transaction_date", None) else ""
+    elif doctype == "Request for Quotation":
+        data["rfq_number"] = doc.name
+        data["rfq_date"] = formatdate(getattr(doc, "transaction_date", "")) if getattr(doc, "transaction_date", None) else ""
 
     return data
 

@@ -1,0 +1,23 @@
+{
+  "name": "email-templates",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "email dev"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.31",
+    "@react-email/render": "^1.0.3",
+    "@vercel/node": "^3.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "resend": "^4.0.0"
+  },
+  "devDependencies": {
+    "@react-email/preview-server": "^5.2.8",
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.7.0"
+  }
+}

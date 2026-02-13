@@ -1,0 +1,127 @@
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { Resend } from "resend";
+import { render } from "@react-email/render";
+import * as React from "react";
+
+import { MagicLinkEmail } from "../emails/magic-link";
+import { SalesInvoiceEmail } from "../emails/sales-invoice";
+import { QuotationEmail } from "../emails/quotation";
+import { SalesOrderEmail } from "../emails/sales-order";
+import { PurchaseOrderEmail } from "../emails/purchase-order";
+import { RequestForQuotationEmail } from "../emails/request-for-quotation";
+import { PasswordResetEmail } from "../emails/password-reset";
+import { EmailVerificationEmail } from "../emails/email-verification";
+import { WelcomeEmail } from "../emails/welcome";
+import { PaymentRequestEmail } from "../emails/payment-request";
+import { Branding } from "../emails/shared";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+// ============================================================================
+// INTERFACES
+// ============================================================================
+
+interface EmailRequest {
+  template: string;
+  to: string | string[];
+  cc?: string | string[];
+  bcc?: string | string[];
+  subject: string;
+  data: Record<string, any>;
+  branding: Branding;
+  attachments?: Array<{ filename: string; content: string }>;
+  from_email: string;
+  from_name: string;
+  reply_to?: string;
+  tags?: Array<{ name: string; value: string }>;
+}
+
+// ============================================================================
+// TEMPLATE REGISTRY
+// ============================================================================
+
+const templates: Record<string, React.FC<any>> = {
+  "magic-link": MagicLinkEmail,
+  "sales-invoice": SalesInvoiceEmail,
+  "quotation": QuotationEmail,
+  "sales-order": SalesOrderEmail,
+  "purchase-order": PurchaseOrderEmail,
+  "request-for-quotation": RequestForQuotationEmail,
+  "password-reset": PasswordResetEmail,
+  "email-verification": EmailVerificationEmail,
+  "welcome": WelcomeEmail,
+  "payment-request": PaymentRequestEmail,
+};
+
+// ============================================================================
+// HANDLER
+// ============================================================================
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method === "GET") {
+    return res.status(200).json({ status: "ok", templates: Object.keys(templates) });
+  }
+
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  const authHeader = req.headers.authorization;
+  if (authHeader !== "Bearer " + process.env.SERVICE_API_KEY) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    const body: EmailRequest = req.body;
+
+    const Template = templates[body.template];
+    if (!Template) {
+      return res.status(400).json({
+        error: "Template '" + body.template + "' not found. Available: " + Object.keys(templates).join(", "),
+      });
+    }
+
+    const attachments: Array<{ filename: string; content: string; content_type?: string }> = [];
+
+    if (body.attachments) {
+      for (const att of body.attachments) {
+        attachments.push({ filename: att.filename, content: att.content });
+      }
+    }
+
+    // For logos, use a publicly accessible URL instead of CID embedding
+    // CID embedding has poor support across email clients
+    let logoUrl = body.branding.logo_url || "";
+
+    const html = await render(
+      React.createElement(Template, {
+        ...body.data,
+        branding: { ...body.branding, logo_url: logoUrl },
+      })
+    );
+
+    const result = await resend.emails.send({
+      from: body.from_name + " <" + body.from_email + ">",
+      to: Array.isArray(body.to) ? body.to : [body.to],
+      cc: body.cc ? (Array.isArray(body.cc) ? body.cc : [body.cc]) : undefined,
+      bcc: body.bcc ? (Array.isArray(body.bcc) ? body.bcc : [body.bcc]) : undefined,
+      subject: body.subject,
+      html,
+      attachments: attachments.length > 0 ? attachments : undefined,
+      replyTo: body.reply_to,
+      tags: body.tags,
+    });
+
+    if (result.error) {
+      console.error("Resend error:", result.error);
+      return res.status(500).json({ error: result.error.message });
+    }
+
+    return res.status(200).json({ message_id: result.data?.id });
+  } catch (error) {
+    console.error("Email send error:", error);
+    return res.status(500).json({
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+}

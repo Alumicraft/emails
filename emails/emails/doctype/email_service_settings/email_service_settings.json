@@ -4,6 +4,7 @@
     "doctype": "DocType",
     "engine": "InnoDB",
     "field_order": [
+        "settings_tab",
         "general_section",
         "enabled",
         "column_break_1",
@@ -21,9 +22,53 @@
         "handle_system_emails",
         "doctype_configuration_section",
         "auto_detect_modules",
-        "supported_doctypes"
+        "supported_doctypes",
+        "branding_tab",
+        "branding_general_section",
+        "company",
+        "branding_enabled",
+        "column_break_branding_general",
+        "logo_section",
+        "logo_url",
+        "logo_url_secondary",
+        "column_break_logo",
+        "logo_alt_text",
+        "logo_height",
+        "background_image_url",
+        "colors_light_section",
+        "primary_color",
+        "secondary_color",
+        "tertiary_color",
+        "column_break_colors_light",
+        "text_color",
+        "background_color",
+        "colors_dark_section",
+        "primary_color_dark",
+        "secondary_color_dark",
+        "tertiary_color_dark",
+        "column_break_colors_dark",
+        "text_color_dark",
+        "background_color_dark",
+        "typography_section",
+        "font_family",
+        "content_section",
+        "preheader_text",
+        "footer_text",
+        "social_section",
+        "website_url",
+        "instagram_url",
+        "tiktok_url",
+        "column_break_social",
+        "facebook_url",
+        "youtube_url",
+        "twitter_url"
     ],
     "fields": [
+        {
+            "fieldname": "settings_tab",
+            "fieldtype": "Tab Break",
+            "label": "Settings"
+        },
         {
             "fieldname": "general_section",
             "fieldtype": "Section Break",
@@ -131,6 +176,232 @@
             "label": "Configured Doctypes",
             "options": "Email Doctype Configuration",
             "description": "Configure which document types can send emails via Resend"
+        },
+        {
+            "fieldname": "branding_tab",
+            "fieldtype": "Tab Break",
+            "label": "Branding"
+        },
+        {
+            "fieldname": "branding_general_section",
+            "fieldtype": "Section Break",
+            "label": "General"
+        },
+        {
+            "fieldname": "company",
+            "fieldtype": "Link",
+            "label": "Company",
+            "options": "Company",
+            "description": "Company name to display in emails"
+        },
+        {
+            "fieldname": "branding_enabled",
+            "fieldtype": "Check",
+            "label": "Branding Enabled",
+            "default": "1",
+            "in_list_view": 1
+        },
+        {
+            "fieldname": "column_break_branding_general",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "logo_section",
+            "fieldtype": "Section Break",
+            "label": "Logo"
+        },
+        {
+            "fieldname": "logo_url",
+            "fieldtype": "Data",
+            "label": "Primary Logo URL",
+            "options": "URL",
+            "description": "Main logo shown in email header"
+        },
+        {
+            "fieldname": "logo_url_secondary",
+            "fieldtype": "Data",
+            "label": "Secondary Logo URL",
+            "options": "URL",
+            "description": "Footer logo (optional, defaults to primary)"
+        },
+        {
+            "fieldname": "column_break_logo",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "logo_alt_text",
+            "fieldtype": "Data",
+            "label": "Logo Alt Text",
+            "description": "Alternative text for accessibility (defaults to company name)"
+        },
+        {
+            "fieldname": "logo_height",
+            "fieldtype": "Int",
+            "label": "Logo Height (px)",
+            "default": "40",
+            "description": "Height in pixels (width auto-scales)"
+        },
+        {
+            "fieldname": "background_image_url",
+            "fieldtype": "Data",
+            "label": "Background Image URL",
+            "options": "URL",
+            "description": "Public URL for email background image (optional)"
+        },
+        {
+            "fieldname": "colors_light_section",
+            "fieldtype": "Section Break",
+            "label": "Colors - Light Mode"
+        },
+        {
+            "fieldname": "primary_color",
+            "fieldtype": "Color",
+            "label": "Primary Color",
+            "default": "#0066cc",
+            "description": "Used for buttons and headings"
+        },
+        {
+            "fieldname": "secondary_color",
+            "fieldtype": "Color",
+            "label": "Secondary Color",
+            "description": "Used for accents (optional)"
+        },
+        {
+            "fieldname": "tertiary_color",
+            "fieldtype": "Color",
+            "label": "Tertiary Color",
+            "default": "#6b7280",
+            "description": "Used for muted text, icons, and dividers"
+        },
+        {
+            "fieldname": "column_break_colors_light",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "text_color",
+            "fieldtype": "Color",
+            "label": "Text Color",
+            "default": "#333333",
+            "description": "Main body text color"
+        },
+        {
+            "fieldname": "background_color",
+            "fieldtype": "Color",
+            "label": "Background Color",
+            "default": "#f8f9fa",
+            "description": "Email background color"
+        },
+        {
+            "fieldname": "colors_dark_section",
+            "fieldtype": "Section Break",
+            "label": "Colors - Dark Mode",
+            "collapsible": 1
+        },
+        {
+            "fieldname": "primary_color_dark",
+            "fieldtype": "Color",
+            "label": "Primary Color (Dark)",
+            "description": "Primary color for dark mode clients"
+        },
+        {
+            "fieldname": "secondary_color_dark",
+            "fieldtype": "Color",
+            "label": "Secondary Color (Dark)"
+        },
+        {
+            "fieldname": "tertiary_color_dark",
+            "fieldtype": "Color",
+            "label": "Tertiary Color (Dark)",
+            "description": "Muted text color for dark mode"
+        },
+        {
+            "fieldname": "column_break_colors_dark",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "text_color_dark",
+            "fieldtype": "Color",
+            "label": "Text Color (Dark)"
+        },
+        {
+            "fieldname": "background_color_dark",
+            "fieldtype": "Color",
+            "label": "Background Color (Dark)"
+        },
+        {
+            "fieldname": "typography_section",
+            "fieldtype": "Section Break",
+            "label": "Typography"
+        },
+        {
+            "fieldname": "font_family",
+            "fieldtype": "Data",
+            "label": "Font Family",
+            "default": "Arial, Helvetica, sans-serif",
+            "description": "Email-safe font stack"
+        },
+        {
+            "fieldname": "content_section",
+            "fieldtype": "Section Break",
+            "label": "Content"
+        },
+        {
+            "fieldname": "preheader_text",
+            "fieldtype": "Data",
+            "label": "Preheader Text",
+            "description": "Preview text shown in inbox (before opening email)"
+        },
+        {
+            "fieldname": "footer_text",
+            "fieldtype": "Small Text",
+            "label": "Footer Text",
+            "description": "Supports Jinja: {{company}}, {{year}}"
+        },
+        {
+            "fieldname": "social_section",
+            "fieldtype": "Section Break",
+            "label": "Social Links",
+            "collapsible": 1
+        },
+        {
+            "fieldname": "website_url",
+            "fieldtype": "Data",
+            "label": "Website URL",
+            "options": "URL"
+        },
+        {
+            "fieldname": "instagram_url",
+            "fieldtype": "Data",
+            "label": "Instagram URL",
+            "options": "URL"
+        },
+        {
+            "fieldname": "tiktok_url",
+            "fieldtype": "Data",
+            "label": "TikTok URL",
+            "options": "URL"
+        },
+        {
+            "fieldname": "column_break_social",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "facebook_url",
+            "fieldtype": "Data",
+            "label": "Facebook URL",
+            "options": "URL"
+        },
+        {
+            "fieldname": "youtube_url",
+            "fieldtype": "Data",
+            "label": "YouTube URL",
+            "options": "URL"
+        },
+        {
+            "fieldname": "twitter_url",
+            "fieldtype": "Data",
+            "label": "X (Twitter) URL",
+            "options": "URL"
         }
     ],
     "index_web_pages_for_search": 1,

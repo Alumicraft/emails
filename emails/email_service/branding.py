@@ -4,8 +4,8 @@
 """
 Email Branding Utilities
 
-Provides functions to fetch company branding and prepare it for the Vercel
-email service.
+Provides functions to fetch branding from Email Service Settings and
+prepare it for the Vercel email service.
 """
 
 import frappe
@@ -15,7 +15,7 @@ def get_company_branding(company_name: str = None) -> dict:
     """
     Get branding configuration for emails.
 
-    Fetches the Email Branding Single DocType configuration.
+    Fetches branding from the Email Service Settings Single DocType.
     If not configured or disabled, returns default values.
 
     Args:
@@ -25,8 +25,8 @@ def get_company_branding(company_name: str = None) -> dict:
         dict: Branding configuration ready for Vercel API payload
     """
     try:
-        branding_doc = frappe.get_single("Email Branding")
-        if not branding_doc.enabled:
+        branding_doc = frappe.get_single("Email Service Settings")
+        if not branding_doc.branding_enabled:
             return get_default_branding()
         return branding_doc.get_branding_dict()
     except Exception:
