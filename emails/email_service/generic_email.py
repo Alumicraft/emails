@@ -2,11 +2,11 @@
 # For license information, please see license.txt
 
 """
-Generic Email Handler - Sends emails for any configured doctype.
+Generic Email Handler - Sends emails for any doctype.
 
 This module provides a universal email sending mechanism that works with any
-doctype configured in Email Service Settings. It dynamically resolves recipients,
-builds template data from document fields, and handles PDF generation.
+doctype. It dynamically resolves recipients, builds template data from document
+fields, and handles PDF generation.
 """
 
 import frappe
@@ -27,6 +27,7 @@ from emails.email_service.utils import (
     get_document_link,
     get_email_recipients_from_doc,
 )
+from emails.emails.doctype.email_service_settings.email_service_settings import DOCTYPE_REGISTRY
 
 # Map ERPNext doctypes to Vercel react-email template names
 DOCTYPE_TEMPLATE_MAP = {
@@ -50,7 +51,7 @@ def send_document_email(
     skip_communication=False,
 ):
     """
-    Generic email sender that works with any configured doctype.
+    Generic email sender that works with any doctype.
 
     Args:
         doctype: The document type
@@ -65,27 +66,19 @@ def send_document_email(
         dict: Result with success status, message_id, and recipient
     """
     settings = get_email_settings()
-    config = settings.get_doctype_config(doctype)
 
     # Get the document
     doc = frappe.get_doc(doctype, docname)
 
-    # Check submission status if required
-    if config and config.require_submit:
-        if doc.docstatus != 1:
-            frappe.throw(
-                _("{0} {1} must be submitted before sending email").format(doctype, docname)
-            )
-    elif not config:
-        # Legacy fallback - require submission for known doctypes
-        if hasattr(doc, "docstatus") and doc.docstatus != 1:
-            frappe.throw(
-                _("{0} {1} must be submitted before sending email").format(doctype, docname)
-            )
+    # Check submission status for submittable documents
+    if hasattr(doc, "docstatus") and doc.docstatus != 1:
+        frappe.throw(
+            _("{0} {1} must be submitted before sending email").format(doctype, docname)
+        )
 
     # Resolve recipient email
     if not to_email:
-        to_email = resolve_recipient_email(doc, config)
+        to_email = resolve_recipient_email(doc)
 
     if not to_email:
         frappe.throw(
@@ -99,17 +92,13 @@ def send_document_email(
     company_info = get_company_info(company_name) if company_name else get_default_company_info()
 
     # Build template data dynamically
-    template_data = build_template_data(doc, doctype, company_info, config, custom_message)
+    template_data = build_template_data(doc, doctype, company_info, custom_message)
 
-    # Generate subject from template or default
+    # Use default subject
     subject = template_data["subject"]
-    if config and config.subject_template:
-        subject = render_subject_template(config.subject_template, doc, company_info)
-        template_data["subject"] = subject
 
     # Generate PDF attachment
-    print_format = config.print_format if config else None
-    attachments = generate_pdf_attachment(doctype, docname, print_format)
+    attachments = generate_pdf_attachment(doctype, docname)
 
     # Check if Vercel service is configured
     use_vercel = bool(getattr(settings, "vercel_service_url", None))
@@ -128,7 +117,6 @@ def send_document_email(
             attachments=attachments,
             skip_communication=skip_communication,
             settings=settings,
-            config=config,
         )
     else:
         # Fall back to direct Resend template
@@ -159,16 +147,13 @@ def _send_via_vercel(
     attachments,
     skip_communication,
     settings,
-    config=None,
 ):
     """Send email via Vercel react-email service with branding."""
     # Get branding
     branding = get_company_branding(company_name)
 
-    # Determine template from DOCTYPE_TEMPLATE_MAP, with config override
-    template = DOCTYPE_TEMPLATE_MAP.get(doctype, "sales-invoice")
-    if config and getattr(config, "vercel_template", None):
-        template = config.vercel_template
+    # Determine template from DOCTYPE_TEMPLATE_MAP, fallback to generic "document"
+    template = DOCTYPE_TEMPLATE_MAP.get(doctype, "document")
 
     try:
         result = vercel_send_email(
@@ -242,11 +227,9 @@ def _send_via_resend(
     doc,
 ):
     """Send email via direct Resend template (legacy fallback)."""
-    template_id = settings.get_template_id(doctype) or ""
-
     try:
         result = send_template_email(
-            template_id=template_id,
+            template_id="",
             to_email=to_email,
             template_data=template_data,
             subject=subject,
@@ -295,37 +278,41 @@ def _send_via_resend(
         raise
 
 
-def resolve_recipient_email(doc, config):
+def resolve_recipient_email(doc):
     """
-    Resolve recipient email based on configuration.
+    Resolve recipient email using DOCTYPE_REGISTRY defaults and fallback logic.
 
     Args:
         doc: The document
-        config: Email Doctype Configuration row (or None)
 
     Returns:
         str: Email address or None
     """
-    # Try direct email field path first (if configured)
-    if config and config.email_field_path:
-        email = resolve_field_path(doc, config.email_field_path)
-        if email:
-            return email
+    doctype = doc.doctype
 
-    # Try recipient field + doctype lookup
-    if config and config.recipient_field:
-        party_name = getattr(doc, config.recipient_field, None)
-        if party_name:
-            recipient_doctype = config.recipient_doctype
+    # Check DOCTYPE_REGISTRY for recipient resolution defaults
+    registry_info = DOCTYPE_REGISTRY.get(doctype)
 
-            # Handle Payment Entry special case where party_type is dynamic
-            if not recipient_doctype and hasattr(doc, "party_type"):
-                recipient_doctype = doc.party_type
+    if registry_info:
+        recipient_field = registry_info.get("recipient_field")
+        recipient_doctype = registry_info.get("recipient_doctype")
 
-            if recipient_doctype and party_name:
-                email = get_party_email(recipient_doctype, party_name)
-                if email:
-                    return email
+        if recipient_field:
+            party_name = getattr(doc, recipient_field, None)
+            if party_name:
+                # Handle Payment Entry special case where party_type is dynamic
+                if not recipient_doctype and hasattr(doc, "party_type"):
+                    recipient_doctype = doc.party_type
+
+                if recipient_doctype and party_name:
+                    email = get_party_email(recipient_doctype, party_name)
+                    if email:
+                        return email
+
+                # If recipient_doctype is None (e.g., Payment Request email_to field),
+                # the field itself might be an email
+                if not recipient_doctype and party_name and "@" in str(party_name):
+                    return party_name
 
     # Fallback to legacy email resolution
     recipients = get_email_recipients_from_doc(doc)
@@ -439,7 +426,7 @@ def get_generic_party_email(doctype, party_name):
     return None
 
 
-def build_template_data(doc, doctype, company_info, config, custom_message=None):
+def build_template_data(doc, doctype, company_info, custom_message=None):
     """
     Build template data dictionary from document fields.
 
@@ -447,7 +434,6 @@ def build_template_data(doc, doctype, company_info, config, custom_message=None)
         doc: The document
         doctype: The document type
         company_info: Company information dict
-        config: Email Doctype Configuration row (or None)
         custom_message: Custom message to include
 
     Returns:

@@ -19,7 +19,7 @@ def get_email_handler(doctype):
     """
     Get the email handler for a doctype.
 
-    For all configured doctypes, uses the generic email handler.
+    When the email service is enabled, all doctypes use the generic handler.
 
     Args:
         doctype: The document type
@@ -30,8 +30,7 @@ def get_email_handler(doctype):
     try:
         settings = frappe.get_single("Email Service Settings")
 
-        if settings.is_doctype_supported(doctype):
-            # Use generic handler for all configured doctypes
+        if settings.enabled:
             return "emails.email_service.generic_email.send_document_email"
 
     except Exception:
@@ -231,23 +230,11 @@ def check_resend_status():
     try:
         settings = frappe.get_single("Email Service Settings")
 
-        # Build templates configured dict from child table
-        templates_configured = {}
-        if settings.supported_doctypes:
-            for row in settings.supported_doctypes:
-                if row.enabled:
-                    templates_configured[row.doctype_name] = bool(row.resend_template_id)
-
         return {
             "enabled": settings.enabled,
             "configured": bool(settings.get_password("resend_api_key")),
             "sender_email": settings.default_sender_email,
-            "templates_configured": templates_configured,
-            "configured_doctypes": [
-                row.doctype_name
-                for row in (settings.supported_doctypes or [])
-                if row.enabled
-            ],
+            "vercel_configured": bool(getattr(settings, "vercel_service_url", None)),
         }
     except Exception as e:
         return {"enabled": False, "error": str(e)}

@@ -280,8 +280,7 @@ def should_use_resend(doctype):
         if not settings.get_password("resend_api_key"):
             return False
 
-        # Check if doctype is supported via child table or legacy config
-        return settings.is_doctype_supported(doctype)
+        return True
 
     except Exception:
         return False

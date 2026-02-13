@@ -371,9 +371,10 @@ def _should_route_document_email(reference_doctype):
     """Check if a document email should be routed through Vercel."""
     try:
         settings = frappe.get_single("Email Service Settings")
-        if not settings.enabled or not getattr(settings, "vercel_service_url", None):
-            return False
-        return settings.is_doctype_supported(reference_doctype)
+        return bool(
+            settings.enabled
+            and getattr(settings, "vercel_service_url", None)
+        )
     except Exception:
         return False
 

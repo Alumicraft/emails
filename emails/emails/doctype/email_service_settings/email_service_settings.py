@@ -94,9 +94,6 @@ class EmailServiceSettings(Document):
             if api_key and not api_key.startswith("re_"):
                 frappe.throw(_("Invalid Resend API Key format. Key should start with 're_'"))
 
-        # Validate doctype configurations
-        self._validate_doctype_configurations()
-
         # Set branding defaults
         self.set_defaults()
 
@@ -115,114 +112,9 @@ class EmailServiceSettings(Document):
         if not self.logo_alt_text and self.company:
             self.logo_alt_text = self.company
 
-    def _validate_doctype_configurations(self):
-        """Validate that configured doctypes exist and their apps are installed."""
-        if not self.supported_doctypes:
-            return
-
-        installed_apps = frappe.get_installed_apps()
-        warnings = []
-
-        for row in self.supported_doctypes:
-            if not row.doctype_name:
-                continue
-
-            # Check if doctype exists
-            if not frappe.db.exists("DocType", row.doctype_name):
-                if row.enabled:
-                    warnings.append(
-                        _("DocType '{0}' does not exist. Configuration will be disabled.").format(
-                            row.doctype_name
-                        )
-                    )
-                    row.enabled = 0
-                continue
-
-            # Check if source app is installed
-            if row.source_app and row.source_app not in installed_apps:
-                if row.enabled:
-                    warnings.append(
-                        _("App '{0}' for '{1}' is not installed. Configuration will be disabled.").format(
-                            row.source_app, row.doctype_name
-                        )
-                    )
-                    row.enabled = 0
-
-        if warnings:
-            frappe.msgprint(
-                "<br>".join(warnings),
-                title=_("Doctype Configuration Warnings"),
-                indicator="orange",
-            )
-
-    def get_template_id(self, doctype):
-        """Get template ID for a given doctype from child table or legacy fields."""
-        # First check child table
-        config = self.get_doctype_config(doctype)
-        if config and config.resend_template_id:
-            return config.resend_template_id
-
-        return None
-
-    def get_doctype_config(self, doctype):
-        """Get full configuration for a doctype from the child table."""
-        if not self.supported_doctypes:
-            return None
-
-        for row in self.supported_doctypes:
-            if row.doctype_name == doctype and row.enabled:
-                return row
-
-        return None
-
     def is_doctype_supported(self, doctype):
-        """Check if a doctype is configured for Resend emails."""
-        # Check child table first
-        if self.supported_doctypes:
-            for row in self.supported_doctypes:
-                if row.doctype_name == doctype and row.enabled:
-                    return True
-
-        # Fallback: check if doctype has legacy template configured
-        legacy_doctypes = ["Sales Invoice", "Quotation", "Sales Order", "Payment Request"]
-        if doctype in legacy_doctypes and self._get_legacy_template_id(doctype):
-            return True
-
-        return False
-
-    def get_available_doctypes(self):
-        """Get list of doctypes available for email configuration based on installed apps."""
-        installed_apps = frappe.get_installed_apps()
-        available = []
-
-        for doctype, info in DOCTYPE_REGISTRY.items():
-            # Check if the app is installed
-            if info["app"] not in installed_apps:
-                continue
-
-            # Check if the doctype actually exists
-            if not frappe.db.exists("DocType", doctype):
-                continue
-
-            # Check if already configured
-            is_configured = False
-            if self.supported_doctypes:
-                is_configured = any(
-                    row.doctype_name == doctype for row in self.supported_doctypes
-                )
-
-            available.append(
-                {
-                    "doctype": doctype,
-                    "app": info["app"],
-                    "category": info["category"],
-                    "default_recipient_field": info["recipient_field"],
-                    "default_recipient_doctype": info["recipient_doctype"],
-                    "is_configured": is_configured,
-                }
-            )
-
-        return available
+        """Check if the email service is enabled (any doctype is supported)."""
+        return bool(self.enabled)
 
     def get_sender(self):
         """Get formatted sender string."""
@@ -395,42 +287,6 @@ class EmailServiceSettings(Document):
 
 
 @frappe.whitelist()
-def get_available_doctypes_for_site():
-    """
-    API endpoint to get doctypes available for email configuration.
-    Used by the UI to populate the doctype selector.
-    """
-    settings = frappe.get_single("Email Service Settings")
-    return settings.get_available_doctypes()
-
-
-@frappe.whitelist()
-def get_doctype_defaults(doctype):
-    """Get default configuration values for a doctype."""
-    if doctype not in DOCTYPE_REGISTRY:
-        return {}
-
-    info = DOCTYPE_REGISTRY[doctype]
-
-    # Try to auto-detect source app
-    source_app = info["app"]
-    try:
-        meta = frappe.get_meta(doctype)
-        module = meta.module
-        module_app = frappe.db.get_value("Module Def", module, "app_name")
-        if module_app:
-            source_app = module_app
-    except Exception:
-        pass
-
-    return {
-        "recipient_field": info["recipient_field"],
-        "recipient_doctype": info["recipient_doctype"],
-        "source_app": source_app,
-    }
-
-
-@frappe.whitelist()
 def get_available_templates():
     """Return list of available email templates."""
     return [
@@ -441,6 +297,7 @@ def get_available_templates():
         {"value": "purchase-order", "label": "Purchase Order"},
         {"value": "request-for-quotation", "label": "Request for Quotation"},
         {"value": "payment-request", "label": "Payment Request"},
+        {"value": "document", "label": "Generic Document"},
         {"value": "password-reset", "label": "Password Reset"},
         {"value": "email-verification", "label": "Email Verification"},
         {"value": "welcome", "label": "Welcome"},
@@ -541,6 +398,16 @@ def send_test_email(template="magic-link"):
                 "customer_name": user_name,
                 "amount_requested": "$500.00",
                 "stripe_payment_url": "https://example.com/pay/test",
+            },
+        },
+        "document": {
+            "subject": _("Delivery Note DN-TEST-001 from {0}").format(branding_doc.company or "Company"),
+            "data": {
+                "document_type": "Delivery Note",
+                "document_number": "DN-TEST-001",
+                "document_date": today,
+                "total_amount": "$750.00",
+                "customer_name": user_name,
             },
         },
         "password-reset": {

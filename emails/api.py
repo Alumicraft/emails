@@ -60,16 +60,16 @@ def send_payment_request_email(payment_request_name, to_email=None, cc=None, bcc
 
 @frappe.whitelist()
 def send_document_email(doctype, docname, to_email=None, cc=None, bcc=None, custom_message=None):
-    """Generic method to send email for any configured document type."""
+    """Generic method to send email for any document type."""
     try:
         frappe.has_permission(doctype, "email", docname, throw=True)
 
         settings = frappe.get_single("Email Service Settings")
 
-        if not settings.is_doctype_supported(doctype):
+        if not settings.enabled:
             return {
                 "success": False,
-                "message": _("Email sending not configured for {0}").format(doctype),
+                "message": _("Email service is not enabled"),
             }
 
         from emails.email_service.generic_email import send_document_email as _send
@@ -205,7 +205,7 @@ def send_test_email(to_email):
 
 @frappe.whitelist()
 def check_doctype_email_enabled(doctype):
-    """Check if email sending is enabled for a doctype (Resend enabled AND configured)."""
+    """Check if email sending is enabled (service enabled and configured)."""
     try:
         settings = frappe.get_single("Email Service Settings")
 
@@ -215,14 +215,7 @@ def check_doctype_email_enabled(doctype):
         if not settings.get_password("resend_api_key"):
             return {"enabled": False}
 
-        # Check if doctype is supported
-        is_supported = settings.is_doctype_supported(doctype)
-        template_id = settings.get_template_id(doctype)
-
-        return {
-            "enabled": is_supported,
-            "has_template": bool(template_id)
-        }
+        return {"enabled": True}
 
     except Exception:
         return {"enabled": False}
@@ -237,13 +230,12 @@ def get_document_recipient(doctype, docname):
             get_supplier_primary_email
         )
         from emails.email_service.generic_email import resolve_recipient_email
+        from emails.emails.doctype.email_service_settings.email_service_settings import DOCTYPE_REGISTRY
 
         doc = frappe.get_doc(doctype, docname)
 
-        # Try using the generic resolver first
-        settings = frappe.get_single("Email Service Settings")
-        config = settings.get_doctype_config(doctype)
-        email = resolve_recipient_email(doc, config)
+        # Try using the generic resolver (uses DOCTYPE_REGISTRY internally)
+        email = resolve_recipient_email(doc)
 
         if email:
             return {"email": email}
@@ -272,37 +264,3 @@ def get_document_recipient(doctype, docname):
     except Exception as e:
         frappe.log_error(title="Get Document Recipient Error", message=str(e))
         return {"email": None}
-
-
-@frappe.whitelist()
-def get_supported_doctypes():
-    """Get list of doctypes available for email configuration on this site."""
-    try:
-        settings = frappe.get_single("Email Service Settings")
-        return {"success": True, "doctypes": settings.get_available_doctypes()}
-    except Exception as e:
-        return {"success": False, "message": str(e)}
-
-
-@frappe.whitelist()
-def get_configured_doctypes():
-    """Get list of doctypes that are currently configured for email."""
-    try:
-        settings = frappe.get_single("Email Service Settings")
-        configured = []
-
-        if settings.supported_doctypes:
-            for row in settings.supported_doctypes:
-                configured.append(
-                    {
-                        "doctype": row.doctype_name,
-                        "enabled": row.enabled,
-                        "has_template": bool(row.resend_template_id),
-                        "source_app": row.source_app,
-                    }
-                )
-
-        return {"success": True, "configured": configured}
-
-    except Exception as e:
-        return {"success": False, "message": str(e)}

@@ -20,9 +20,6 @@
         "column_break_vercel",
         "vercel_service_key",
         "handle_system_emails",
-        "doctype_configuration_section",
-        "auto_detect_modules",
-        "supported_doctypes",
         "branding_tab",
         "branding_general_section",
         "company",
@@ -157,25 +154,6 @@
             "label": "Route System Emails Through Vercel",
             "default": "1",
             "description": "Send password reset, welcome, and notification emails via Vercel with branding"
-        },
-        {
-            "fieldname": "doctype_configuration_section",
-            "fieldtype": "Section Break",
-            "label": "Supported Document Types"
-        },
-        {
-            "default": "1",
-            "fieldname": "auto_detect_modules",
-            "fieldtype": "Check",
-            "label": "Auto-detect Installed Modules",
-            "description": "Automatically detect available doctypes based on installed apps"
-        },
-        {
-            "fieldname": "supported_doctypes",
-            "fieldtype": "Table",
-            "label": "Configured Doctypes",
-            "options": "Email Doctype Configuration",
-            "description": "Configure which document types can send emails via Resend"
         },
         {
             "fieldname": "branding_tab",
