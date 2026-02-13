@@ -8,6 +8,11 @@ app_license = "MIT"
 # Apps
 required_apps = ["frappe", "erpnext"]
 
+# Override Payment Request to route emails through Resend
+override_doctype_class = {
+    "Payment Request": "emails.email_service.payment_request_override.CustomPaymentRequest"
+}
+
 # Include JS in desk
 app_include_js = "/assets/emails/js/send_email_button.js"
 

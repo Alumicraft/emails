@@ -514,11 +514,15 @@ def build_template_data(doc, doctype, company_info, custom_message=None):
     if doctype == "Payment Request":
         if hasattr(doc, "reference_name") and doc.reference_name:
             data["reference_number"] = doc.reference_name
-        # Also try to get project from the reference document
+        # Pull due_date and project from the reference document
         if hasattr(doc, "reference_doctype") and hasattr(doc, "reference_name"):
             if doc.reference_doctype and doc.reference_name:
                 try:
                     ref_doc = frappe.get_doc(doc.reference_doctype, doc.reference_name)
+                    for date_field in ("due_date", "transaction_date"):
+                        if getattr(ref_doc, date_field, None):
+                            data["due_date"] = formatdate(ref_doc.get(date_field))
+                            break
                     if hasattr(ref_doc, "project") and ref_doc.project:
                         data["project_name"] = ref_doc.project
                 except Exception:
@@ -527,7 +531,7 @@ def build_template_data(doc, doctype, company_info, custom_message=None):
     # Per-doctype prop mapping: map ERPNext field names to React template prop names
     if doctype == "Payment Request":
         data["amount_requested"] = data.get("total_amount", "")
-        data["stripe_payment_url"] = getattr(doc, "payment_url", "") or ""
+        data["stripe_payment_url"] = getattr(doc, "stripe_invoice_url", "") or getattr(doc, "payment_url", "") or ""
     elif doctype == "Sales Invoice":
         data["invoice_number"] = doc.name
         data["invoice_date"] = formatdate(getattr(doc, "posting_date", "")) if getattr(doc, "posting_date", None) else ""

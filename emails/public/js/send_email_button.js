@@ -8,8 +8,7 @@ emails.SUPPORTED_DOCTYPES = [
     "Sales Order",
     "Sales Invoice",
     "Payment Entry",
-    "Purchase Order",
-    "Payment Request"
+    "Purchase Order"
 ];
 
 emails.check_email_sent = function(frm) {
