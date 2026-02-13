@@ -129,7 +129,7 @@ def patched_sendmail(
 
     # Build data for template based on Frappe args
     template_args = args or {}
-    template_data = _build_template_data(template_type, template_args, subject, html_content)
+    template_data = _build_template_data(template_type, template_args, subject, html_content, recipients)
 
     # Send via Vercel
     try:
@@ -237,7 +237,7 @@ def _get_system_template(template: str, args: dict) -> str:
     return "notification"
 
 
-def _build_template_data(template_type: str, args: dict, subject: str, html_content: str) -> dict:
+def _build_template_data(template_type: str, args: dict, subject: str, html_content: str, recipients: list = None) -> dict:
     """
     Build template data by mapping Frappe variables to our Vercel template props.
 
@@ -246,6 +246,7 @@ def _build_template_data(template_type: str, args: dict, subject: str, html_cont
         args: Template arguments from Frappe
         subject: Email subject
         html_content: Rendered HTML content (fallback)
+        recipients: List of recipient email addresses
 
     Returns:
         dict: Data for the Vercel template
@@ -262,6 +263,15 @@ def _build_template_data(template_type: str, args: dict, subject: str, html_cont
         data["button_text"] = "Sign In"
         data["title"] = f"Sign in to {args.get('app_name', 'your account')}"
         data["message"] = "Click the button below to securely sign in. No password required."
+
+        # Get user's first name from email
+        recipient_email = args.get("recipient") or args.get("email")
+        if not recipient_email and recipients:
+            recipient_email = recipients[0] if isinstance(recipients, list) else recipients
+        if recipient_email:
+            first_name = frappe.db.get_value("User", recipient_email, "first_name")
+            if first_name:
+                data["user_name"] = first_name
 
     elif template_type == "auth":
         # password_reset provides: link
