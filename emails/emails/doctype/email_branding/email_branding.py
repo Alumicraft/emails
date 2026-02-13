@@ -204,9 +204,15 @@ def get_available_templates():
     """Return list of available email templates."""
     return [
         {"value": "magic-link", "label": "Magic Link"},
-        {"value": "document", "label": "Document"},
-        {"value": "notification", "label": "Notification"},
-        {"value": "auth", "label": "Authentication"},
+        {"value": "sales-invoice", "label": "Sales Invoice"},
+        {"value": "quotation", "label": "Quotation"},
+        {"value": "sales-order", "label": "Sales Order"},
+        {"value": "purchase-order", "label": "Purchase Order"},
+        {"value": "request-for-quotation", "label": "Request for Quotation"},
+        {"value": "payment-request", "label": "Payment Request"},
+        {"value": "password-reset", "label": "Password Reset"},
+        {"value": "email-verification", "label": "Email Verification"},
+        {"value": "welcome", "label": "Welcome"},
     ]
 
 
@@ -235,6 +241,9 @@ def send_test_email(template="magic-link"):
         frappe.throw(_("No email address found for current user"))
 
     # Template-specific data and subjects
+    today = frappe.utils.formatdate(frappe.utils.today())
+    due_date = frappe.utils.formatdate(frappe.utils.add_days(frappe.utils.today(), 15))
+
     template_configs = {
         "magic-link": {
             "subject": _("Sign in to {0}").format(branding_doc.company or "Your Account"),
@@ -244,43 +253,92 @@ def send_test_email(template="magic-link"):
                 "expiry_time": "10 minutes",
             },
         },
-        "document": {
-            "subject": _("Test Document - {0}").format(branding_doc.company or "Email"),
+        "sales-invoice": {
+            "subject": _("Invoice SINV-TEST-001 from {0}").format(branding_doc.company or "Company"),
             "data": {
-                "document_type": "Test Invoice",
-                "document_number": "INV-TEST-001",
-                "document_date": frappe.utils.formatdate(frappe.utils.today()),
+                "invoice_number": "SINV-TEST-001",
+                "invoice_date": today,
+                "due_date": due_date,
                 "customer_name": user_name,
-                "total_amount": "$1,234.56",
-                "custom_message": _(
-                    "This is a test email to preview your email branding. "
-                    "If you can see this message with your company logo and colors, "
-                    "your branding is configured correctly."
-                ),
-                "items": [
-                    {"item_name": "Sample Item 1", "qty": 2, "rate": "$100.00", "amount": "$200.00"},
-                    {"item_name": "Sample Item 2", "qty": 1, "rate": "$500.00", "amount": "$500.00"},
-                ],
+                "amount_due": "$1,234.56",
+                "document_link": "https://example.com/invoice/test",
             },
         },
-        "notification": {
-            "subject": _("Notification from {0}").format(branding_doc.company or "System"),
+        "quotation": {
+            "subject": _("Quotation QTN-TEST-001 from {0}").format(branding_doc.company or "Company"),
             "data": {
-                "title": "Test Notification",
-                "message": _(
-                    "This is a test notification email to preview your email branding. "
-                    "Notifications can be used for alerts, updates, and general communications."
-                ),
-                "action_url": "https://example.com",
-                "action_text": "View Details",
+                "quotation_number": "QTN-TEST-001",
+                "quotation_date": today,
+                "valid_until": due_date,
+                "customer_name": user_name,
+                "total_amount": "$2,500.00",
+                "document_link": "https://example.com/quotation/test",
             },
         },
-        "auth": {
-            "subject": _("Verify your email - {0}").format(branding_doc.company or "Account"),
+        "sales-order": {
+            "subject": _("Order SO-TEST-001 Confirmed"),
+            "data": {
+                "order_number": "SO-TEST-001",
+                "order_date": today,
+                "expected_delivery": due_date,
+                "customer_name": user_name,
+                "order_total": "$1,500.00",
+                "document_link": "https://example.com/order/test",
+            },
+        },
+        "purchase-order": {
+            "subject": _("Purchase Order PO-TEST-001 from {0}").format(branding_doc.company or "Company"),
+            "data": {
+                "po_number": "PO-TEST-001",
+                "po_date": today,
+                "required_by": due_date,
+                "supplier_name": user_name,
+                "po_total": "$3,000.00",
+                "document_link": "https://example.com/po/test",
+            },
+        },
+        "request-for-quotation": {
+            "subject": _("Request for Quotation RFQ-TEST-001 from {0}").format(branding_doc.company or "Company"),
+            "data": {
+                "rfq_number": "RFQ-TEST-001",
+                "rfq_date": today,
+                "required_by": due_date,
+                "supplier_name": user_name,
+                "document_link": "https://example.com/rfq/test",
+            },
+        },
+        "payment-request": {
+            "subject": _("Payment Request from {0}").format(branding_doc.company or "Company"),
+            "data": {
+                "reference_number": "PR-TEST-001",
+                "request_date": today,
+                "due_date": due_date,
+                "customer_name": user_name,
+                "amount_requested": "$500.00",
+                "stripe_payment_url": "https://example.com/pay/test",
+            },
+        },
+        "password-reset": {
+            "subject": _("Reset your {0} password").format(branding_doc.company or "Account"),
+            "data": {
+                "reset_link": "https://example.com/reset?token=test123",
+                "user_name": user_name,
+                "expiry_time": "1 hour",
+            },
+        },
+        "email-verification": {
+            "subject": _("Verify your {0} email").format(branding_doc.company or "Account"),
+            "data": {
+                "verification_link": "https://example.com/verify?token=test123",
+                "user_name": user_name,
+                "expiry_time": "24 hours",
+            },
+        },
+        "welcome": {
+            "subject": _("Welcome to {0}").format(branding_doc.company or "Our Platform"),
             "data": {
                 "user_name": user_name,
-                "verification_code": "123456",
-                "expiry_time": "15 minutes",
+                "login_link": "https://example.com/login",
             },
         },
     }

@@ -32,11 +32,17 @@ frappe.ui.form.on("Email Branding", {
                     fieldtype: "Select",
                     options: [
                         {"value": "magic-link", "label": __("Magic Link")},
-                        {"value": "document", "label": __("Document")},
-                        {"value": "notification", "label": __("Notification")},
-                        {"value": "auth", "label": __("Authentication")}
+                        {"value": "sales-invoice", "label": __("Sales Invoice")},
+                        {"value": "quotation", "label": __("Quotation")},
+                        {"value": "sales-order", "label": __("Sales Order")},
+                        {"value": "purchase-order", "label": __("Purchase Order")},
+                        {"value": "request-for-quotation", "label": __("Request for Quotation")},
+                        {"value": "payment-request", "label": __("Payment Request")},
+                        {"value": "password-reset", "label": __("Password Reset")},
+                        {"value": "email-verification", "label": __("Email Verification")},
+                        {"value": "welcome", "label": __("Welcome")}
                     ],
-                    default: "magic-link",
+                    default: "sales-invoice",
                     reqd: 1
                 },
                 {
