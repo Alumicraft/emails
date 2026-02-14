@@ -44038,7 +44038,7 @@ var MagicLinkEmail = ({
                     /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
                       Heading,
                       {
-                        className: "text-[22px] font-medium",
+                        className: "text-[24px] font-medium",
                         style: { color: branding.text_color },
                         children: user_name ? `Hello ${toTitleCase(user_name)}, sign in.` : "Sign in"
                       }
@@ -44098,7 +44098,7 @@ var SalesInvoiceEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
       Heading,
       {
-        className: "text-[22px] font-medium",
+        className: "text-[24px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
         children: "New Invoice"
       }
@@ -44144,7 +44144,7 @@ var QuotationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       Heading,
       {
-        className: "text-[22px] font-medium",
+        className: "text-[24px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
         children: "New Quotation"
       }
@@ -44189,7 +44189,7 @@ var SalesOrderEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       Heading,
       {
-        className: "text-[22px] font-medium",
+        className: "text-[24px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
         children: "Order Confirmation"
       }
@@ -44232,7 +44232,7 @@ var PurchaseOrderEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
       Heading,
       {
-        className: "text-[22px] font-medium",
+        className: "text-[24px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
         children: "New Purchase Order"
       }
@@ -44275,7 +44275,7 @@ var RequestForQuotationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       Heading,
       {
-        className: "text-[22px] font-medium",
+        className: "text-[24px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
         children: "Request for Quotation"
       }
@@ -44317,7 +44317,7 @@ var PasswordResetEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
       Heading,
       {
-        className: "text-[22px] font-medium",
+        className: "text-[24px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
         children: user_name ? `Hello ${toTitleCase(user_name)},` : "Reset your password"
       }
@@ -44369,7 +44369,7 @@ var EmailVerificationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
       Heading,
       {
-        className: "text-[22px] font-medium",
+        className: "text-[24px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
         children: user_name ? `Hello ${toTitleCase(user_name)},` : "Verify your email"
       }
@@ -44421,7 +44421,7 @@ var WelcomeEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(
       Heading,
       {
-        className: "text-[22px] font-medium email-heading",
+        className: "text-[24px] font-medium email-heading",
         style: { color: branding.text_color, marginTop: 0 },
         children: [
           "Your account is ready",
@@ -44466,7 +44466,7 @@ var PaymentRequestEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
       Heading,
       {
-        className: "text-[22px] font-medium",
+        className: "text-[24px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
         children: "New Invoice"
       }
@@ -44522,7 +44522,7 @@ var DocumentEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(
       Heading,
       {
-        className: "text-[22px] font-medium",
+        className: "text-[24px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
         children: [
           "New ",

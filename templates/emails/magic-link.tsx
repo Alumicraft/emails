@@ -64,7 +64,7 @@ export const MagicLinkEmail = ({
                 />
               )}
               <Heading
-                className="text-[22px] font-medium"
+                className="text-[24px] font-medium"
                 style={{ color: branding.text_color }}
               >
                 {user_name ? `Hello ${toTitleCase(user_name)}, sign in.` : "Sign in"}

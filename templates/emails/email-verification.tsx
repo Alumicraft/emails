@@ -19,7 +19,7 @@ export const EmailVerificationEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[22px] font-medium"
+        className="text-[24px] font-medium"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
         {user_name ? `Hello ${toTitleCase(user_name)},` : "Verify your email"}

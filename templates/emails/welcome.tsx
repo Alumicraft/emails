@@ -19,7 +19,7 @@ export const WelcomeEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[22px] font-medium email-heading"
+        className="text-[24px] font-medium email-heading"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
         Your account is ready{user_name ? `, ${toTitleCase(user_name)}` : ""}!

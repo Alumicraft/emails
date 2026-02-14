@@ -23,7 +23,7 @@ export const RequestForQuotationEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[22px] font-medium"
+        className="text-[24px] font-medium"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
         Request for Quotation
