@@ -172,7 +172,7 @@ export const Footer = ({ branding }: { branding: Branding }) => {
   const footerLogoDark = branding.logo_url_secondary_dark || branding.logo_url_dark;
   const tertiaryColor = branding.tertiary_color || "#6b7280";
   const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
-  const iconColor = tertiaryColor.replace("#", "");
+  const iconColor = "000000";
   const iconColorDark = tertiaryColorDark.replace("#", "");
 
   return (

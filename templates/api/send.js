@@ -47922,7 +47922,7 @@ var Footer = ({ branding }) => {
   const footerLogoDark = branding.logo_url_secondary_dark || branding.logo_url_dark;
   const tertiaryColor = branding.tertiary_color || "#6b7280";
   const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
-  const iconColor = tertiaryColor.replace("#", "");
+  const iconColor = "000000";
   const iconColorDark = tertiaryColorDark.replace("#", "");
   return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Section, { className: "mt-12 mb-8", children: [
     /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Hr2, { className: "email-footer-divider mb-8", style: { border: "none", borderTop: `1px solid ${tertiaryColor}`, marginTop: 0 } }),
