@@ -32,7 +32,7 @@ export const QuotationEmail = ({
       </Heading>
 
       <Text
-        className="text-sm leading-6"
+        className="text-base leading-7"
         style={{ color: branding.text_color }}
       >
         Please review the attached quotation at your earliest convenience.
@@ -51,7 +51,7 @@ export const QuotationEmail = ({
       )}
 
       <Text
-        className="text-sm leading-6"
+        className="text-base leading-7"
         style={{ color: branding.tertiary_color }}
       >
         <em>We look forward to working with you!</em>

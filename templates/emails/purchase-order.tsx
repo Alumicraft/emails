@@ -28,7 +28,7 @@ export const PurchaseOrderEmail = ({
       </Heading>
 
       <Text
-        className="text-sm leading-6"
+        className="text-base leading-7"
         style={{ color: branding.text_color }}
       >
         Please review the attached purchase order.
@@ -46,7 +46,7 @@ export const PurchaseOrderEmail = ({
       )}
 
       <Text
-        className="text-sm leading-6"
+        className="text-base leading-7"
         style={{ color: branding.text_color }}
       >
         The PDF is attached for your review. Please reach out if you have any questions or concerns.

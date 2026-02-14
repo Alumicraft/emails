@@ -26,7 +26,7 @@ export const WelcomeEmail = ({
       </Heading>
 
       <Text
-        className="text-sm leading-6 email-text"
+        className="text-base leading-7 email-text"
         style={{ color: branding.text_color }}
       >
         {custom_message || "Log in to access company resources."}

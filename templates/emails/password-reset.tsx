@@ -26,7 +26,7 @@ export const PasswordResetEmail = ({
       </Heading>
 
       <Text
-        className="text-sm leading-6"
+        className="text-base leading-7"
         style={{ color: branding.text_color }}
       >
         Click the button below to reset your password.

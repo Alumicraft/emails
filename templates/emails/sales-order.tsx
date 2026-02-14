@@ -32,7 +32,7 @@ export const SalesOrderEmail = ({
       </Heading>
 
       <Text
-        className="text-sm leading-6"
+        className="text-base leading-7"
         style={{ color: branding.text_color }}
       >
         Your order has been confirmed. Please review the attached PDF.
@@ -51,7 +51,7 @@ export const SalesOrderEmail = ({
       )}
 
       <Text
-        className="text-sm leading-6"
+        className="text-base leading-7"
         style={{ color: branding.tertiary_color }}
       >
         <em>Thank you for your business!</em>

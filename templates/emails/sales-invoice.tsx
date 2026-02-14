@@ -36,7 +36,7 @@ export const SalesInvoiceEmail = ({
       </Heading>
 
       <Text
-        className="text-sm leading-6"
+        className="text-base leading-7"
         style={{ color: branding.text_color }}
       >
         Please review the attached invoice and submit payment at your earliest convenience.
@@ -56,7 +56,7 @@ export const SalesInvoiceEmail = ({
       )}
 
       <Text
-        className="text-sm leading-6"
+        className="text-base leading-7"
         style={{ color: branding.tertiary_color }}
       >
         <em>Thank you for your business!</em>
