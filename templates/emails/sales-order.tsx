@@ -41,7 +41,7 @@ export const SalesOrderEmail = ({
       <InfoCard>
         <InfoRow label="Order No." value={order_number} />
         {project_name && <InfoRow label="Project" value={project_name} />}
-        <InfoAmount label="Order Total" value={order_total} />
+        <InfoAmount label="Order Total" value={order_total} bgColor={branding.background_color} />
       </InfoCard>
 
       {custom_message && (

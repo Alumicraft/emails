@@ -65,7 +65,9 @@ class EmailBranding(Document):
 
             # Logo
             "logo_url": self.logo_url or "",
+            "logo_url_dark": getattr(self, "logo_url_dark", "") or "",
             "logo_url_secondary": self.logo_url_secondary or self.logo_url or "",
+            "logo_url_secondary_dark": getattr(self, "logo_url_secondary_dark", "") or "",
             "logo_height": self.logo_height or 40,
             "logo_alt": self.logo_alt_text or self.company or "",
             "background_image_url": getattr(self, "background_image_url", "") or "",
@@ -76,6 +78,7 @@ class EmailBranding(Document):
             "tertiary_color": self.tertiary_color or "#6b7280",
             "text_color": self.text_color or "#333333",
             "background_color": self.background_color or "#f8f9fa",
+            "button_text_color": getattr(self, "button_text_color", "") or "#ffffff",
 
             # Dark mode colors
             "primary_color_dark": self.primary_color_dark or self.primary_color or "#0066cc",
@@ -83,6 +86,7 @@ class EmailBranding(Document):
             "tertiary_color_dark": getattr(self, "tertiary_color_dark", None) or self.tertiary_color or "#9ca3af",
             "text_color_dark": self.text_color_dark or "#ffffff",
             "background_color_dark": self.background_color_dark or "#1a1a1a",
+            "button_text_color_dark": getattr(self, "button_text_color_dark", "") or "",
 
             # Typography
             "font_family": self.font_family or "Arial, Helvetica, sans-serif",

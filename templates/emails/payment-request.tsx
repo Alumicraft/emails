@@ -43,8 +43,8 @@ export const PaymentRequestEmail = ({
       <InfoCard>
         {reference_number && <InfoRow label="Reference No." value={reference_number} />}
         {project_name && <InfoRow label="Project" value={project_name} />}
-        {due_date && <InfoRow label="Due Date" value={due_date} valueColor="#dc2626" />}
-        <InfoAmount label="Amount" value={amount_requested} />
+        {due_date && <InfoRow label="Due Date" value={due_date} valueColor="#d97706" />}
+        <InfoAmount label="Amount" value={amount_requested} bgColor={branding.background_color} />
       </InfoCard>
 
       {custom_message && (
@@ -63,8 +63,8 @@ export const PaymentRequestEmail = ({
       {stripe_payment_url && (
         <Section className="my-8">
           <Button
-            className="box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-white text-[16px]"
-            style={{ backgroundColor: branding.primary_color }}
+            className="email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]"
+            style={{ backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" }}
             href={stripe_payment_url}
           >
             Pay Invoice

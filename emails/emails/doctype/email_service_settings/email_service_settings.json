@@ -27,7 +27,9 @@
         "column_break_branding_general",
         "logo_section",
         "logo_url",
+        "logo_url_dark",
         "logo_url_secondary",
+        "logo_url_secondary_dark",
         "column_break_logo",
         "logo_alt_text",
         "logo_height",
@@ -39,6 +41,7 @@
         "column_break_colors_light",
         "text_color",
         "background_color",
+        "button_text_color",
         "colors_dark_section",
         "primary_color_dark",
         "secondary_color_dark",
@@ -46,6 +49,7 @@
         "column_break_colors_dark",
         "text_color_dark",
         "background_color_dark",
+        "button_text_color_dark",
         "typography_section",
         "font_family",
         "content_section",
@@ -196,11 +200,25 @@
             "description": "Main logo shown in email header"
         },
         {
+            "fieldname": "logo_url_dark",
+            "fieldtype": "Data",
+            "label": "Primary Logo URL (Dark)",
+            "options": "URL",
+            "description": "Logo for dark mode email clients (optional)"
+        },
+        {
             "fieldname": "logo_url_secondary",
             "fieldtype": "Data",
             "label": "Secondary Logo URL",
             "options": "URL",
             "description": "Footer logo (optional, defaults to primary)"
+        },
+        {
+            "fieldname": "logo_url_secondary_dark",
+            "fieldtype": "Data",
+            "label": "Secondary Logo URL (Dark)",
+            "options": "URL",
+            "description": "Footer logo for dark mode (optional)"
         },
         {
             "fieldname": "column_break_logo",
@@ -270,6 +288,13 @@
             "description": "Email background color"
         },
         {
+            "fieldname": "button_text_color",
+            "fieldtype": "Color",
+            "label": "Button Text Color",
+            "default": "#ffffff",
+            "description": "Text color for buttons (default white)"
+        },
+        {
             "fieldname": "colors_dark_section",
             "fieldtype": "Section Break",
             "label": "Colors - Dark Mode",
@@ -305,6 +330,12 @@
             "fieldname": "background_color_dark",
             "fieldtype": "Color",
             "label": "Background Color (Dark)"
+        },
+        {
+            "fieldname": "button_text_color_dark",
+            "fieldtype": "Color",
+            "label": "Button Text Color (Dark)",
+            "description": "Text color for buttons in dark mode"
         },
         {
             "fieldname": "typography_section",

@@ -50,8 +50,8 @@ export const RequestForQuotationEmail = ({
       {document_link && (
         <Section className="my-8">
           <Button
-            className="box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-white text-[16px]"
-            style={{ backgroundColor: branding.primary_color }}
+            className="email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]"
+            style={{ backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" }}
             href={document_link}
           >
             View Request for Quotation

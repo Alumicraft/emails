@@ -37,7 +37,9 @@ export const toTitleCase = (str?: string): string => {
 export interface Branding {
   company: string;
   logo_url?: string;
+  logo_url_dark?: string;
   logo_url_secondary?: string;
+  logo_url_secondary_dark?: string;
   logo_height?: number;
   logo_alt?: string;
   background_image_url?: string;
@@ -46,9 +48,13 @@ export interface Branding {
   tertiary_color?: string;
   text_color: string;
   background_color: string;
+  button_text_color?: string;
   primary_color_dark?: string;
+  secondary_color_dark?: string;
+  tertiary_color_dark?: string;
   text_color_dark?: string;
   background_color_dark?: string;
+  button_text_color_dark?: string;
   font_family: string;
   footer_text?: string;
   preheader?: string;
@@ -76,12 +82,13 @@ export interface Item {
 // BUTTON COMPONENT
 // ============================================================================
 
-export const Button = ({ href, color, children }: { href: string; color: string; children: React.ReactNode }) => (
+export const Button = ({ href, color, textColor, children }: { href: string; color: string; textColor?: string; children: React.ReactNode }) => (
   <EmailButton
     href={href}
+    className="email-button"
     style={{
       backgroundColor: color,
-      color: "#ffffff",
+      color: textColor || "#ffffff",
       display: "inline-block",
       padding: "12px 24px",
       borderRadius: "6px",
@@ -117,6 +124,34 @@ const getSocialIconUrl = (platform: string, color: string): string => {
 };
 
 // ============================================================================
+// LOGO COMPONENT (dark mode swap via CSS show/hide)
+// ============================================================================
+
+export const Logo = ({
+  lightSrc,
+  darkSrc,
+  alt,
+  height,
+  className,
+}: {
+  lightSrc: string;
+  darkSrc?: string;
+  alt: string;
+  height: string | number;
+  className?: string;
+}) => {
+  if (!darkSrc) {
+    return <Img src={lightSrc} height={height} alt={alt} className={className} />;
+  }
+  return (
+    <>
+      <Img src={lightSrc} height={height} alt={alt} className={`email-logo-light ${className || ""}`} />
+      <Img src={darkSrc} height={height} alt={alt} className={`email-logo-dark ${className || ""}`} style={{ display: "none" }} />
+    </>
+  );
+};
+
+// ============================================================================
 // FOOTER COMPONENT
 // ============================================================================
 
@@ -134,25 +169,30 @@ export const Footer = ({ branding }: { branding: Branding }) => {
       ].filter(Boolean) as Array<{ platform: string; url: string }>;
 
   const footerLogo = branding.logo_url_secondary || branding.logo_url;
+  const footerLogoDark = branding.logo_url_secondary_dark || branding.logo_url_dark;
   const tertiaryColor = branding.tertiary_color || "#6b7280";
+  const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
+  const iconColor = tertiaryColor.replace("#", "");
+  const iconColorDark = tertiaryColorDark.replace("#", "");
 
   return (
     <Section className="mt-12 mb-8">
       {/* Divider line */}
-      <Hr className="mb-8" style={{ border: "none", borderTop: `1px solid ${tertiaryColor}`, marginTop: 0 }} />
+      <Hr className="email-footer-divider mb-8" style={{ border: "none", borderTop: `1px solid ${tertiaryColor}`, marginTop: 0 }} />
       {/* Logo */}
       {footerLogo && (
-        <Img
+        <Logo
+          lightSrc={footerLogo}
+          darkSrc={footerLogoDark}
           alt={branding.logo_alt || branding.company}
           height="24"
-          src={footerLogo}
           className="mb-6"
         />
       )}
 
-      {/* Social Links */}
+      {/* Social Links — light mode icons */}
       {socialLinks.length > 0 && (
-        <table cellPadding="0" cellSpacing="0" className="mb-4">
+        <table cellPadding="0" cellSpacing="0" className="email-social-light mb-4">
           <tr>
             {socialLinks.map((social, index) => (
               <td key={index} className={index === 0 ? "" : "pl-2"}>
@@ -161,7 +201,27 @@ export const Footer = ({ branding }: { branding: Branding }) => {
                     alt={social.platform}
                     height="20"
                     width="20"
-                    src={getSocialIconUrl(social.platform, "000000")}
+                    src={getSocialIconUrl(social.platform, iconColor)}
+                  />
+                </Link>
+              </td>
+            ))}
+          </tr>
+        </table>
+      )}
+
+      {/* Social Links — dark mode icons (hidden by default, shown via CSS) */}
+      {socialLinks.length > 0 && (
+        <table cellPadding="0" cellSpacing="0" className="email-social-dark mb-4" style={{ display: "none" }}>
+          <tr>
+            {socialLinks.map((social, index) => (
+              <td key={index} className={index === 0 ? "" : "pl-2"}>
+                <Link href={social.url}>
+                  <Img
+                    alt={social.platform}
+                    height="20"
+                    width="20"
+                    src={getSocialIconUrl(social.platform, iconColorDark)}
                   />
                 </Link>
               </td>
@@ -172,17 +232,18 @@ export const Footer = ({ branding }: { branding: Branding }) => {
 
       {/* Address */}
       {branding.mailing_address && (
-        <Text style={{ margin: "0 0 4px 0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }}>
+        <Text className="email-footer-text" style={{ margin: "0 0 4px 0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }}>
           {branding.mailing_address}
         </Text>
       )}
 
       {/* Contact */}
       {(branding.company_email || branding.company_phone) && (
-        <Text style={{ margin: "0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }}>
+        <Text className="email-footer-text" style={{ margin: "0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }}>
           {branding.company_email && (
             <Link
               href={`mailto:${branding.company_email}`}
+              className="email-footer-link"
               style={{ color: tertiaryColor, textDecoration: "none" }}
             >
               {branding.company_email}
@@ -192,6 +253,7 @@ export const Footer = ({ branding }: { branding: Branding }) => {
           {branding.company_phone && (
             <Link
               href={`tel:${branding.company_phone.replace(/[^+\d]/g, "")}`}
+              className="email-footer-link"
               style={{ color: tertiaryColor, textDecoration: "none" }}
             >
               {branding.company_phone}
@@ -234,6 +296,8 @@ export const Layout = ({
 }) => {
   const darkBg = branding.background_color_dark || "#1a1a1a";
   const darkText = branding.text_color_dark || "#ffffff";
+  const buttonTextColorDark = branding.button_text_color_dark || branding.button_text_color || "#ffffff";
+  const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
 
   const darkModeStyles = `
     @media (prefers-color-scheme: dark) {
@@ -244,6 +308,15 @@ export const Layout = ({
       .email-row-value { color: #d1d5db !important; }
       .email-divider { border-color: #4b5563 !important; }
       .email-confidentiality { color: #6b7280 !important; }
+      .email-button { color: ${buttonTextColorDark} !important; }
+      .email-logo-light { display: none !important; }
+      .email-logo-dark { display: block !important; }
+      .email-social-light { display: none !important; }
+      .email-social-dark { display: inline-block !important; }
+      .email-footer-text { color: ${tertiaryColorDark} !important; }
+      .email-footer-link { color: ${tertiaryColorDark} !important; }
+      .email-footer-divider { border-color: #4b5563 !important; }
+      .email-amount-bg { background-color: ${darkBg} !important; }
     }
   `;
 
@@ -271,10 +344,11 @@ export const Layout = ({
               }}
             >
               {branding.logo_url && (
-                <Img
-                  src={branding.logo_url}
-                  height={branding.logo_height || 48}
+                <Logo
+                  lightSrc={branding.logo_url}
+                  darkSrc={branding.logo_url_dark}
                   alt={branding.logo_alt || branding.company}
+                  height={branding.logo_height || 48}
                   className="mt-4 mb-8"
                 />
               )}
@@ -302,7 +376,7 @@ export const InfoCard = ({ children }: { children: React.ReactNode }) => (
     width: "100%",
     borderCollapse: "collapse",
     marginTop: "32px",
-    marginBottom: "32px"
+    marginBottom: "32px",
   }}>
     <tbody>
       {children}
@@ -313,39 +387,42 @@ export const InfoCard = ({ children }: { children: React.ReactNode }) => (
 export const InfoRow = ({ label, value, valueColor }: { label: string; value: string; valueColor?: string }) => (
   <tr>
     <td className="email-row-label email-divider" style={{
-      padding: "8px 0",
+      padding: "12px 16px",
       borderBottom: "1px solid #e5e7eb",
-      color: "#1f2937",
+      color: "#6b7280",
       fontSize: "14px",
       fontWeight: 500,
       whiteSpace: "nowrap",
-      paddingRight: "16px"
     }}>{label}</td>
     <td className="email-row-value email-divider" style={{
-      padding: "8px 0",
+      padding: "12px 16px",
       borderBottom: "1px solid #e5e7eb",
       color: valueColor || "#1f2937",
       fontSize: "14px",
-      fontFamily: monoFont
+      fontFamily: monoFont,
+      textAlign: "right",
     }}>{value}</td>
   </tr>
 );
 
-export const InfoAmount = ({ label, value }: { label: string; value: string }) => (
+export const InfoAmount = ({ label, value, bgColor }: { label: string; value: string; bgColor?: string }) => (
   <tr>
-    <td className="email-row-label" style={{
-      padding: "8px 0",
-      color: "#1f2937",
+    <td className="email-row-label email-amount-bg" style={{
+      padding: "12px 16px",
+      color: "#6b7280",
       fontSize: "14px",
       fontWeight: 500,
       whiteSpace: "nowrap",
-      paddingRight: "16px"
+      backgroundColor: bgColor || "#f3f4f6",
     }}>{label}</td>
-    <td className="email-row-value" style={{
-      padding: "8px 0",
+    <td className="email-row-value email-amount-bg" style={{
+      padding: "12px 16px",
       color: "#1f2937",
       fontSize: "14px",
-      fontFamily: monoFont
+      fontFamily: monoFont,
+      fontWeight: 700,
+      textAlign: "right",
+      backgroundColor: bgColor || "#f3f4f6",
     }}>{value}</td>
   </tr>
 );

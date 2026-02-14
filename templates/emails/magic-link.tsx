@@ -5,14 +5,13 @@ import {
   Head,
   Heading,
   Html,
-  Img,
   Preview,
   Section,
   Tailwind,
   Text,
 } from "@react-email/components";
 import tailwindConfig from "../tailwind.config";
-import { Footer, Confidentiality, Branding, toTitleCase } from "./shared";
+import { Footer, Confidentiality, Logo, Branding, toTitleCase } from "./shared";
 
 export interface MagicLinkEmailProps {
   branding: Branding;
@@ -29,6 +28,8 @@ export const MagicLinkEmail = ({
 }: MagicLinkEmailProps) => {
   const darkBg = branding.background_color_dark || "#1a1a1a";
   const darkText = branding.text_color_dark || "#ffffff";
+  const buttonTextColorDark = branding.button_text_color_dark || branding.button_text_color || "#ffffff";
+  const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
 
   const darkModeStyles = `
     @media (prefers-color-scheme: dark) {
@@ -39,6 +40,15 @@ export const MagicLinkEmail = ({
       .email-row-value { color: #d1d5db !important; }
       .email-divider { border-color: #4b5563 !important; }
       .email-confidentiality { color: #6b7280 !important; }
+      .email-button { color: ${buttonTextColorDark} !important; }
+      .email-logo-light { display: none !important; }
+      .email-logo-dark { display: block !important; }
+      .email-social-light { display: none !important; }
+      .email-social-dark { display: inline-block !important; }
+      .email-footer-text { color: ${tertiaryColorDark} !important; }
+      .email-footer-link { color: ${tertiaryColorDark} !important; }
+      .email-footer-divider { border-color: #4b5563 !important; }
+      .email-amount-bg { background-color: ${darkBg} !important; }
     }
   `;
 
@@ -75,10 +85,11 @@ export const MagicLinkEmail = ({
               }}
             >
               {branding.logo_url && (
-                <Img
-                  src={branding.logo_url}
-                  height={branding.logo_height || 48}
+                <Logo
+                  lightSrc={branding.logo_url}
+                  darkSrc={branding.logo_url_dark}
                   alt={branding.logo_alt || branding.company}
+                  height={branding.logo_height || 48}
                   className="mt-4 mb-8"
                 />
               )}
@@ -96,8 +107,8 @@ export const MagicLinkEmail = ({
               </Text>
               <Section className="my-8">
                 <Button
-                  className="box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-white text-[16px]"
-                  style={{ backgroundColor: branding.primary_color }}
+                  className="email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]"
+                  style={{ backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" }}
                   href={magic_link}
                 >
                   Login

@@ -43,7 +43,7 @@ export const DocumentEmail = ({
       <InfoCard>
         <InfoRow label={document_type || "Document"} value={document_number} />
         {document_date && <InfoRow label="Date" value={document_date} />}
-        {total_amount && <InfoAmount label="Total" value={total_amount} />}
+        {total_amount && <InfoAmount label="Total" value={total_amount} bgColor={branding.background_color} />}
       </InfoCard>
 
       {custom_message && (
