@@ -44046,7 +44046,7 @@ var MagicLinkEmail = ({
                     /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
                       Text,
                       {
-                        className: "text-base leading-7",
+                        className: "text-[15px] leading-6",
                         style: { color: branding.text_color },
                         children: "Click the button below to sign in."
                       }
@@ -44106,7 +44106,7 @@ var SalesInvoiceEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.text_color },
         children: "Please review the attached invoice and submit payment at your earliest convenience."
       }
@@ -44121,7 +44121,7 @@ var SalesInvoiceEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.tertiary_color },
         children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("em", { children: "Thank you for your business!" })
       }
@@ -44152,7 +44152,7 @@ var QuotationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.text_color },
         children: "Please review the attached quotation at your earliest convenience."
       }
@@ -44166,7 +44166,7 @@ var QuotationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.tertiary_color },
         children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("em", { children: "We look forward to working with you!" })
       }
@@ -44197,7 +44197,7 @@ var SalesOrderEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.text_color },
         children: "Your order has been confirmed. Please review the attached PDF."
       }
@@ -44211,7 +44211,7 @@ var SalesOrderEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.tertiary_color },
         children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("em", { children: "Thank you for your business!" })
       }
@@ -44240,7 +44240,7 @@ var PurchaseOrderEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.text_color },
         children: "Please review the attached purchase order."
       }
@@ -44253,7 +44253,7 @@ var PurchaseOrderEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.text_color },
         children: "The PDF is attached for your review. Please reach out if you have any questions or concerns."
       }
@@ -44283,7 +44283,7 @@ var RequestForQuotationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.text_color },
         children: "Please review the attached request for quotation and respond with your pricing."
       }
@@ -44325,7 +44325,7 @@ var PasswordResetEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.text_color },
         children: "Click the button below to reset your password."
       }
@@ -44377,7 +44377,7 @@ var EmailVerificationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.text_color },
         children: "Click the button below to verify your email."
       }
@@ -44433,7 +44433,7 @@ var WelcomeEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
       Text,
       {
-        className: "text-base leading-7 email-text",
+        className: "text-[15px] leading-6 email-text",
         style: { color: branding.text_color },
         children: custom_message || "Log in to access company resources."
       }
@@ -44474,7 +44474,7 @@ var PaymentRequestEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.text_color },
         children: "Please review the attached PDF and submit payment at your earliest convenience."
       }
@@ -44489,7 +44489,7 @@ var PaymentRequestEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.tertiary_color },
         children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("em", { children: "Thank you for your business!" })
       }
@@ -44533,7 +44533,7 @@ var DocumentEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.text_color },
         children: [
           "Please find the attached ",
@@ -44551,7 +44551,7 @@ var DocumentEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
       Text,
       {
-        className: "text-base leading-7",
+        className: "text-[15px] leading-6",
         style: { color: branding.tertiary_color },
         children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("em", { children: "Thank you for your business!" })
       }

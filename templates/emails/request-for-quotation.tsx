@@ -30,7 +30,7 @@ export const RequestForQuotationEmail = ({
       </Heading>
 
       <Text
-        className="text-base leading-7"
+        className="text-[15px] leading-6"
         style={{ color: branding.text_color }}
       >
         Please review the attached request for quotation and respond with your pricing.

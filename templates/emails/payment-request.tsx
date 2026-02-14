@@ -34,7 +34,7 @@ export const PaymentRequestEmail = ({
       </Heading>
 
       <Text
-        className="text-base leading-7"
+        className="text-[15px] leading-6"
         style={{ color: branding.text_color }}
       >
         Please review the attached PDF and submit payment at your earliest convenience.
@@ -54,7 +54,7 @@ export const PaymentRequestEmail = ({
       )}
 
       <Text
-        className="text-base leading-7"
+        className="text-[15px] leading-6"
         style={{ color: branding.tertiary_color }}
       >
         <em>Thank you for your business!</em>

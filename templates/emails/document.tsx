@@ -34,7 +34,7 @@ export const DocumentEmail = ({
       </Heading>
 
       <Text
-        className="text-base leading-7"
+        className="text-[15px] leading-6"
         style={{ color: branding.text_color }}
       >
         Please find the attached {document_type?.toLowerCase() || "document"} for your reference.
@@ -53,7 +53,7 @@ export const DocumentEmail = ({
       )}
 
       <Text
-        className="text-base leading-7"
+        className="text-[15px] leading-6"
         style={{ color: branding.tertiary_color }}
       >
         <em>Thank you for your business!</em>
