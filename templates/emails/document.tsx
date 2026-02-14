@@ -27,14 +27,14 @@ export const DocumentEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[24px] font-medium"
+        className="text-[24px] font-medium email-heading"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
         New {document_type || "Document"}
       </Heading>
 
       <Text
-        className="text-[15px] leading-6"
+        className="text-[15px] leading-6 email-text"
         style={{ color: branding.text_color }}
       >
         Please find the attached {document_type?.toLowerCase() || "document"} for your reference.

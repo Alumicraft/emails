@@ -23,14 +23,14 @@ export const RequestForQuotationEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[24px] font-medium"
+        className="text-[24px] font-medium email-heading"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
         Request for Quotation
       </Heading>
 
       <Text
-        className="text-[15px] leading-6"
+        className="text-[15px] leading-6 email-text"
         style={{ color: branding.text_color }}
       >
         Please review the attached request for quotation and respond with your pricing.

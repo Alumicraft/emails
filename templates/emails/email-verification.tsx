@@ -19,14 +19,14 @@ export const EmailVerificationEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[24px] font-medium"
+        className="text-[24px] font-medium email-heading"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
         {user_name ? `Hello ${toTitleCase(user_name)},` : "Verify your email"}
       </Heading>
 
       <Text
-        className="text-[15px] leading-6"
+        className="text-[15px] leading-6 email-text"
         style={{ color: branding.text_color }}
       >
         Click the button below to verify your email.

@@ -312,7 +312,7 @@ export const InfoCard = ({ children }: { children: React.ReactNode }) => (
 
 export const InfoRow = ({ label, value, valueColor }: { label: string; value: string; valueColor?: string }) => (
   <tr>
-    <td style={{
+    <td className="email-row-label email-divider" style={{
       padding: "8px 0",
       borderBottom: "1px solid #e5e7eb",
       color: "#1f2937",
@@ -321,7 +321,7 @@ export const InfoRow = ({ label, value, valueColor }: { label: string; value: st
       whiteSpace: "nowrap",
       paddingRight: "16px"
     }}>{label}</td>
-    <td style={{
+    <td className="email-row-value email-divider" style={{
       padding: "8px 0",
       borderBottom: "1px solid #e5e7eb",
       color: valueColor || "#1f2937",
@@ -333,7 +333,7 @@ export const InfoRow = ({ label, value, valueColor }: { label: string; value: st
 
 export const InfoAmount = ({ label, value }: { label: string; value: string }) => (
   <tr>
-    <td style={{
+    <td className="email-row-label" style={{
       padding: "8px 0",
       color: "#1f2937",
       fontSize: "14px",
@@ -341,7 +341,7 @@ export const InfoAmount = ({ label, value }: { label: string; value: string }) =
       whiteSpace: "nowrap",
       paddingRight: "16px"
     }}>{label}</td>
-    <td style={{
+    <td className="email-row-value" style={{
       padding: "8px 0",
       color: "#1f2937",
       fontSize: "14px",

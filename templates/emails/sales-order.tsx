@@ -25,14 +25,14 @@ export const SalesOrderEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[24px] font-medium"
+        className="text-[24px] font-medium email-heading"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
         Order Confirmation
       </Heading>
 
       <Text
-        className="text-[15px] leading-6"
+        className="text-[15px] leading-6 email-text"
         style={{ color: branding.text_color }}
       >
         Your order has been confirmed. Please review the attached PDF.
