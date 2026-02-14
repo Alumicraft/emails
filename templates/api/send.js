@@ -3127,11 +3127,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx30 = jsxWithValidationDynamic;
-        var jsxs17 = jsxWithValidationStatic;
+        var jsx31 = jsxWithValidationDynamic;
+        var jsxs18 = jsxWithValidationStatic;
         exports2.Fragment = REACT_FRAGMENT_TYPE;
-        exports2.jsx = jsx30;
-        exports2.jsxs = jsxs17;
+        exports2.jsx = jsx31;
+        exports2.jsxs = jsxs18;
       })();
     }
   }
@@ -7139,603 +7139,7 @@ __export(send_exports, {
   default: () => handler
 });
 module.exports = __toCommonJS(send_exports);
-
-// node_modules/resend/dist/index.mjs
-var __defProp2 = Object.defineProperty;
-var __defProps = Object.defineProperties;
-var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __hasOwnProp2 = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp2.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
-var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
-var version = "4.8.0";
-var ApiKeys = class {
-  constructor(resend2) {
-    this.resend = resend2;
-  }
-  create(_0) {
-    return __async(this, arguments, function* (payload, options = {}) {
-      const data = yield this.resend.post(
-        "/api-keys",
-        payload,
-        options
-      );
-      return data;
-    });
-  }
-  list() {
-    return __async(this, null, function* () {
-      const data = yield this.resend.get("/api-keys");
-      return data;
-    });
-  }
-  remove(id) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.delete(
-        `/api-keys/${id}`
-      );
-      return data;
-    });
-  }
-};
-var Audiences = class {
-  constructor(resend2) {
-    this.resend = resend2;
-  }
-  create(_0) {
-    return __async(this, arguments, function* (payload, options = {}) {
-      const data = yield this.resend.post(
-        "/audiences",
-        payload,
-        options
-      );
-      return data;
-    });
-  }
-  list() {
-    return __async(this, null, function* () {
-      const data = yield this.resend.get("/audiences");
-      return data;
-    });
-  }
-  get(id) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.get(
-        `/audiences/${id}`
-      );
-      return data;
-    });
-  }
-  remove(id) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.delete(
-        `/audiences/${id}`
-      );
-      return data;
-    });
-  }
-};
-function parseAttachments(attachments) {
-  return attachments == null ? void 0 : attachments.map((attachment) => ({
-    content: attachment.content,
-    filename: attachment.filename,
-    path: attachment.path,
-    content_type: attachment.contentType,
-    inline_content_id: attachment.inlineContentId
-  }));
-}
-function parseEmailToApiOptions(email) {
-  return {
-    attachments: parseAttachments(email.attachments),
-    bcc: email.bcc,
-    cc: email.cc,
-    from: email.from,
-    headers: email.headers,
-    html: email.html,
-    reply_to: email.replyTo,
-    scheduled_at: email.scheduledAt,
-    subject: email.subject,
-    tags: email.tags,
-    text: email.text,
-    to: email.to
-  };
-}
-var Batch = class {
-  constructor(resend2) {
-    this.resend = resend2;
-  }
-  send(_0) {
-    return __async(this, arguments, function* (payload, options = {}) {
-      return this.create(payload, options);
-    });
-  }
-  create(_0) {
-    return __async(this, arguments, function* (payload, options = {}) {
-      const emails = [];
-      for (const email of payload) {
-        if (email.react) {
-          if (!this.renderAsync) {
-            try {
-              const { renderAsync } = yield import("@react-email/render");
-              this.renderAsync = renderAsync;
-            } catch (error) {
-              throw new Error(
-                "Failed to render React component. Make sure to install `@react-email/render`"
-              );
-            }
-          }
-          email.html = yield this.renderAsync(email.react);
-          email.react = void 0;
-        }
-        emails.push(parseEmailToApiOptions(email));
-      }
-      const data = yield this.resend.post(
-        "/emails/batch",
-        emails,
-        options
-      );
-      return data;
-    });
-  }
-};
-var Broadcasts = class {
-  constructor(resend2) {
-    this.resend = resend2;
-  }
-  create(_0) {
-    return __async(this, arguments, function* (payload, options = {}) {
-      if (payload.react) {
-        if (!this.renderAsync) {
-          try {
-            const { renderAsync } = yield import("@react-email/render");
-            this.renderAsync = renderAsync;
-          } catch (error) {
-            throw new Error(
-              "Failed to render React component. Make sure to install `@react-email/render`"
-            );
-          }
-        }
-        payload.html = yield this.renderAsync(
-          payload.react
-        );
-      }
-      const data = yield this.resend.post(
-        "/broadcasts",
-        {
-          name: payload.name,
-          audience_id: payload.audienceId,
-          preview_text: payload.previewText,
-          from: payload.from,
-          html: payload.html,
-          reply_to: payload.replyTo,
-          subject: payload.subject,
-          text: payload.text
-        },
-        options
-      );
-      return data;
-    });
-  }
-  send(id, payload) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.post(
-        `/broadcasts/${id}/send`,
-        { scheduled_at: payload == null ? void 0 : payload.scheduledAt }
-      );
-      return data;
-    });
-  }
-  list() {
-    return __async(this, null, function* () {
-      const data = yield this.resend.get("/broadcasts");
-      return data;
-    });
-  }
-  get(id) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.get(
-        `/broadcasts/${id}`
-      );
-      return data;
-    });
-  }
-  remove(id) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.delete(
-        `/broadcasts/${id}`
-      );
-      return data;
-    });
-  }
-  update(id, payload) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.patch(
-        `/broadcasts/${id}`,
-        {
-          name: payload.name,
-          audience_id: payload.audienceId,
-          from: payload.from,
-          html: payload.html,
-          text: payload.text,
-          subject: payload.subject,
-          reply_to: payload.replyTo,
-          preview_text: payload.previewText
-        }
-      );
-      return data;
-    });
-  }
-};
-var Contacts = class {
-  constructor(resend2) {
-    this.resend = resend2;
-  }
-  create(_0) {
-    return __async(this, arguments, function* (payload, options = {}) {
-      const data = yield this.resend.post(
-        `/audiences/${payload.audienceId}/contacts`,
-        {
-          unsubscribed: payload.unsubscribed,
-          email: payload.email,
-          first_name: payload.firstName,
-          last_name: payload.lastName
-        },
-        options
-      );
-      return data;
-    });
-  }
-  list(options) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.get(
-        `/audiences/${options.audienceId}/contacts`
-      );
-      return data;
-    });
-  }
-  get(options) {
-    return __async(this, null, function* () {
-      if (!options.id && !options.email) {
-        return {
-          data: null,
-          error: {
-            message: "Missing `id` or `email` field.",
-            name: "missing_required_field"
-          }
-        };
-      }
-      const data = yield this.resend.get(
-        `/audiences/${options.audienceId}/contacts/${(options == null ? void 0 : options.email) ? options == null ? void 0 : options.email : options == null ? void 0 : options.id}`
-      );
-      return data;
-    });
-  }
-  update(payload) {
-    return __async(this, null, function* () {
-      if (!payload.id && !payload.email) {
-        return {
-          data: null,
-          error: {
-            message: "Missing `id` or `email` field.",
-            name: "missing_required_field"
-          }
-        };
-      }
-      const data = yield this.resend.patch(
-        `/audiences/${payload.audienceId}/contacts/${(payload == null ? void 0 : payload.email) ? payload == null ? void 0 : payload.email : payload == null ? void 0 : payload.id}`,
-        {
-          unsubscribed: payload.unsubscribed,
-          first_name: payload.firstName,
-          last_name: payload.lastName
-        }
-      );
-      return data;
-    });
-  }
-  remove(payload) {
-    return __async(this, null, function* () {
-      if (!payload.id && !payload.email) {
-        return {
-          data: null,
-          error: {
-            message: "Missing `id` or `email` field.",
-            name: "missing_required_field"
-          }
-        };
-      }
-      const data = yield this.resend.delete(
-        `/audiences/${payload.audienceId}/contacts/${(payload == null ? void 0 : payload.email) ? payload == null ? void 0 : payload.email : payload == null ? void 0 : payload.id}`
-      );
-      return data;
-    });
-  }
-};
-function parseDomainToApiOptions(domain) {
-  return {
-    name: domain.name,
-    region: domain.region,
-    custom_return_path: domain.customReturnPath
-  };
-}
-var Domains = class {
-  constructor(resend2) {
-    this.resend = resend2;
-  }
-  create(_0) {
-    return __async(this, arguments, function* (payload, options = {}) {
-      const data = yield this.resend.post(
-        "/domains",
-        parseDomainToApiOptions(payload),
-        options
-      );
-      return data;
-    });
-  }
-  list() {
-    return __async(this, null, function* () {
-      const data = yield this.resend.get("/domains");
-      return data;
-    });
-  }
-  get(id) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.get(
-        `/domains/${id}`
-      );
-      return data;
-    });
-  }
-  update(payload) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.patch(
-        `/domains/${payload.id}`,
-        {
-          click_tracking: payload.clickTracking,
-          open_tracking: payload.openTracking,
-          tls: payload.tls
-        }
-      );
-      return data;
-    });
-  }
-  remove(id) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.delete(
-        `/domains/${id}`
-      );
-      return data;
-    });
-  }
-  verify(id) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.post(
-        `/domains/${id}/verify`
-      );
-      return data;
-    });
-  }
-};
-var Emails = class {
-  constructor(resend2) {
-    this.resend = resend2;
-  }
-  send(_0) {
-    return __async(this, arguments, function* (payload, options = {}) {
-      return this.create(payload, options);
-    });
-  }
-  create(_0) {
-    return __async(this, arguments, function* (payload, options = {}) {
-      if (payload.react) {
-        if (!this.renderAsync) {
-          try {
-            const { renderAsync } = yield import("@react-email/render");
-            this.renderAsync = renderAsync;
-          } catch (error) {
-            throw new Error(
-              "Failed to render React component. Make sure to install `@react-email/render`"
-            );
-          }
-        }
-        payload.html = yield this.renderAsync(
-          payload.react
-        );
-      }
-      const data = yield this.resend.post(
-        "/emails",
-        parseEmailToApiOptions(payload),
-        options
-      );
-      return data;
-    });
-  }
-  get(id) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.get(
-        `/emails/${id}`
-      );
-      return data;
-    });
-  }
-  update(payload) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.patch(
-        `/emails/${payload.id}`,
-        {
-          scheduled_at: payload.scheduledAt
-        }
-      );
-      return data;
-    });
-  }
-  cancel(id) {
-    return __async(this, null, function* () {
-      const data = yield this.resend.post(
-        `/emails/${id}/cancel`
-      );
-      return data;
-    });
-  }
-};
-var defaultBaseUrl = "https://api.resend.com";
-var defaultUserAgent = `resend-node:${version}`;
-var baseUrl = typeof process !== "undefined" && process.env ? process.env.RESEND_BASE_URL || defaultBaseUrl : defaultBaseUrl;
-var userAgent = typeof process !== "undefined" && process.env ? process.env.RESEND_USER_AGENT || defaultUserAgent : defaultUserAgent;
-var Resend = class {
-  constructor(key) {
-    this.key = key;
-    this.apiKeys = new ApiKeys(this);
-    this.audiences = new Audiences(this);
-    this.batch = new Batch(this);
-    this.broadcasts = new Broadcasts(this);
-    this.contacts = new Contacts(this);
-    this.domains = new Domains(this);
-    this.emails = new Emails(this);
-    if (!key) {
-      if (typeof process !== "undefined" && process.env) {
-        this.key = process.env.RESEND_API_KEY;
-      }
-      if (!this.key) {
-        throw new Error(
-          'Missing API key. Pass it to the constructor `new Resend("re_123")`'
-        );
-      }
-    }
-    this.headers = new Headers({
-      Authorization: `Bearer ${this.key}`,
-      "User-Agent": userAgent,
-      "Content-Type": "application/json"
-    });
-  }
-  fetchRequest(_0) {
-    return __async(this, arguments, function* (path, options = {}) {
-      try {
-        const response = yield fetch(`${baseUrl}${path}`, options);
-        if (!response.ok) {
-          try {
-            const rawError = yield response.text();
-            return { data: null, error: JSON.parse(rawError) };
-          } catch (err) {
-            if (err instanceof SyntaxError) {
-              return {
-                data: null,
-                error: {
-                  name: "application_error",
-                  message: "Internal server error. We are unable to process your request right now, please try again later."
-                }
-              };
-            }
-            const error = {
-              message: response.statusText,
-              name: "application_error"
-            };
-            if (err instanceof Error) {
-              return { data: null, error: __spreadProps(__spreadValues({}, error), { message: err.message }) };
-            }
-            return { data: null, error };
-          }
-        }
-        const data = yield response.json();
-        return { data, error: null };
-      } catch (error) {
-        return {
-          data: null,
-          error: {
-            name: "application_error",
-            message: "Unable to fetch data. The request could not be resolved."
-          }
-        };
-      }
-    });
-  }
-  post(_0, _1) {
-    return __async(this, arguments, function* (path, entity, options = {}) {
-      const headers = new Headers(this.headers);
-      if (options.idempotencyKey) {
-        headers.set("Idempotency-Key", options.idempotencyKey);
-      }
-      const requestOptions = __spreadValues({
-        method: "POST",
-        headers,
-        body: JSON.stringify(entity)
-      }, options);
-      return this.fetchRequest(path, requestOptions);
-    });
-  }
-  get(_0) {
-    return __async(this, arguments, function* (path, options = {}) {
-      const requestOptions = __spreadValues({
-        method: "GET",
-        headers: this.headers
-      }, options);
-      return this.fetchRequest(path, requestOptions);
-    });
-  }
-  put(_0, _1) {
-    return __async(this, arguments, function* (path, entity, options = {}) {
-      const requestOptions = __spreadValues({
-        method: "PUT",
-        headers: this.headers,
-        body: JSON.stringify(entity)
-      }, options);
-      return this.fetchRequest(path, requestOptions);
-    });
-  }
-  patch(_0, _1) {
-    return __async(this, arguments, function* (path, entity, options = {}) {
-      const requestOptions = __spreadValues({
-        method: "PATCH",
-        headers: this.headers,
-        body: JSON.stringify(entity)
-      }, options);
-      return this.fetchRequest(path, requestOptions);
-    });
-  }
-  delete(path, query) {
-    return __async(this, null, function* () {
-      const requestOptions = {
-        method: "DELETE",
-        headers: this.headers,
-        body: JSON.stringify(query)
-      };
-      return this.fetchRequest(path, requestOptions);
-    });
-  }
-};
-
-// src/send.tsx
+var import_resend = require("resend");
 var import_render = require("@react-email/render");
 var React18 = __toESM(require_react());
 
@@ -7805,6 +7209,48 @@ __export(dist_exports, {
 // node_modules/@react-email/body/dist/index.mjs
 var React = __toESM(require_react(), 1);
 var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
+var __defProp2 = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp2 = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp2.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+var __objRest = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    if (__hasOwnProp2.call(source, prop) && exclude.indexOf(prop) < 0)
+      target[prop] = source[prop];
+  if (source != null && __getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+        target[prop] = source[prop];
+    }
+  return target;
+};
+var Body = React.forwardRef(
+  (_a3, ref) => {
+    var _b = _a3, { children, style } = _b, props = __objRest(_b, ["children", "style"]);
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("body", __spreadProps(__spreadValues({}, props), { ref, style, children }));
+  }
+);
+Body.displayName = "Body";
+
+// node_modules/@react-email/button/dist/index.mjs
+var React2 = __toESM(require_react(), 1);
+var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
 var __defProp3 = Object.defineProperty;
 var __defProps2 = Object.defineProperties;
 var __getOwnPropDescs2 = Object.getOwnPropertyDescriptors;
@@ -7824,7 +7270,7 @@ var __spreadValues2 = (a, b) => {
   return a;
 };
 var __spreadProps2 = (a, b) => __defProps2(a, __getOwnPropDescs2(b));
-var __objRest = (source, exclude) => {
+var __objRest2 = (source, exclude) => {
   var target = {};
   for (var prop in source)
     if (__hasOwnProp3.call(source, prop) && exclude.indexOf(prop) < 0)
@@ -7832,48 +7278,6 @@ var __objRest = (source, exclude) => {
   if (source != null && __getOwnPropSymbols2)
     for (var prop of __getOwnPropSymbols2(source)) {
       if (exclude.indexOf(prop) < 0 && __propIsEnum2.call(source, prop))
-        target[prop] = source[prop];
-    }
-  return target;
-};
-var Body = React.forwardRef(
-  (_a3, ref) => {
-    var _b = _a3, { children, style } = _b, props = __objRest(_b, ["children", "style"]);
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("body", __spreadProps2(__spreadValues2({}, props), { ref, style, children }));
-  }
-);
-Body.displayName = "Body";
-
-// node_modules/@react-email/button/dist/index.mjs
-var React2 = __toESM(require_react(), 1);
-var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-var __defProp4 = Object.defineProperty;
-var __defProps3 = Object.defineProperties;
-var __getOwnPropDescs3 = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols3 = Object.getOwnPropertySymbols;
-var __hasOwnProp4 = Object.prototype.hasOwnProperty;
-var __propIsEnum3 = Object.prototype.propertyIsEnumerable;
-var __defNormalProp3 = (obj, key, value) => key in obj ? __defProp4(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues3 = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp4.call(b, prop))
-      __defNormalProp3(a, prop, b[prop]);
-  if (__getOwnPropSymbols3)
-    for (var prop of __getOwnPropSymbols3(b)) {
-      if (__propIsEnum3.call(b, prop))
-        __defNormalProp3(a, prop, b[prop]);
-    }
-  return a;
-};
-var __spreadProps3 = (a, b) => __defProps3(a, __getOwnPropDescs3(b));
-var __objRest2 = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp4.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols3)
-    for (var prop of __getOwnPropSymbols3(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum3.call(source, prop))
         target[prop] = source[prop];
     }
   return target;
@@ -7995,9 +7399,9 @@ var Button = React2.forwardRef(
     const [prFontWidth, prSpaceCount] = computeFontWidthAndSpaceCount(pr);
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
       "a",
-      __spreadProps3(__spreadValues3({}, props), {
+      __spreadProps2(__spreadValues2({}, props), {
         ref,
-        style: buttonStyle(__spreadProps3(__spreadValues3({}, style), { pt: pt2, pr, pb, pl: pl2 })),
+        style: buttonStyle(__spreadProps2(__spreadValues2({}, style), { pt: pt2, pr, pb, pl: pl2 })),
         target,
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
@@ -8034,7 +7438,7 @@ var Button = React2.forwardRef(
 Button.displayName = "Button";
 var buttonStyle = (style) => {
   const _a3 = style || {}, { pt: pt2, pr, pb, pl: pl2 } = _a3, rest = __objRest2(_a3, ["pt", "pr", "pb", "pl"]);
-  return __spreadProps3(__spreadValues3({
+  return __spreadProps2(__spreadValues2({
     lineHeight: "100%",
     textDecoration: "none",
     display: "inline-block",
@@ -8058,25 +7462,25 @@ var buttonTextStyle = (pb) => {
 var React3 = __toESM(require_react(), 1);
 var PrismImport = __toESM(require_prism(), 1);
 var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
-var __defProp5 = Object.defineProperty;
-var __defProps4 = Object.defineProperties;
-var __getOwnPropDescs4 = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols4 = Object.getOwnPropertySymbols;
-var __hasOwnProp5 = Object.prototype.hasOwnProperty;
-var __propIsEnum4 = Object.prototype.propertyIsEnumerable;
-var __defNormalProp4 = (obj, key, value) => key in obj ? __defProp5(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues4 = (a, b) => {
+var __defProp4 = Object.defineProperty;
+var __defProps3 = Object.defineProperties;
+var __getOwnPropDescs3 = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols3 = Object.getOwnPropertySymbols;
+var __hasOwnProp4 = Object.prototype.hasOwnProperty;
+var __propIsEnum3 = Object.prototype.propertyIsEnumerable;
+var __defNormalProp3 = (obj, key, value) => key in obj ? __defProp4(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues3 = (a, b) => {
   for (var prop in b || (b = {}))
-    if (__hasOwnProp5.call(b, prop))
-      __defNormalProp4(a, prop, b[prop]);
-  if (__getOwnPropSymbols4)
-    for (var prop of __getOwnPropSymbols4(b)) {
-      if (__propIsEnum4.call(b, prop))
-        __defNormalProp4(a, prop, b[prop]);
+    if (__hasOwnProp4.call(b, prop))
+      __defNormalProp3(a, prop, b[prop]);
+  if (__getOwnPropSymbols3)
+    for (var prop of __getOwnPropSymbols3(b)) {
+      if (__propIsEnum3.call(b, prop))
+        __defNormalProp3(a, prop, b[prop]);
     }
   return a;
 };
-var __spreadProps4 = (a, b) => __defProps4(a, __getOwnPropDescs4(b));
+var __spreadProps3 = (a, b) => __defProps3(a, __getOwnPropDescs3(b));
 var _a;
 var Prism = (_a = PrismImport.default) != null ? _a : PrismImport;
 Prism.languages.markup = {
@@ -21208,10 +20612,10 @@ Prism.languages.markup = {
   });
 }(Prism);
 var stylesForToken = (token, theme) => {
-  let styles = __spreadValues4({}, theme[token.type]);
+  let styles = __spreadValues3({}, theme[token.type]);
   const aliases = Array.isArray(token.alias) ? token.alias : [token.alias];
   for (const alias of aliases) {
-    styles = __spreadValues4(__spreadValues4({}, styles), theme[alias]);
+    styles = __spreadValues3(__spreadValues3({}, styles), theme[alias]);
   }
   return styles;
 };
@@ -21221,7 +20625,7 @@ var CodeBlockLine = ({
   inheritedStyles
 }) => {
   if (token instanceof Prism.Token) {
-    const styleForToken = __spreadValues4(__spreadValues4({}, inheritedStyles), stylesForToken(token, theme));
+    const styleForToken = __spreadValues3(__spreadValues3({}, inheritedStyles), stylesForToken(token, theme));
     if (token.content instanceof Prism.Token) {
       return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: styleForToken, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(CodeBlockLine, { theme, token: token.content }) });
     } else if (typeof token.content === "string") {
@@ -21255,7 +20659,7 @@ var CodeBlock = React3.forwardRef(
       "pre",
       {
         ref,
-        style: __spreadValues4(__spreadProps4(__spreadValues4({}, props.theme.base), { width: "100%" }), props.style),
+        style: __spreadValues3(__spreadProps3(__spreadValues3({}, props.theme.base), { width: "100%" }), props.style),
         children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("code", { children: tokensPerLine.map((tokensForLine, lineIndex) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("p", { style: { margin: 0, minHeight: "1em" }, children: [
           props.lineNumbers ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
             "span",
@@ -26157,33 +25561,33 @@ var vesper = {
 // node_modules/@react-email/code-inline/dist/index.mjs
 var React4 = __toESM(require_react(), 1);
 var import_jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
-var __defProp6 = Object.defineProperty;
-var __defProps5 = Object.defineProperties;
-var __getOwnPropDescs5 = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols5 = Object.getOwnPropertySymbols;
-var __hasOwnProp6 = Object.prototype.hasOwnProperty;
-var __propIsEnum5 = Object.prototype.propertyIsEnumerable;
-var __defNormalProp5 = (obj, key, value) => key in obj ? __defProp6(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues5 = (a, b) => {
+var __defProp5 = Object.defineProperty;
+var __defProps4 = Object.defineProperties;
+var __getOwnPropDescs4 = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols4 = Object.getOwnPropertySymbols;
+var __hasOwnProp5 = Object.prototype.hasOwnProperty;
+var __propIsEnum4 = Object.prototype.propertyIsEnumerable;
+var __defNormalProp4 = (obj, key, value) => key in obj ? __defProp5(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues4 = (a, b) => {
   for (var prop in b || (b = {}))
-    if (__hasOwnProp6.call(b, prop))
-      __defNormalProp5(a, prop, b[prop]);
-  if (__getOwnPropSymbols5)
-    for (var prop of __getOwnPropSymbols5(b)) {
-      if (__propIsEnum5.call(b, prop))
-        __defNormalProp5(a, prop, b[prop]);
+    if (__hasOwnProp5.call(b, prop))
+      __defNormalProp4(a, prop, b[prop]);
+  if (__getOwnPropSymbols4)
+    for (var prop of __getOwnPropSymbols4(b)) {
+      if (__propIsEnum4.call(b, prop))
+        __defNormalProp4(a, prop, b[prop]);
     }
   return a;
 };
-var __spreadProps5 = (a, b) => __defProps5(a, __getOwnPropDescs5(b));
+var __spreadProps4 = (a, b) => __defProps4(a, __getOwnPropDescs4(b));
 var __objRest3 = (source, exclude) => {
   var target = {};
   for (var prop in source)
-    if (__hasOwnProp6.call(source, prop) && exclude.indexOf(prop) < 0)
+    if (__hasOwnProp5.call(source, prop) && exclude.indexOf(prop) < 0)
       target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols5)
-    for (var prop of __getOwnPropSymbols5(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum5.call(source, prop))
+  if (source != null && __getOwnPropSymbols4)
+    for (var prop of __getOwnPropSymbols4(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum4.call(source, prop))
         target[prop] = source[prop];
     }
   return target;
@@ -26204,17 +25608,17 @@ var CodeInline = React4.forwardRef(
       ` }),
       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
         "code",
-        __spreadProps5(__spreadValues5({}, props), {
+        __spreadProps4(__spreadValues4({}, props), {
           className: `${props.className ? props.className : ""} cino`,
           children
         })
       ),
       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
         "span",
-        __spreadProps5(__spreadValues5({}, props), {
+        __spreadProps4(__spreadValues4({}, props), {
           className: `${props.className ? props.className : ""} cio`,
           ref,
-          style: __spreadValues5({ display: "none" }, props.style),
+          style: __spreadValues4({ display: "none" }, props.style),
           children
         })
       )
@@ -26226,6 +25630,48 @@ CodeInline.displayName = "CodeInline";
 // node_modules/@react-email/column/dist/index.mjs
 var React5 = __toESM(require_react(), 1);
 var import_jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
+var __defProp6 = Object.defineProperty;
+var __defProps5 = Object.defineProperties;
+var __getOwnPropDescs5 = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols5 = Object.getOwnPropertySymbols;
+var __hasOwnProp6 = Object.prototype.hasOwnProperty;
+var __propIsEnum5 = Object.prototype.propertyIsEnumerable;
+var __defNormalProp5 = (obj, key, value) => key in obj ? __defProp6(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues5 = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp6.call(b, prop))
+      __defNormalProp5(a, prop, b[prop]);
+  if (__getOwnPropSymbols5)
+    for (var prop of __getOwnPropSymbols5(b)) {
+      if (__propIsEnum5.call(b, prop))
+        __defNormalProp5(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps5 = (a, b) => __defProps5(a, __getOwnPropDescs5(b));
+var __objRest4 = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    if (__hasOwnProp6.call(source, prop) && exclude.indexOf(prop) < 0)
+      target[prop] = source[prop];
+  if (source != null && __getOwnPropSymbols5)
+    for (var prop of __getOwnPropSymbols5(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum5.call(source, prop))
+        target[prop] = source[prop];
+    }
+  return target;
+};
+var Column = React5.forwardRef(
+  (_a3, ref) => {
+    var _b = _a3, { children, style } = _b, props = __objRest4(_b, ["children", "style"]);
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("td", __spreadProps5(__spreadValues5({}, props), { "data-id": "__react-email-column", ref, style, children }));
+  }
+);
+Column.displayName = "Column";
+
+// node_modules/@react-email/container/dist/index.mjs
+var React6 = __toESM(require_react(), 1);
+var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
 var __defProp7 = Object.defineProperty;
 var __defProps6 = Object.defineProperties;
 var __getOwnPropDescs6 = Object.getOwnPropertyDescriptors;
@@ -26245,7 +25691,7 @@ var __spreadValues6 = (a, b) => {
   return a;
 };
 var __spreadProps6 = (a, b) => __defProps6(a, __getOwnPropDescs6(b));
-var __objRest4 = (source, exclude) => {
+var __objRest5 = (source, exclude) => {
   var target = {};
   for (var prop in source)
     if (__hasOwnProp7.call(source, prop) && exclude.indexOf(prop) < 0)
@@ -26257,54 +25703,12 @@ var __objRest4 = (source, exclude) => {
     }
   return target;
 };
-var Column = React5.forwardRef(
-  (_a3, ref) => {
-    var _b = _a3, { children, style } = _b, props = __objRest4(_b, ["children", "style"]);
-    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("td", __spreadProps6(__spreadValues6({}, props), { "data-id": "__react-email-column", ref, style, children }));
-  }
-);
-Column.displayName = "Column";
-
-// node_modules/@react-email/container/dist/index.mjs
-var React6 = __toESM(require_react(), 1);
-var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
-var __defProp8 = Object.defineProperty;
-var __defProps7 = Object.defineProperties;
-var __getOwnPropDescs7 = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols7 = Object.getOwnPropertySymbols;
-var __hasOwnProp8 = Object.prototype.hasOwnProperty;
-var __propIsEnum7 = Object.prototype.propertyIsEnumerable;
-var __defNormalProp7 = (obj, key, value) => key in obj ? __defProp8(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues7 = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp8.call(b, prop))
-      __defNormalProp7(a, prop, b[prop]);
-  if (__getOwnPropSymbols7)
-    for (var prop of __getOwnPropSymbols7(b)) {
-      if (__propIsEnum7.call(b, prop))
-        __defNormalProp7(a, prop, b[prop]);
-    }
-  return a;
-};
-var __spreadProps7 = (a, b) => __defProps7(a, __getOwnPropDescs7(b));
-var __objRest5 = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp8.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols7)
-    for (var prop of __getOwnPropSymbols7(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum7.call(source, prop))
-        target[prop] = source[prop];
-    }
-  return target;
-};
 var Container = React6.forwardRef(
   (_a3, ref) => {
     var _b = _a3, { children, style } = _b, props = __objRest5(_b, ["children", "style"]);
     return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
       "table",
-      __spreadProps7(__spreadValues7({
+      __spreadProps6(__spreadValues6({
         align: "center",
         width: "100%"
       }, props), {
@@ -26313,7 +25717,7 @@ var Container = React6.forwardRef(
         cellSpacing: "0",
         ref,
         role: "presentation",
-        style: __spreadValues7({ maxWidth: "37.5em" }, style),
+        style: __spreadValues6({ maxWidth: "37.5em" }, style),
         children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("tbody", { children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("tr", { style: { width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("td", { children }) }) })
       })
     );
@@ -26350,6 +25754,52 @@ var Font = ({
 // node_modules/@react-email/head/dist/index.mjs
 var React7 = __toESM(require_react(), 1);
 var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
+var __defProp8 = Object.defineProperty;
+var __defProps7 = Object.defineProperties;
+var __getOwnPropDescs7 = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols7 = Object.getOwnPropertySymbols;
+var __hasOwnProp8 = Object.prototype.hasOwnProperty;
+var __propIsEnum7 = Object.prototype.propertyIsEnumerable;
+var __defNormalProp7 = (obj, key, value) => key in obj ? __defProp8(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues7 = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp8.call(b, prop))
+      __defNormalProp7(a, prop, b[prop]);
+  if (__getOwnPropSymbols7)
+    for (var prop of __getOwnPropSymbols7(b)) {
+      if (__propIsEnum7.call(b, prop))
+        __defNormalProp7(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps7 = (a, b) => __defProps7(a, __getOwnPropDescs7(b));
+var __objRest6 = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    if (__hasOwnProp8.call(source, prop) && exclude.indexOf(prop) < 0)
+      target[prop] = source[prop];
+  if (source != null && __getOwnPropSymbols7)
+    for (var prop of __getOwnPropSymbols7(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum7.call(source, prop))
+        target[prop] = source[prop];
+    }
+  return target;
+};
+var Head = React7.forwardRef(
+  (_a3, ref) => {
+    var _b = _a3, { children } = _b, props = __objRest6(_b, ["children"]);
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("head", __spreadProps7(__spreadValues7({}, props), { ref, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("meta", { content: "text/html; charset=UTF-8", httpEquiv: "Content-Type" }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("meta", { name: "x-apple-disable-message-reformatting" }),
+      children
+    ] }));
+  }
+);
+Head.displayName = "Head";
+
+// node_modules/@react-email/heading/dist/index.mjs
+var React8 = __toESM(require_react(), 1);
+var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
 var __defProp9 = Object.defineProperty;
 var __defProps8 = Object.defineProperties;
 var __getOwnPropDescs8 = Object.getOwnPropertyDescriptors;
@@ -26369,7 +25819,7 @@ var __spreadValues8 = (a, b) => {
   return a;
 };
 var __spreadProps8 = (a, b) => __defProps8(a, __getOwnPropDescs8(b));
-var __objRest6 = (source, exclude) => {
+var __objRest7 = (source, exclude) => {
   var target = {};
   for (var prop in source)
     if (__hasOwnProp9.call(source, prop) && exclude.indexOf(prop) < 0)
@@ -26381,21 +25831,47 @@ var __objRest6 = (source, exclude) => {
     }
   return target;
 };
-var Head = React7.forwardRef(
+var withMargin = (props) => {
+  const nonEmptyStyles = [
+    withSpace(props.m, ["margin"]),
+    withSpace(props.mx, ["marginLeft", "marginRight"]),
+    withSpace(props.my, ["marginTop", "marginBottom"]),
+    withSpace(props.mt, ["marginTop"]),
+    withSpace(props.mr, ["marginRight"]),
+    withSpace(props.mb, ["marginBottom"]),
+    withSpace(props.ml, ["marginLeft"])
+  ].filter((s3) => Object.keys(s3).length);
+  const mergedStyles = nonEmptyStyles.reduce((acc, style) => {
+    return __spreadValues8(__spreadValues8({}, acc), style);
+  }, {});
+  return mergedStyles;
+};
+var withSpace = (value, properties) => {
+  return properties.reduce((styles, property) => {
+    if (!isNaN(parseFloat(value))) {
+      return __spreadProps8(__spreadValues8({}, styles), { [property]: `${value}px` });
+    }
+    return styles;
+  }, {});
+};
+var Heading = React8.forwardRef(
   (_a3, ref) => {
-    var _b = _a3, { children } = _b, props = __objRest6(_b, ["children"]);
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("head", __spreadProps8(__spreadValues8({}, props), { ref, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("meta", { content: "text/html; charset=UTF-8", httpEquiv: "Content-Type" }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("meta", { name: "x-apple-disable-message-reformatting" }),
-      children
-    ] }));
+    var _b = _a3, { as: Tag = "h1", children, style, m, mx, my, mt: mt2, mr: mr2, mb, ml: ml2 } = _b, props = __objRest7(_b, ["as", "children", "style", "m", "mx", "my", "mt", "mr", "mb", "ml"]);
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+      Tag,
+      __spreadProps8(__spreadValues8({}, props), {
+        ref,
+        style: __spreadValues8(__spreadValues8({}, withMargin({ m, mx, my, mt: mt2, mr: mr2, mb, ml: ml2 })), style),
+        children
+      })
+    );
   }
 );
-Head.displayName = "Head";
+Heading.displayName = "Heading";
 
-// node_modules/@react-email/heading/dist/index.mjs
-var React8 = __toESM(require_react(), 1);
-var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
+// node_modules/@react-email/hr/dist/index.mjs
+var React9 = __toESM(require_react(), 1);
+var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
 var __defProp10 = Object.defineProperty;
 var __defProps9 = Object.defineProperties;
 var __getOwnPropDescs9 = Object.getOwnPropertyDescriptors;
@@ -26415,7 +25891,7 @@ var __spreadValues9 = (a, b) => {
   return a;
 };
 var __spreadProps9 = (a, b) => __defProps9(a, __getOwnPropDescs9(b));
-var __objRest7 = (source, exclude) => {
+var __objRest8 = (source, exclude) => {
   var target = {};
   for (var prop in source)
     if (__hasOwnProp10.call(source, prop) && exclude.indexOf(prop) < 0)
@@ -26427,47 +25903,27 @@ var __objRest7 = (source, exclude) => {
     }
   return target;
 };
-var withMargin = (props) => {
-  const nonEmptyStyles = [
-    withSpace(props.m, ["margin"]),
-    withSpace(props.mx, ["marginLeft", "marginRight"]),
-    withSpace(props.my, ["marginTop", "marginBottom"]),
-    withSpace(props.mt, ["marginTop"]),
-    withSpace(props.mr, ["marginRight"]),
-    withSpace(props.mb, ["marginBottom"]),
-    withSpace(props.ml, ["marginLeft"])
-  ].filter((s3) => Object.keys(s3).length);
-  const mergedStyles = nonEmptyStyles.reduce((acc, style) => {
-    return __spreadValues9(__spreadValues9({}, acc), style);
-  }, {});
-  return mergedStyles;
-};
-var withSpace = (value, properties) => {
-  return properties.reduce((styles, property) => {
-    if (!isNaN(parseFloat(value))) {
-      return __spreadProps9(__spreadValues9({}, styles), { [property]: `${value}px` });
-    }
-    return styles;
-  }, {});
-};
-var Heading = React8.forwardRef(
+var Hr = React9.forwardRef(
   (_a3, ref) => {
-    var _b = _a3, { as: Tag = "h1", children, style, m, mx, my, mt: mt2, mr: mr2, mb, ml: ml2 } = _b, props = __objRest7(_b, ["as", "children", "style", "m", "mx", "my", "mt", "mr", "mb", "ml"]);
-    return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-      Tag,
+    var _b = _a3, { style } = _b, props = __objRest8(_b, ["style"]);
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+      "hr",
       __spreadProps9(__spreadValues9({}, props), {
         ref,
-        style: __spreadValues9(__spreadValues9({}, withMargin({ m, mx, my, mt: mt2, mr: mr2, mb, ml: ml2 })), style),
-        children
+        style: __spreadValues9({
+          width: "100%",
+          border: "none",
+          borderTop: "1px solid #eaeaea"
+        }, style)
       })
     );
   }
 );
-Heading.displayName = "Heading";
+Hr.displayName = "Hr";
 
-// node_modules/@react-email/hr/dist/index.mjs
-var React9 = __toESM(require_react(), 1);
-var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
+// node_modules/@react-email/html/dist/index.mjs
+var React10 = __toESM(require_react(), 1);
+var import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
 var __defProp11 = Object.defineProperty;
 var __defProps10 = Object.defineProperties;
 var __getOwnPropDescs10 = Object.getOwnPropertyDescriptors;
@@ -26487,7 +25943,7 @@ var __spreadValues10 = (a, b) => {
   return a;
 };
 var __spreadProps10 = (a, b) => __defProps10(a, __getOwnPropDescs10(b));
-var __objRest8 = (source, exclude) => {
+var __objRest9 = (source, exclude) => {
   var target = {};
   for (var prop in source)
     if (__hasOwnProp11.call(source, prop) && exclude.indexOf(prop) < 0)
@@ -26499,27 +25955,17 @@ var __objRest8 = (source, exclude) => {
     }
   return target;
 };
-var Hr = React9.forwardRef(
+var Html = React10.forwardRef(
   (_a3, ref) => {
-    var _b = _a3, { style } = _b, props = __objRest8(_b, ["style"]);
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-      "hr",
-      __spreadProps10(__spreadValues10({}, props), {
-        ref,
-        style: __spreadValues10({
-          width: "100%",
-          border: "none",
-          borderTop: "1px solid #eaeaea"
-        }, style)
-      })
-    );
+    var _b = _a3, { children, lang = "en", dir = "ltr" } = _b, props = __objRest9(_b, ["children", "lang", "dir"]);
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("html", __spreadProps10(__spreadValues10({}, props), { dir, lang, ref, children }));
   }
 );
-Hr.displayName = "Hr";
+Html.displayName = "Html";
 
-// node_modules/@react-email/html/dist/index.mjs
-var React10 = __toESM(require_react(), 1);
-var import_jsx_runtime11 = __toESM(require_jsx_runtime(), 1);
+// node_modules/@react-email/img/dist/index.mjs
+var React11 = __toESM(require_react(), 1);
+var import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
 var __defProp12 = Object.defineProperty;
 var __defProps11 = Object.defineProperties;
 var __getOwnPropDescs11 = Object.getOwnPropertyDescriptors;
@@ -26539,7 +25985,7 @@ var __spreadValues11 = (a, b) => {
   return a;
 };
 var __spreadProps11 = (a, b) => __defProps11(a, __getOwnPropDescs11(b));
-var __objRest9 = (source, exclude) => {
+var __objRest10 = (source, exclude) => {
   var target = {};
   for (var prop in source)
     if (__hasOwnProp12.call(source, prop) && exclude.indexOf(prop) < 0)
@@ -26551,17 +25997,32 @@ var __objRest9 = (source, exclude) => {
     }
   return target;
 };
-var Html = React10.forwardRef(
+var Img = React11.forwardRef(
   (_a3, ref) => {
-    var _b = _a3, { children, lang = "en", dir = "ltr" } = _b, props = __objRest9(_b, ["children", "lang", "dir"]);
-    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("html", __spreadProps11(__spreadValues11({}, props), { dir, lang, ref, children }));
+    var _b = _a3, { alt, src, width, height, style } = _b, props = __objRest10(_b, ["alt", "src", "width", "height", "style"]);
+    return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+      "img",
+      __spreadProps11(__spreadValues11({}, props), {
+        alt,
+        height,
+        ref,
+        src,
+        style: __spreadValues11({
+          display: "block",
+          outline: "none",
+          border: "none",
+          textDecoration: "none"
+        }, style),
+        width
+      })
+    );
   }
 );
-Html.displayName = "Html";
+Img.displayName = "Img";
 
-// node_modules/@react-email/img/dist/index.mjs
-var React11 = __toESM(require_react(), 1);
-var import_jsx_runtime12 = __toESM(require_jsx_runtime(), 1);
+// node_modules/@react-email/link/dist/index.mjs
+var React12 = __toESM(require_react(), 1);
+var import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
 var __defProp13 = Object.defineProperty;
 var __defProps12 = Object.defineProperties;
 var __getOwnPropDescs12 = Object.getOwnPropertyDescriptors;
@@ -26581,7 +26042,7 @@ var __spreadValues12 = (a, b) => {
   return a;
 };
 var __spreadProps12 = (a, b) => __defProps12(a, __getOwnPropDescs12(b));
-var __objRest10 = (source, exclude) => {
+var __objRest11 = (source, exclude) => {
   var target = {};
   for (var prop in source)
     if (__hasOwnProp13.call(source, prop) && exclude.indexOf(prop) < 0)
@@ -26593,32 +26054,29 @@ var __objRest10 = (source, exclude) => {
     }
   return target;
 };
-var Img = React11.forwardRef(
+var Link = React12.forwardRef(
   (_a3, ref) => {
-    var _b = _a3, { alt, src, width, height, style } = _b, props = __objRest10(_b, ["alt", "src", "width", "height", "style"]);
-    return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
-      "img",
+    var _b = _a3, { target = "_blank", style } = _b, props = __objRest11(_b, ["target", "style"]);
+    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+      "a",
       __spreadProps12(__spreadValues12({}, props), {
-        alt,
-        height,
         ref,
-        src,
         style: __spreadValues12({
-          display: "block",
-          outline: "none",
-          border: "none",
-          textDecoration: "none"
+          color: "#067df7",
+          textDecorationLine: "none"
         }, style),
-        width
+        target,
+        children: props.children
       })
     );
   }
 );
-Img.displayName = "Img";
+Link.displayName = "Link";
 
-// node_modules/@react-email/link/dist/index.mjs
-var React12 = __toESM(require_react(), 1);
-var import_jsx_runtime13 = __toESM(require_jsx_runtime(), 1);
+// node_modules/@react-email/markdown/dist/index.mjs
+var import_md_to_react_email = __toESM(require_dist(), 1);
+var React13 = __toESM(require_react(), 1);
+var import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
 var __defProp14 = Object.defineProperty;
 var __defProps13 = Object.defineProperties;
 var __getOwnPropDescs13 = Object.getOwnPropertyDescriptors;
@@ -26638,7 +26096,7 @@ var __spreadValues13 = (a, b) => {
   return a;
 };
 var __spreadProps13 = (a, b) => __defProps13(a, __getOwnPropDescs13(b));
-var __objRest11 = (source, exclude) => {
+var __objRest12 = (source, exclude) => {
   var target = {};
   for (var prop in source)
     if (__hasOwnProp14.call(source, prop) && exclude.indexOf(prop) < 0)
@@ -26650,29 +26108,29 @@ var __objRest11 = (source, exclude) => {
     }
   return target;
 };
-var Link = React12.forwardRef(
+var Markdown = React13.forwardRef(
   (_a3, ref) => {
-    var _b = _a3, { target = "_blank", style } = _b, props = __objRest11(_b, ["target", "style"]);
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-      "a",
+    var _b = _a3, { children, markdownContainerStyles, markdownCustomStyles } = _b, props = __objRest12(_b, ["children", "markdownContainerStyles", "markdownCustomStyles"]);
+    const parsedMarkdown = (0, import_md_to_react_email.parseMarkdownToJSX)({
+      markdown: children,
+      customStyles: markdownCustomStyles
+    });
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+      "div",
       __spreadProps13(__spreadValues13({}, props), {
+        dangerouslySetInnerHTML: { __html: parsedMarkdown },
+        "data-id": "react-email-markdown",
         ref,
-        style: __spreadValues13({
-          color: "#067df7",
-          textDecorationLine: "none"
-        }, style),
-        target,
-        children: props.children
+        style: markdownContainerStyles
       })
     );
   }
 );
-Link.displayName = "Link";
+Markdown.displayName = "Markdown";
 
-// node_modules/@react-email/markdown/dist/index.mjs
-var import_md_to_react_email = __toESM(require_dist(), 1);
-var React13 = __toESM(require_react(), 1);
-var import_jsx_runtime14 = __toESM(require_jsx_runtime(), 1);
+// node_modules/@react-email/preview/dist/index.mjs
+var React14 = __toESM(require_react(), 1);
+var import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
 var __defProp15 = Object.defineProperty;
 var __defProps14 = Object.defineProperties;
 var __getOwnPropDescs14 = Object.getOwnPropertyDescriptors;
@@ -26692,7 +26150,7 @@ var __spreadValues14 = (a, b) => {
   return a;
 };
 var __spreadProps14 = (a, b) => __defProps14(a, __getOwnPropDescs14(b));
-var __objRest12 = (source, exclude) => {
+var __objRest13 = (source, exclude) => {
   var target = {};
   for (var prop in source)
     if (__hasOwnProp15.call(source, prop) && exclude.indexOf(prop) < 0)
@@ -26704,60 +26162,6 @@ var __objRest12 = (source, exclude) => {
     }
   return target;
 };
-var Markdown = React13.forwardRef(
-  (_a3, ref) => {
-    var _b = _a3, { children, markdownContainerStyles, markdownCustomStyles } = _b, props = __objRest12(_b, ["children", "markdownContainerStyles", "markdownCustomStyles"]);
-    const parsedMarkdown = (0, import_md_to_react_email.parseMarkdownToJSX)({
-      markdown: children,
-      customStyles: markdownCustomStyles
-    });
-    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
-      "div",
-      __spreadProps14(__spreadValues14({}, props), {
-        dangerouslySetInnerHTML: { __html: parsedMarkdown },
-        "data-id": "react-email-markdown",
-        ref,
-        style: markdownContainerStyles
-      })
-    );
-  }
-);
-Markdown.displayName = "Markdown";
-
-// node_modules/@react-email/preview/dist/index.mjs
-var React14 = __toESM(require_react(), 1);
-var import_jsx_runtime15 = __toESM(require_jsx_runtime(), 1);
-var __defProp16 = Object.defineProperty;
-var __defProps15 = Object.defineProperties;
-var __getOwnPropDescs15 = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols15 = Object.getOwnPropertySymbols;
-var __hasOwnProp16 = Object.prototype.hasOwnProperty;
-var __propIsEnum15 = Object.prototype.propertyIsEnumerable;
-var __defNormalProp15 = (obj, key, value) => key in obj ? __defProp16(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues15 = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp16.call(b, prop))
-      __defNormalProp15(a, prop, b[prop]);
-  if (__getOwnPropSymbols15)
-    for (var prop of __getOwnPropSymbols15(b)) {
-      if (__propIsEnum15.call(b, prop))
-        __defNormalProp15(a, prop, b[prop]);
-    }
-  return a;
-};
-var __spreadProps15 = (a, b) => __defProps15(a, __getOwnPropDescs15(b));
-var __objRest13 = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp16.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols15)
-    for (var prop of __getOwnPropSymbols15(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum15.call(source, prop))
-        target[prop] = source[prop];
-    }
-  return target;
-};
 var PREVIEW_MAX_LENGTH = 150;
 var Preview = React14.forwardRef(
   (_a3, ref) => {
@@ -26765,7 +26169,7 @@ var Preview = React14.forwardRef(
     const text = (Array.isArray(children) ? children.join("") : children).substring(0, PREVIEW_MAX_LENGTH);
     return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
       "div",
-      __spreadProps15(__spreadValues15({
+      __spreadProps14(__spreadValues14({
         style: {
           display: "none",
           overflow: "hidden",
@@ -26799,33 +26203,33 @@ __reExport(dist_exports, require("@react-email/render"));
 // node_modules/@react-email/row/dist/index.mjs
 var React15 = __toESM(require_react(), 1);
 var import_jsx_runtime16 = __toESM(require_jsx_runtime(), 1);
-var __defProp17 = Object.defineProperty;
-var __defProps16 = Object.defineProperties;
-var __getOwnPropDescs16 = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols16 = Object.getOwnPropertySymbols;
-var __hasOwnProp17 = Object.prototype.hasOwnProperty;
-var __propIsEnum16 = Object.prototype.propertyIsEnumerable;
-var __defNormalProp16 = (obj, key, value) => key in obj ? __defProp17(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues16 = (a, b) => {
+var __defProp16 = Object.defineProperty;
+var __defProps15 = Object.defineProperties;
+var __getOwnPropDescs15 = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols15 = Object.getOwnPropertySymbols;
+var __hasOwnProp16 = Object.prototype.hasOwnProperty;
+var __propIsEnum15 = Object.prototype.propertyIsEnumerable;
+var __defNormalProp15 = (obj, key, value) => key in obj ? __defProp16(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues15 = (a, b) => {
   for (var prop in b || (b = {}))
-    if (__hasOwnProp17.call(b, prop))
-      __defNormalProp16(a, prop, b[prop]);
-  if (__getOwnPropSymbols16)
-    for (var prop of __getOwnPropSymbols16(b)) {
-      if (__propIsEnum16.call(b, prop))
-        __defNormalProp16(a, prop, b[prop]);
+    if (__hasOwnProp16.call(b, prop))
+      __defNormalProp15(a, prop, b[prop]);
+  if (__getOwnPropSymbols15)
+    for (var prop of __getOwnPropSymbols15(b)) {
+      if (__propIsEnum15.call(b, prop))
+        __defNormalProp15(a, prop, b[prop]);
     }
   return a;
 };
-var __spreadProps16 = (a, b) => __defProps16(a, __getOwnPropDescs16(b));
+var __spreadProps15 = (a, b) => __defProps15(a, __getOwnPropDescs15(b));
 var __objRest14 = (source, exclude) => {
   var target = {};
   for (var prop in source)
-    if (__hasOwnProp17.call(source, prop) && exclude.indexOf(prop) < 0)
+    if (__hasOwnProp16.call(source, prop) && exclude.indexOf(prop) < 0)
       target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols16)
-    for (var prop of __getOwnPropSymbols16(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum16.call(source, prop))
+  if (source != null && __getOwnPropSymbols15)
+    for (var prop of __getOwnPropSymbols15(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum15.call(source, prop))
         target[prop] = source[prop];
     }
   return target;
@@ -26835,7 +26239,7 @@ var Row = React15.forwardRef(
     var _b = _a3, { children, style } = _b, props = __objRest14(_b, ["children", "style"]);
     return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
       "table",
-      __spreadProps16(__spreadValues16({
+      __spreadProps15(__spreadValues15({
         align: "center",
         width: "100%",
         border: 0,
@@ -26855,33 +26259,33 @@ Row.displayName = "Row";
 // node_modules/@react-email/section/dist/index.mjs
 var React16 = __toESM(require_react(), 1);
 var import_jsx_runtime17 = __toESM(require_jsx_runtime(), 1);
-var __defProp18 = Object.defineProperty;
-var __defProps17 = Object.defineProperties;
-var __getOwnPropDescs17 = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols17 = Object.getOwnPropertySymbols;
-var __hasOwnProp18 = Object.prototype.hasOwnProperty;
-var __propIsEnum17 = Object.prototype.propertyIsEnumerable;
-var __defNormalProp17 = (obj, key, value) => key in obj ? __defProp18(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues17 = (a, b) => {
+var __defProp17 = Object.defineProperty;
+var __defProps16 = Object.defineProperties;
+var __getOwnPropDescs16 = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols16 = Object.getOwnPropertySymbols;
+var __hasOwnProp17 = Object.prototype.hasOwnProperty;
+var __propIsEnum16 = Object.prototype.propertyIsEnumerable;
+var __defNormalProp16 = (obj, key, value) => key in obj ? __defProp17(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues16 = (a, b) => {
   for (var prop in b || (b = {}))
-    if (__hasOwnProp18.call(b, prop))
-      __defNormalProp17(a, prop, b[prop]);
-  if (__getOwnPropSymbols17)
-    for (var prop of __getOwnPropSymbols17(b)) {
-      if (__propIsEnum17.call(b, prop))
-        __defNormalProp17(a, prop, b[prop]);
+    if (__hasOwnProp17.call(b, prop))
+      __defNormalProp16(a, prop, b[prop]);
+  if (__getOwnPropSymbols16)
+    for (var prop of __getOwnPropSymbols16(b)) {
+      if (__propIsEnum16.call(b, prop))
+        __defNormalProp16(a, prop, b[prop]);
     }
   return a;
 };
-var __spreadProps17 = (a, b) => __defProps17(a, __getOwnPropDescs17(b));
+var __spreadProps16 = (a, b) => __defProps16(a, __getOwnPropDescs16(b));
 var __objRest15 = (source, exclude) => {
   var target = {};
   for (var prop in source)
-    if (__hasOwnProp18.call(source, prop) && exclude.indexOf(prop) < 0)
+    if (__hasOwnProp17.call(source, prop) && exclude.indexOf(prop) < 0)
       target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols17)
-    for (var prop of __getOwnPropSymbols17(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum17.call(source, prop))
+  if (source != null && __getOwnPropSymbols16)
+    for (var prop of __getOwnPropSymbols16(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum16.call(source, prop))
         target[prop] = source[prop];
     }
   return target;
@@ -26891,7 +26295,7 @@ var Section = React16.forwardRef(
     var _b = _a3, { children, style } = _b, props = __objRest15(_b, ["children", "style"]);
     return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
       "table",
-      __spreadProps17(__spreadValues17({
+      __spreadProps16(__spreadValues16({
         align: "center",
         width: "100%",
         border: 0,
@@ -44334,33 +43738,33 @@ please file a bug https://github.com/resend/react-email/issues/new?assignees=&la
 // node_modules/@react-email/text/dist/index.mjs
 var React17 = __toESM(require_react(), 1);
 var import_jsx_runtime19 = __toESM(require_jsx_runtime(), 1);
-var __defProp19 = Object.defineProperty;
-var __defProps18 = Object.defineProperties;
-var __getOwnPropDescs18 = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols18 = Object.getOwnPropertySymbols;
-var __hasOwnProp19 = Object.prototype.hasOwnProperty;
-var __propIsEnum18 = Object.prototype.propertyIsEnumerable;
-var __defNormalProp18 = (obj, key, value) => key in obj ? __defProp19(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues18 = (a, b) => {
+var __defProp18 = Object.defineProperty;
+var __defProps17 = Object.defineProperties;
+var __getOwnPropDescs17 = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols17 = Object.getOwnPropertySymbols;
+var __hasOwnProp18 = Object.prototype.hasOwnProperty;
+var __propIsEnum17 = Object.prototype.propertyIsEnumerable;
+var __defNormalProp17 = (obj, key, value) => key in obj ? __defProp18(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues17 = (a, b) => {
   for (var prop in b || (b = {}))
-    if (__hasOwnProp19.call(b, prop))
-      __defNormalProp18(a, prop, b[prop]);
-  if (__getOwnPropSymbols18)
-    for (var prop of __getOwnPropSymbols18(b)) {
-      if (__propIsEnum18.call(b, prop))
-        __defNormalProp18(a, prop, b[prop]);
+    if (__hasOwnProp18.call(b, prop))
+      __defNormalProp17(a, prop, b[prop]);
+  if (__getOwnPropSymbols17)
+    for (var prop of __getOwnPropSymbols17(b)) {
+      if (__propIsEnum17.call(b, prop))
+        __defNormalProp17(a, prop, b[prop]);
     }
   return a;
 };
-var __spreadProps18 = (a, b) => __defProps18(a, __getOwnPropDescs18(b));
+var __spreadProps17 = (a, b) => __defProps17(a, __getOwnPropDescs17(b));
 var __objRest16 = (source, exclude) => {
   var target = {};
   for (var prop in source)
-    if (__hasOwnProp19.call(source, prop) && exclude.indexOf(prop) < 0)
+    if (__hasOwnProp18.call(source, prop) && exclude.indexOf(prop) < 0)
       target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols18)
-    for (var prop of __getOwnPropSymbols18(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum18.call(source, prop))
+  if (source != null && __getOwnPropSymbols17)
+    for (var prop of __getOwnPropSymbols17(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum17.call(source, prop))
         target[prop] = source[prop];
     }
   return target;
@@ -44370,9 +43774,9 @@ var Text = React17.forwardRef(
     var _b = _a3, { style } = _b, props = __objRest16(_b, ["style"]);
     return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
       "p",
-      __spreadProps18(__spreadValues18({}, props), {
+      __spreadProps17(__spreadValues17({}, props), {
         ref,
-        style: __spreadValues18({
+        style: __spreadValues17({
           fontSize: "14px",
           lineHeight: "24px",
           margin: "16px 0"
@@ -44511,15 +43915,13 @@ var Layout = ({
           fontFamily: branding.font_family,
           backgroundColor: branding.background_color
         },
-        children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Container, { className: "mx-auto my-0 pt-5 px-6 pb-12 max-w-[600px]", children: [
+        children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Container, { className: "mx-auto my-0 max-w-[600px]", children: [
           /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
             Section,
             {
-              className: "mt-8 p-8 email-card",
+              className: "px-6 py-8 email-card",
               style: {
-                backgroundColor: "#ffffff",
-                borderRadius: "12px",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
+                backgroundColor: "#ffffff"
               },
               children: [
                 branding.logo_url && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
@@ -44691,16 +44093,12 @@ var SalesInvoiceEmail = ({
   custom_message
 }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(Layout, { branding, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
       Heading,
       {
         className: "text-[22px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
-        children: [
-          "Hello ",
-          toTitleCase(customer_name) || "there",
-          ","
-        ]
+        children: "New Invoice"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
@@ -44741,16 +44139,12 @@ var QuotationEmail = ({
   custom_message
 }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(Layout, { branding, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       Heading,
       {
         className: "text-[22px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
-        children: [
-          "Hello ",
-          toTitleCase(customer_name) || "there",
-          ","
-        ]
+        children: "New Quotation"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
@@ -44790,16 +44184,12 @@ var SalesOrderEmail = ({
   custom_message
 }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(Layout, { branding, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       Heading,
       {
         className: "text-[22px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
-        children: [
-          "Hello ",
-          toTitleCase(customer_name) || "there",
-          ","
-        ]
+        children: "Order Confirmation"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
@@ -44837,16 +44227,12 @@ var PurchaseOrderEmail = ({
   custom_message
 }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(Layout, { branding, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
       Heading,
       {
         className: "text-[22px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
-        children: [
-          "Hello ",
-          toTitleCase(supplier_name) || "there",
-          ","
-        ]
+        children: "New Purchase Order"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
@@ -44884,16 +44270,12 @@ var RequestForQuotationEmail = ({
   custom_message
 }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(Layout, { branding, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       Heading,
       {
         className: "text-[22px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
-        children: [
-          "Hello ",
-          toTitleCase(supplier_name) || "there",
-          ","
-        ]
+        children: "Request for Quotation"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
@@ -45078,18 +44460,13 @@ var PaymentRequestEmail = ({
   stripe_payment_url,
   custom_message
 }) => {
-  const displayName = toTitleCase(customer_name) || "there";
   return /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(Layout, { branding, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
       Heading,
       {
         className: "text-[22px] font-medium",
         style: { color: branding.text_color, marginTop: 0 },
-        children: [
-          "Hello ",
-          displayName,
-          ","
-        ]
+        children: "New Invoice"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
@@ -45127,8 +44504,61 @@ var PaymentRequestEmail = ({
   ] });
 };
 
+// emails/document.tsx
+var import_jsx_runtime31 = __toESM(require_jsx_runtime());
+var DocumentEmail = ({
+  branding,
+  document_type,
+  document_number,
+  document_date,
+  total_amount,
+  customer_name,
+  party_name,
+  custom_message
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(Layout, { branding, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(
+      Heading,
+      {
+        className: "text-[22px] font-medium",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: [
+          "New ",
+          document_type || "Document"
+        ]
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(
+      Text,
+      {
+        className: "text-sm leading-6",
+        style: { color: branding.text_color },
+        children: [
+          "Please find the attached ",
+          document_type?.toLowerCase() || "document",
+          " for your reference."
+        ]
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(InfoCard, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(InfoRow, { label: document_type || "Document", value: document_number }),
+      document_date && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(InfoRow, { label: "Date", value: document_date }),
+      total_amount && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(InfoAmount, { label: "Total", value: total_amount })
+    ] }),
+    custom_message && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(Text, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
+    /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+      Text,
+      {
+        className: "text-sm leading-6",
+        style: { color: branding.tertiary_color },
+        children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("em", { children: "Thank you for your business!" })
+      }
+    )
+  ] });
+};
+
 // src/send.tsx
-var resend = new Resend(process.env.RESEND_API_KEY);
+var resend = new import_resend.Resend(process.env.RESEND_API_KEY);
 var templates = {
   "magic-link": MagicLinkEmail,
   "sales-invoice": SalesInvoiceEmail,
@@ -45139,7 +44569,8 @@ var templates = {
   "password-reset": PasswordResetEmail,
   "email-verification": EmailVerificationEmail,
   "welcome": WelcomeEmail,
-  "payment-request": PaymentRequestEmail
+  "payment-request": PaymentRequestEmail,
+  "document": DocumentEmail
 };
 async function handler(req, res) {
   if (req.method === "GET") {
