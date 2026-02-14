@@ -207,9 +207,8 @@ def send_test_email(to_email):
 def check_doctype_email_enabled(doctype):
     """Check if email sending is enabled (service enabled and configured)."""
     try:
-        # Payment Request uses ERPNext's standard button via override_doctype_class
-        if doctype == "Payment Request":
-            return {"enabled": False}
+        # Custom Send Email button disabled — using ERPNext's standard email flow
+        return {"enabled": False}
 
         settings = frappe.get_single("Email Service Settings")
 
