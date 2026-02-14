@@ -263,13 +263,11 @@ export const Layout = ({
             backgroundColor: branding.background_color,
           }}
         >
-          <Container className="mx-auto my-0 pt-5 px-6 pb-12 max-w-[600px]">
+          <Container className="mx-auto my-0 pt-5 pb-12 max-w-[600px]">
             <Section
-              className="mt-8 p-8 email-card"
+              className="mt-8 px-6 py-8 email-card"
               style={{
                 backgroundColor: "#ffffff",
-                borderRadius: "12px",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
               }}
             >
               {branding.logo_url && (
