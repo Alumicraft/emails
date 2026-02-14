@@ -26,7 +26,7 @@ export const RequestForQuotationEmail = ({
         className="text-[22px] font-medium"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
-        Hello {toTitleCase(supplier_name) || "there"},
+        Request for Quotation
       </Heading>
 
       <Text

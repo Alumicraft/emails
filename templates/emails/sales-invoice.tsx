@@ -32,7 +32,7 @@ export const SalesInvoiceEmail = ({
         className="text-[22px] font-medium"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
-        Hello {toTitleCase(customer_name) || "there"},
+        New Invoice
       </Heading>
 
       <Text

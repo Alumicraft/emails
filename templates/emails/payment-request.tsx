@@ -24,15 +24,13 @@ export const PaymentRequestEmail = ({
   stripe_payment_url,
   custom_message,
 }: PaymentRequestEmailProps) => {
-  const displayName = toTitleCase(customer_name) || "there";
-
   return (
     <Layout branding={branding}>
       <Heading
         className="text-[22px] font-medium"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
-        Hello {displayName},
+        New Invoice
       </Heading>
 
       <Text

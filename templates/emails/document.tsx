@@ -24,15 +24,13 @@ export const DocumentEmail = ({
   party_name,
   custom_message,
 }: DocumentEmailProps) => {
-  const recipientName = toTitleCase(customer_name || party_name) || "there";
-
   return (
     <Layout branding={branding}>
       <Heading
         className="text-[22px] font-medium"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
-        Hello {recipientName},
+        New {document_type || "Document"}
       </Heading>
 
       <Text
