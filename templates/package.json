@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "email dev"
+    "dev": "email dev",
+    "build": "esbuild src/send.tsx --bundle --platform=node --target=node18 --outfile=api/send.js --format=cjs"
   },
   "dependencies": {
     "@react-email/components": "^0.0.31",
