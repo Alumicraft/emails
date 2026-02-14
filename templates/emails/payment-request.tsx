@@ -40,11 +40,11 @@ export const PaymentRequestEmail = ({
         Please review the attached PDF and submit payment at your earliest convenience.
       </Text>
 
-      <InfoCard>
-        {reference_number && <InfoRow label="Reference No." value={reference_number} />}
-        {project_name && <InfoRow label="Project" value={project_name} />}
-        {due_date && <InfoRow label="Due Date" value={due_date} valueColor="#d97706" />}
-        <InfoAmount label="Amount" value={amount_requested} bgColor={branding.background_color} />
+      <InfoCard branding={branding}>
+        {reference_number && <InfoRow branding={branding} label="Reference No." value={reference_number} />}
+        {project_name && <InfoRow branding={branding} label="Project" value={project_name} />}
+        {due_date && <InfoRow branding={branding} label="Due Date" value={due_date} valueColor="#d97706" />}
+        <InfoAmount branding={branding} label="Amount" value={amount_requested} />
       </InfoCard>
 
       {custom_message && (

@@ -27,6 +27,9 @@ export const MagicLinkEmail = ({
   expiry_time = "15 minutes",
 }: MagicLinkEmailProps) => {
   const darkBg = branding.background_color_dark || "#1a1a1a";
+  const darkCard = branding.card_color_dark || "#000000";
+  const darkBorder = branding.border_color_dark || "#4b5563";
+  const darkHighlight = branding.highlight_color_dark || "#374151";
   const darkText = branding.text_color_dark || "#ffffff";
   const buttonTextColorDark = branding.button_text_color_dark || branding.button_text_color || "#ffffff";
   const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
@@ -34,11 +37,11 @@ export const MagicLinkEmail = ({
   const darkModeStyles = `
     @media (prefers-color-scheme: dark) {
       .email-body { background-color: ${darkBg} !important; }
-      .email-card { background-color: #2d2d2d !important; }
+      .email-card { background-color: ${darkCard} !important; }
       .email-heading, .email-text { color: ${darkText} !important; }
       .email-row-label { color: #e5e7eb !important; }
       .email-row-value { color: #d1d5db !important; }
-      .email-divider { border-color: #4b5563 !important; }
+      .email-divider { border-color: ${darkBorder} !important; }
       .email-confidentiality { color: #6b7280 !important; }
       .email-button { color: ${buttonTextColorDark} !important; }
       .email-logo-light { display: none !important; }
@@ -47,8 +50,9 @@ export const MagicLinkEmail = ({
       .email-social-dark { display: inline-block !important; }
       .email-footer-text { color: ${tertiaryColorDark} !important; }
       .email-footer-link { color: ${tertiaryColorDark} !important; }
-      .email-footer-divider { border-color: #4b5563 !important; }
-      .email-amount-bg { background-color: ${darkBg} !important; }
+      .email-footer-divider { border-color: ${darkBorder} !important; }
+      .email-info-card { background-color: ${darkBg} !important; }
+      .email-amount-bg { background-color: ${darkHighlight} !important; }
     }
   `;
 
@@ -74,7 +78,7 @@ export const MagicLinkEmail = ({
             <Section
               className="mt-8 p-8 email-card"
               style={{
-                backgroundColor: "#ffffff",
+                backgroundColor: branding.card_color || "#ffffff",
                 borderRadius: "12px",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                 backgroundImage: branding.background_image_url

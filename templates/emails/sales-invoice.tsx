@@ -42,11 +42,11 @@ export const SalesInvoiceEmail = ({
         Please review the attached invoice and submit payment at your earliest convenience.
       </Text>
 
-      <InfoCard>
-        <InfoRow label="Invoice No." value={invoice_number} />
-        {project_name && <InfoRow label="Project" value={project_name} />}
-        <InfoRow label="Due Date" value={due_date} valueColor="#d97706" />
-        <InfoAmount label="Amount Due" value={amount_due} bgColor={branding.background_color} />
+      <InfoCard branding={branding}>
+        <InfoRow branding={branding} label="Invoice No." value={invoice_number} />
+        {project_name && <InfoRow branding={branding} label="Project" value={project_name} />}
+        <InfoRow branding={branding} label="Due Date" value={due_date} valueColor="#d97706" />
+        <InfoAmount branding={branding} label="Amount Due" value={amount_due} />
       </InfoCard>
 
       {custom_message && (

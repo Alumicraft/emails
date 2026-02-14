@@ -34,9 +34,9 @@ export const PurchaseOrderEmail = ({
         Please review the attached purchase order.
       </Text>
 
-      <InfoCard>
-        <InfoRow label="PO No." value={po_number} />
-        <InfoRow label="Date" value={po_date} />
+      <InfoCard branding={branding}>
+        <InfoRow branding={branding} label="PO No." value={po_number} />
+        <InfoRow branding={branding} label="Date" value={po_date} />
       </InfoCard>
 
       {custom_message && (

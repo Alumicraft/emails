@@ -48,8 +48,14 @@ export interface Branding {
   tertiary_color?: string;
   text_color: string;
   background_color: string;
+  card_color?: string;
+  border_color?: string;
+  highlight_color?: string;
   button_text_color?: string;
   primary_color_dark?: string;
+  card_color_dark?: string;
+  border_color_dark?: string;
+  highlight_color_dark?: string;
   secondary_color_dark?: string;
   tertiary_color_dark?: string;
   text_color_dark?: string;
@@ -295,6 +301,9 @@ export const Layout = ({
   children: React.ReactNode;
 }) => {
   const darkBg = branding.background_color_dark || "#1a1a1a";
+  const darkCard = branding.card_color_dark || "#000000";
+  const darkBorder = branding.border_color_dark || "#4b5563";
+  const darkHighlight = branding.highlight_color_dark || "#374151";
   const darkText = branding.text_color_dark || "#ffffff";
   const buttonTextColorDark = branding.button_text_color_dark || branding.button_text_color || "#ffffff";
   const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
@@ -302,11 +311,11 @@ export const Layout = ({
   const darkModeStyles = `
     @media (prefers-color-scheme: dark) {
       .email-body { background-color: ${darkBg} !important; }
-      .email-card { background-color: #2d2d2d !important; }
+      .email-card { background-color: ${darkCard} !important; }
       .email-heading, .email-text { color: ${darkText} !important; }
       .email-row-label { color: #e5e7eb !important; }
       .email-row-value { color: #d1d5db !important; }
-      .email-divider { border-color: #4b5563 !important; }
+      .email-divider { border-color: ${darkBorder} !important; }
       .email-confidentiality { color: #6b7280 !important; }
       .email-button { color: ${buttonTextColorDark} !important; }
       .email-logo-light { display: none !important; }
@@ -315,8 +324,9 @@ export const Layout = ({
       .email-social-dark { display: inline-block !important; }
       .email-footer-text { color: ${tertiaryColorDark} !important; }
       .email-footer-link { color: ${tertiaryColorDark} !important; }
-      .email-footer-divider { border-color: #4b5563 !important; }
-      .email-amount-bg { background-color: ${darkBg} !important; }
+      .email-footer-divider { border-color: ${darkBorder} !important; }
+      .email-info-card { background-color: ${darkBg} !important; }
+      .email-amount-bg { background-color: ${darkHighlight} !important; }
     }
   `;
 
@@ -340,7 +350,7 @@ export const Layout = ({
             <Section
               className="px-6 py-8 email-card"
               style={{
-                backgroundColor: "#ffffff",
+                backgroundColor: branding.card_color || "#ffffff",
               }}
             >
               {branding.logo_url && (
@@ -371,12 +381,15 @@ export const Layout = ({
 
 const monoFont = "Courier, monospace";
 
-export const InfoCard = ({ children }: { children: React.ReactNode }) => (
-  <table cellPadding="0" cellSpacing="0" style={{
+export const InfoCard = ({ branding, children }: { branding: Branding; children: React.ReactNode }) => (
+  <table cellPadding="0" cellSpacing="0" className="email-info-card" style={{
     width: "100%",
     borderCollapse: "collapse",
     marginTop: "32px",
     marginBottom: "32px",
+    backgroundColor: branding.background_color,
+    borderRadius: "6px",
+    overflow: "hidden",
   }}>
     <tbody>
       {children}
@@ -384,20 +397,20 @@ export const InfoCard = ({ children }: { children: React.ReactNode }) => (
   </table>
 );
 
-export const InfoRow = ({ label, value, valueColor }: { label: string; value: string; valueColor?: string }) => (
+export const InfoRow = ({ branding, label, value, valueColor }: { branding: Branding; label: string; value: string; valueColor?: string }) => (
   <tr>
     <td className="email-row-label email-divider" style={{
       padding: "12px 16px",
-      borderBottom: "1px solid #e5e7eb",
-      color: "#6b7280",
+      borderBottom: `1px solid ${branding.border_color || "#e5e7eb"}`,
+      color: branding.secondary_color || "#6b7280",
       fontSize: "14px",
-      fontWeight: 500,
+      fontWeight: 400,
       whiteSpace: "nowrap",
     }}>{label}</td>
     <td className="email-row-value email-divider" style={{
       padding: "12px 16px",
-      borderBottom: "1px solid #e5e7eb",
-      color: valueColor || "#1f2937",
+      borderBottom: `1px solid ${branding.border_color || "#e5e7eb"}`,
+      color: valueColor || branding.secondary_color || "#1f2937",
       fontSize: "14px",
       fontFamily: monoFont,
       textAlign: "right",
@@ -405,24 +418,24 @@ export const InfoRow = ({ label, value, valueColor }: { label: string; value: st
   </tr>
 );
 
-export const InfoAmount = ({ label, value, bgColor }: { label: string; value: string; bgColor?: string }) => (
+export const InfoAmount = ({ branding, label, value }: { branding: Branding; label: string; value: string }) => (
   <tr>
     <td className="email-row-label email-amount-bg" style={{
       padding: "12px 16px",
-      color: "#6b7280",
+      color: branding.secondary_color || "#6b7280",
       fontSize: "14px",
-      fontWeight: 500,
+      fontWeight: 400,
       whiteSpace: "nowrap",
-      backgroundColor: bgColor || "#f3f4f6",
+      backgroundColor: branding.highlight_color || "#e5e7eb",
     }}>{label}</td>
     <td className="email-row-value email-amount-bg" style={{
       padding: "12px 16px",
-      color: "#1f2937",
+      color: "#000000",
       fontSize: "14px",
       fontFamily: monoFont,
       fontWeight: 700,
       textAlign: "right",
-      backgroundColor: bgColor || "#f3f4f6",
+      backgroundColor: branding.highlight_color || "#e5e7eb",
     }}>{value}</td>
   </tr>
 );

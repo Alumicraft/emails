@@ -36,9 +36,9 @@ export const RequestForQuotationEmail = ({
         Please review the attached request for quotation and respond with your pricing.
       </Text>
 
-      <InfoCard>
-        <InfoRow label="RFQ No." value={rfq_number} />
-        <InfoRow label="Date" value={rfq_date} />
+      <InfoCard branding={branding}>
+        <InfoRow branding={branding} label="RFQ No." value={rfq_number} />
+        <InfoRow branding={branding} label="Date" value={rfq_date} />
       </InfoCard>
 
       {custom_message && (

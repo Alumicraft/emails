@@ -38,10 +38,10 @@ export const SalesOrderEmail = ({
         Your order has been confirmed. Please review the attached PDF.
       </Text>
 
-      <InfoCard>
-        <InfoRow label="Order No." value={order_number} />
-        {project_name && <InfoRow label="Project" value={project_name} />}
-        <InfoAmount label="Order Total" value={order_total} bgColor={branding.background_color} />
+      <InfoCard branding={branding}>
+        <InfoRow branding={branding} label="Order No." value={order_number} />
+        {project_name && <InfoRow branding={branding} label="Project" value={project_name} />}
+        <InfoAmount branding={branding} label="Order Total" value={order_total} />
       </InfoCard>
 
       {custom_message && (

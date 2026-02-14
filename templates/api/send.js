@@ -47991,17 +47991,20 @@ var Layout = ({
   children
 }) => {
   const darkBg = branding.background_color_dark || "#1a1a1a";
+  const darkCard = branding.card_color_dark || "#000000";
+  const darkBorder = branding.border_color_dark || "#4b5563";
+  const darkHighlight = branding.highlight_color_dark || "#374151";
   const darkText = branding.text_color_dark || "#ffffff";
   const buttonTextColorDark = branding.button_text_color_dark || branding.button_text_color || "#ffffff";
   const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
   const darkModeStyles = `
     @media (prefers-color-scheme: dark) {
       .email-body { background-color: ${darkBg} !important; }
-      .email-card { background-color: #2d2d2d !important; }
+      .email-card { background-color: ${darkCard} !important; }
       .email-heading, .email-text { color: ${darkText} !important; }
       .email-row-label { color: #e5e7eb !important; }
       .email-row-value { color: #d1d5db !important; }
-      .email-divider { border-color: #4b5563 !important; }
+      .email-divider { border-color: ${darkBorder} !important; }
       .email-confidentiality { color: #6b7280 !important; }
       .email-button { color: ${buttonTextColorDark} !important; }
       .email-logo-light { display: none !important; }
@@ -48010,8 +48013,9 @@ var Layout = ({
       .email-social-dark { display: inline-block !important; }
       .email-footer-text { color: ${tertiaryColorDark} !important; }
       .email-footer-link { color: ${tertiaryColorDark} !important; }
-      .email-footer-divider { border-color: #4b5563 !important; }
-      .email-amount-bg { background-color: ${darkBg} !important; }
+      .email-footer-divider { border-color: ${darkBorder} !important; }
+      .email-info-card { background-color: ${darkBg} !important; }
+      .email-amount-bg { background-color: ${darkHighlight} !important; }
     }
   `;
   return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Html, { lang: "en", children: [
@@ -48035,7 +48039,7 @@ var Layout = ({
             {
               className: "px-6 py-8 email-card",
               style: {
-                backgroundColor: "#ffffff"
+                backgroundColor: branding.card_color || "#ffffff"
               },
               children: [
                 branding.logo_url && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
@@ -48060,47 +48064,50 @@ var Layout = ({
   ] });
 };
 var monoFont = "Courier, monospace";
-var InfoCard = ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("table", { cellPadding: "0", cellSpacing: "0", style: {
+var InfoCard = ({ branding, children }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("table", { cellPadding: "0", cellSpacing: "0", className: "email-info-card", style: {
   width: "100%",
   borderCollapse: "collapse",
   marginTop: "32px",
-  marginBottom: "32px"
+  marginBottom: "32px",
+  backgroundColor: branding.background_color,
+  borderRadius: "6px",
+  overflow: "hidden"
 }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("tbody", { children }) });
-var InfoRow = ({ label, value, valueColor }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("tr", { children: [
+var InfoRow = ({ branding, label, value, valueColor }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("tr", { children: [
   /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { className: "email-row-label email-divider", style: {
     padding: "12px 16px",
-    borderBottom: "1px solid #e5e7eb",
-    color: "#6b7280",
+    borderBottom: `1px solid ${branding.border_color || "#e5e7eb"}`,
+    color: branding.secondary_color || "#6b7280",
     fontSize: "14px",
-    fontWeight: 500,
+    fontWeight: 400,
     whiteSpace: "nowrap"
   }, children: label }),
   /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { className: "email-row-value email-divider", style: {
     padding: "12px 16px",
-    borderBottom: "1px solid #e5e7eb",
-    color: valueColor || "#1f2937",
+    borderBottom: `1px solid ${branding.border_color || "#e5e7eb"}`,
+    color: valueColor || branding.secondary_color || "#1f2937",
     fontSize: "14px",
     fontFamily: monoFont,
     textAlign: "right"
   }, children: value })
 ] });
-var InfoAmount = ({ label, value, bgColor }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("tr", { children: [
+var InfoAmount = ({ branding, label, value }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("tr", { children: [
   /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { className: "email-row-label email-amount-bg", style: {
     padding: "12px 16px",
-    color: "#6b7280",
+    color: branding.secondary_color || "#6b7280",
     fontSize: "14px",
-    fontWeight: 500,
+    fontWeight: 400,
     whiteSpace: "nowrap",
-    backgroundColor: bgColor || "#f3f4f6"
+    backgroundColor: branding.highlight_color || "#e5e7eb"
   }, children: label }),
   /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { className: "email-row-value email-amount-bg", style: {
     padding: "12px 16px",
-    color: "#1f2937",
+    color: "#000000",
     fontSize: "14px",
     fontFamily: monoFont,
     fontWeight: 700,
     textAlign: "right",
-    backgroundColor: bgColor || "#f3f4f6"
+    backgroundColor: branding.highlight_color || "#e5e7eb"
   }, children: value })
 ] });
 
@@ -48113,17 +48120,20 @@ var MagicLinkEmail = ({
   expiry_time = "15 minutes"
 }) => {
   const darkBg = branding.background_color_dark || "#1a1a1a";
+  const darkCard = branding.card_color_dark || "#000000";
+  const darkBorder = branding.border_color_dark || "#4b5563";
+  const darkHighlight = branding.highlight_color_dark || "#374151";
   const darkText = branding.text_color_dark || "#ffffff";
   const buttonTextColorDark = branding.button_text_color_dark || branding.button_text_color || "#ffffff";
   const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
   const darkModeStyles = `
     @media (prefers-color-scheme: dark) {
       .email-body { background-color: ${darkBg} !important; }
-      .email-card { background-color: #2d2d2d !important; }
+      .email-card { background-color: ${darkCard} !important; }
       .email-heading, .email-text { color: ${darkText} !important; }
       .email-row-label { color: #e5e7eb !important; }
       .email-row-value { color: #d1d5db !important; }
-      .email-divider { border-color: #4b5563 !important; }
+      .email-divider { border-color: ${darkBorder} !important; }
       .email-confidentiality { color: #6b7280 !important; }
       .email-button { color: ${buttonTextColorDark} !important; }
       .email-logo-light { display: none !important; }
@@ -48132,8 +48142,9 @@ var MagicLinkEmail = ({
       .email-social-dark { display: inline-block !important; }
       .email-footer-text { color: ${tertiaryColorDark} !important; }
       .email-footer-link { color: ${tertiaryColorDark} !important; }
-      .email-footer-divider { border-color: #4b5563 !important; }
-      .email-amount-bg { background-color: ${darkBg} !important; }
+      .email-footer-divider { border-color: ${darkBorder} !important; }
+      .email-info-card { background-color: ${darkBg} !important; }
+      .email-amount-bg { background-color: ${darkHighlight} !important; }
     }
   `;
   return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Html, { lang: "en", children: [
@@ -48165,7 +48176,7 @@ var MagicLinkEmail = ({
                 {
                   className: "mt-8 p-8 email-card",
                   style: {
-                    backgroundColor: "#ffffff",
+                    backgroundColor: branding.card_color || "#ffffff",
                     borderRadius: "12px",
                     boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                     backgroundImage: branding.background_image_url ? `linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url(${branding.background_image_url})` : void 0,
@@ -48259,11 +48270,11 @@ var SalesInvoiceEmail = ({
         children: "Please review the attached invoice and submit payment at your earliest convenience."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(InfoCard, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoRow, { label: "Invoice No.", value: invoice_number }),
-      project_name && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoRow, { label: "Project", value: project_name }),
-      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoRow, { label: "Due Date", value: due_date, valueColor: "#d97706" }),
-      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoAmount, { label: "Amount Due", value: amount_due, bgColor: branding.background_color })
+    /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoRow, { branding, label: "Invoice No.", value: invoice_number }),
+      project_name && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoRow, { branding, label: "Project", value: project_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoRow, { branding, label: "Due Date", value: due_date, valueColor: "#d97706" }),
+      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoAmount, { branding, label: "Amount Due", value: amount_due })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
@@ -48305,10 +48316,10 @@ var QuotationEmail = ({
         children: "Please review the attached quotation at your earliest convenience."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(InfoCard, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(InfoRow, { label: "Quotation No.", value: quotation_number }),
-      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(InfoRow, { label: "Valid Until", value: valid_until, valueColor: "#d97706" }),
-      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(InfoAmount, { label: "Estimated Total", value: total_amount, bgColor: branding.background_color })
+    /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(InfoRow, { branding, label: "Quotation No.", value: quotation_number }),
+      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(InfoRow, { branding, label: "Valid Until", value: valid_until, valueColor: "#d97706" }),
+      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(InfoAmount, { branding, label: "Estimated Total", value: total_amount })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
     /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
@@ -48350,10 +48361,10 @@ var SalesOrderEmail = ({
         children: "Your order has been confirmed. Please review the attached PDF."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(InfoCard, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(InfoRow, { label: "Order No.", value: order_number }),
-      project_name && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(InfoRow, { label: "Project", value: project_name }),
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(InfoAmount, { label: "Order Total", value: order_total, bgColor: branding.background_color })
+    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(InfoRow, { branding, label: "Order No.", value: order_number }),
+      project_name && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(InfoRow, { branding, label: "Project", value: project_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(InfoAmount, { branding, label: "Order Total", value: order_total })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
     /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
@@ -48393,9 +48404,9 @@ var PurchaseOrderEmail = ({
         children: "Please review the attached purchase order."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(InfoCard, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(InfoRow, { label: "PO No.", value: po_number }),
-      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(InfoRow, { label: "Date", value: po_date })
+    /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(InfoRow, { branding, label: "PO No.", value: po_number }),
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(InfoRow, { branding, label: "Date", value: po_date })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
     /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
@@ -48436,9 +48447,9 @@ var RequestForQuotationEmail = ({
         children: "Please review the attached request for quotation and respond with your pricing."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(InfoCard, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(InfoRow, { label: "RFQ No.", value: rfq_number }),
-      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(InfoRow, { label: "Date", value: rfq_date })
+    /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(InfoRow, { branding, label: "RFQ No.", value: rfq_number }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(InfoRow, { branding, label: "Date", value: rfq_date })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
     document_link && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
@@ -48627,11 +48638,11 @@ var PaymentRequestEmail = ({
         children: "Please review the attached PDF and submit payment at your earliest convenience."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(InfoCard, { children: [
-      reference_number && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoRow, { label: "Reference No.", value: reference_number }),
-      project_name && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoRow, { label: "Project", value: project_name }),
-      due_date && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoRow, { label: "Due Date", value: due_date, valueColor: "#d97706" }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoAmount, { label: "Amount", value: amount_requested, bgColor: branding.background_color })
+    /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(InfoCard, { branding, children: [
+      reference_number && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoRow, { branding, label: "Reference No.", value: reference_number }),
+      project_name && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoRow, { branding, label: "Project", value: project_name }),
+      due_date && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoRow, { branding, label: "Due Date", value: due_date, valueColor: "#d97706" }),
+      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoAmount, { branding, label: "Amount", value: amount_requested })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
     /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
@@ -48690,10 +48701,10 @@ var DocumentEmail = ({
         ]
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(InfoCard, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { label: document_type || "Document", value: document_number }),
-      document_date && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { label: "Date", value: document_date }),
-      total_amount && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoAmount, { label: "Total", value: total_amount, bgColor: branding.background_color })
+    /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: document_type || "Document", value: document_number }),
+      document_date && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: "Date", value: document_date }),
+      total_amount && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoAmount, { branding, label: "Total", value: total_amount })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
     /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(

@@ -40,10 +40,10 @@ export const DocumentEmail = ({
         Please find the attached {document_type?.toLowerCase() || "document"} for your reference.
       </Text>
 
-      <InfoCard>
-        <InfoRow label={document_type || "Document"} value={document_number} />
-        {document_date && <InfoRow label="Date" value={document_date} />}
-        {total_amount && <InfoAmount label="Total" value={total_amount} bgColor={branding.background_color} />}
+      <InfoCard branding={branding}>
+        <InfoRow branding={branding} label={document_type || "Document"} value={document_number} />
+        {document_date && <InfoRow branding={branding} label="Date" value={document_date} />}
+        {total_amount && <InfoAmount branding={branding} label="Total" value={total_amount} />}
       </InfoCard>
 
       {custom_message && (

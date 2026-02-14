@@ -38,10 +38,10 @@ export const QuotationEmail = ({
         Please review the attached quotation at your earliest convenience.
       </Text>
 
-      <InfoCard>
-        <InfoRow label="Quotation No." value={quotation_number} />
-        <InfoRow label="Valid Until" value={valid_until} valueColor="#d97706" />
-        <InfoAmount label="Estimated Total" value={total_amount} bgColor={branding.background_color} />
+      <InfoCard branding={branding}>
+        <InfoRow branding={branding} label="Quotation No." value={quotation_number} />
+        <InfoRow branding={branding} label="Valid Until" value={valid_until} valueColor="#d97706" />
+        <InfoAmount branding={branding} label="Estimated Total" value={total_amount} />
       </InfoCard>
 
       {custom_message && (
