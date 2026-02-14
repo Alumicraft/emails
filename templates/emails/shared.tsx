@@ -97,7 +97,7 @@ export const Button = ({ href, color, textColor, children }: { href: string; col
       color: textColor || "#ffffff",
       display: "inline-block",
       padding: "12px 24px",
-      borderRadius: "6px",
+      borderRadius: "4px",
       fontWeight: 400,
       textDecoration: "none",
       border: "none",
@@ -348,7 +348,7 @@ export const Layout = ({
         >
           <Container className="mx-auto my-0 pt-6 pb-8 max-w-[600px]">
             <Section
-              className="px-6 py-8 email-card"
+              className="px-6 py-8 rounded-[4px] email-card"
               style={{
                 backgroundColor: branding.card_color || "#ffffff",
               }}
@@ -388,7 +388,7 @@ export const InfoCard = ({ branding, children }: { branding: Branding; children:
     marginTop: "32px",
     marginBottom: "32px",
     backgroundColor: branding.background_color,
-    borderRadius: "6px",
+    borderRadius: "4px",
     overflow: "hidden",
   }}>
     <tbody>

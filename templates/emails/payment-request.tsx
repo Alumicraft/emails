@@ -63,7 +63,7 @@ export const PaymentRequestEmail = ({
       {stripe_payment_url && (
         <Section className="my-8">
           <Button
-            className="email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]"
+            className="email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]"
             style={{ backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" }}
             href={stripe_payment_url}
           >

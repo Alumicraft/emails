@@ -79,7 +79,7 @@ export const MagicLinkEmail = ({
               className="mt-8 p-8 email-card"
               style={{
                 backgroundColor: branding.card_color || "#ffffff",
-                borderRadius: "12px",
+                borderRadius: "4px",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                 backgroundImage: branding.background_image_url
                   ? `linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url(${branding.background_image_url})`
@@ -111,7 +111,7 @@ export const MagicLinkEmail = ({
               </Text>
               <Section className="my-8">
                 <Button
-                  className="email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]"
+                  className="email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]"
                   style={{ backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" }}
                   href={magic_link}
                 >

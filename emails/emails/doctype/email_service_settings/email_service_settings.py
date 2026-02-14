@@ -164,6 +164,9 @@ class EmailServiceSettings(Document):
             "tertiary_color": self.tertiary_color or "#6b7280",
             "text_color": self.text_color or "#333333",
             "background_color": self.background_color or "#f8f9fa",
+            "card_color": getattr(self, "card_color", "") or "#ffffff",
+            "border_color": getattr(self, "border_color", "") or "#e5e7eb",
+            "highlight_color": getattr(self, "highlight_color", "") or "#e5e7eb",
             "button_text_color": getattr(self, "button_text_color", "") or "#ffffff",
 
             # Dark mode colors
@@ -172,6 +175,9 @@ class EmailServiceSettings(Document):
             "tertiary_color_dark": getattr(self, "tertiary_color_dark", None) or self.tertiary_color or "#9ca3af",
             "text_color_dark": self.text_color_dark or "#ffffff",
             "background_color_dark": self.background_color_dark or "#1a1a1a",
+            "card_color_dark": getattr(self, "card_color_dark", "") or "#000000",
+            "border_color_dark": getattr(self, "border_color_dark", "") or "#4b5563",
+            "highlight_color_dark": getattr(self, "highlight_color_dark", "") or "#374151",
             "button_text_color_dark": getattr(self, "button_text_color_dark", "") or "",
 
             # Typography

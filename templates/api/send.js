@@ -48037,7 +48037,7 @@ var Layout = ({
           /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
             Section,
             {
-              className: "px-6 py-8 email-card",
+              className: "px-6 py-8 rounded-[4px] email-card",
               style: {
                 backgroundColor: branding.card_color || "#ffffff"
               },
@@ -48070,7 +48070,7 @@ var InfoCard = ({ branding, children }) => /* @__PURE__ */ (0, import_jsx_runtim
   marginTop: "32px",
   marginBottom: "32px",
   backgroundColor: branding.background_color,
-  borderRadius: "6px",
+  borderRadius: "4px",
   overflow: "hidden"
 }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("tbody", { children }) });
 var InfoRow = ({ branding, label, value, valueColor }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("tr", { children: [
@@ -48177,7 +48177,7 @@ var MagicLinkEmail = ({
                   className: "mt-8 p-8 email-card",
                   style: {
                     backgroundColor: branding.card_color || "#ffffff",
-                    borderRadius: "12px",
+                    borderRadius: "4px",
                     boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                     backgroundImage: branding.background_image_url ? `linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url(${branding.background_image_url})` : void 0,
                     backgroundSize: "cover",
@@ -48213,7 +48213,7 @@ var MagicLinkEmail = ({
                     /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
                       Button,
                       {
-                        className: "email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]",
+                        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
                         style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
                         href: magic_link,
                         children: "Login"
@@ -48455,7 +48455,7 @@ var RequestForQuotationEmail = ({
     document_link && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
       Button,
       {
-        className: "email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]",
+        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
         style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
         href: document_link,
         children: "View Request for Quotation"
@@ -48492,7 +48492,7 @@ var PasswordResetEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       Button,
       {
-        className: "email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]",
+        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
         style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
         href: reset_link,
         children: "Reset Password"
@@ -48544,7 +48544,7 @@ var EmailVerificationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       Button,
       {
-        className: "email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]",
+        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
         style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
         href: verification_link,
         children: "Verify Email"
@@ -48600,7 +48600,7 @@ var WelcomeEmail = ({
     login_link && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
       Button,
       {
-        className: "email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]",
+        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
         style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
         href: login_link,
         children: "Log In"
@@ -48656,7 +48656,7 @@ var PaymentRequestEmail = ({
     stripe_payment_url && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       Button,
       {
-        className: "email-button box-border w-full rounded-[6px] px-[12px] py-[12px] text-center font-medium text-[16px]",
+        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
         style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
         href: stripe_payment_url,
         children: "Pay Invoice"

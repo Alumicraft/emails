@@ -22,17 +22,23 @@
         "primary_color",
         "secondary_color",
         "tertiary_color",
+        "border_color",
+        "highlight_color",
         "column_break_colors_light",
         "text_color",
         "background_color",
+        "card_color",
         "button_text_color",
         "colors_dark_section",
         "primary_color_dark",
         "secondary_color_dark",
         "tertiary_color_dark",
+        "border_color_dark",
+        "highlight_color_dark",
         "column_break_colors_dark",
         "text_color_dark",
         "background_color_dark",
+        "card_color_dark",
         "button_text_color_dark",
         "typography_section",
         "font_family",
@@ -145,14 +151,28 @@
             "fieldname": "secondary_color",
             "fieldtype": "Color",
             "label": "Secondary Color",
-            "description": "Used for accents (optional)"
+            "description": "Info table labels and values"
         },
         {
             "fieldname": "tertiary_color",
             "fieldtype": "Color",
             "label": "Tertiary Color",
             "default": "#6b7280",
-            "description": "Used for muted text, icons, and dividers"
+            "description": "Muted text, footer, and disclaimers"
+        },
+        {
+            "fieldname": "border_color",
+            "fieldtype": "Color",
+            "label": "Border Color",
+            "default": "#e5e7eb",
+            "description": "Table row dividers and footer separator"
+        },
+        {
+            "fieldname": "highlight_color",
+            "fieldtype": "Color",
+            "label": "Highlight Color",
+            "default": "#e5e7eb",
+            "description": "Amount row background in info tables"
         },
         {
             "fieldname": "column_break_colors_light",
@@ -170,7 +190,7 @@
             "fieldtype": "Color",
             "label": "Background Color",
             "default": "#f8f9fa",
-            "description": "Email background color"
+            "description": "Outer email background and info table background"
         },
         {
             "fieldname": "button_text_color",
@@ -180,10 +200,16 @@
             "description": "Text color for buttons (default white)"
         },
         {
+            "fieldname": "card_color",
+            "fieldtype": "Color",
+            "label": "Card Color",
+            "default": "#ffffff",
+            "description": "Main content card background"
+        },
+        {
             "fieldname": "colors_dark_section",
             "fieldtype": "Section Break",
-            "label": "Colors - Dark Mode",
-            "collapsible": 1
+            "label": "Colors - Dark Mode"
         },
         {
             "fieldname": "primary_color_dark",
@@ -201,6 +227,18 @@
             "fieldtype": "Color",
             "label": "Tertiary Color (Dark)",
             "description": "Muted text color for dark mode"
+        },
+        {
+            "fieldname": "border_color_dark",
+            "fieldtype": "Color",
+            "label": "Border Color (Dark)",
+            "description": "Divider color in dark mode"
+        },
+        {
+            "fieldname": "highlight_color_dark",
+            "fieldtype": "Color",
+            "label": "Highlight Color (Dark)",
+            "description": "Amount row background in dark mode"
         },
         {
             "fieldname": "column_break_colors_dark",
@@ -221,6 +259,12 @@
             "fieldtype": "Color",
             "label": "Button Text Color (Dark)",
             "description": "Text color for buttons in dark mode"
+        },
+        {
+            "fieldname": "card_color_dark",
+            "fieldtype": "Color",
+            "label": "Card Color (Dark)",
+            "description": "Content card background in dark mode"
         },
         {
             "fieldname": "typography_section",
