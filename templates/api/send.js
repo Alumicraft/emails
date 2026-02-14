@@ -43915,7 +43915,7 @@ var Layout = ({
           fontFamily: branding.font_family,
           backgroundColor: branding.background_color
         },
-        children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Container, { className: "mx-auto my-0 max-w-[600px]", children: [
+        children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Container, { className: "mx-auto my-0 pt-6 pb-8 max-w-[600px]", children: [
           /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
             Section,
             {
@@ -43957,7 +43957,8 @@ var InfoRow = ({ label, value, valueColor }) => /* @__PURE__ */ (0, import_jsx_r
     color: "#1f2937",
     fontSize: "14px",
     fontWeight: 500,
-    width: "25%"
+    whiteSpace: "nowrap",
+    paddingRight: "16px"
   }, children: label }),
   /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: {
     padding: "8px 0",
@@ -43973,7 +43974,8 @@ var InfoAmount = ({ label, value }) => /* @__PURE__ */ (0, import_jsx_runtime20.
     color: "#1f2937",
     fontSize: "14px",
     fontWeight: 500,
-    width: "25%"
+    whiteSpace: "nowrap",
+    paddingRight: "16px"
   }, children: label }),
   /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: {
     padding: "8px 0",

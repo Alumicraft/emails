@@ -263,7 +263,7 @@ export const Layout = ({
             backgroundColor: branding.background_color,
           }}
         >
-          <Container className="mx-auto my-0 max-w-[600px]">
+          <Container className="mx-auto my-0 pt-6 pb-8 max-w-[600px]">
             <Section
               className="px-6 py-8 email-card"
               style={{
@@ -317,7 +317,8 @@ export const InfoRow = ({ label, value, valueColor }: { label: string; value: st
       color: "#1f2937",
       fontSize: "14px",
       fontWeight: 500,
-      width: "25%"
+      whiteSpace: "nowrap",
+      paddingRight: "16px"
     }}>{label}</td>
     <td style={{
       padding: "8px 0",
@@ -336,7 +337,8 @@ export const InfoAmount = ({ label, value }: { label: string; value: string }) =
       color: "#1f2937",
       fontSize: "14px",
       fontWeight: 500,
-      width: "25%"
+      whiteSpace: "nowrap",
+      paddingRight: "16px"
     }}>{label}</td>
     <td style={{
       padding: "8px 0",
