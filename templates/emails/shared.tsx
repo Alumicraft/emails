@@ -301,7 +301,8 @@ export const InfoCard = ({ children }: { children: React.ReactNode }) => (
   <table cellPadding="0" cellSpacing="0" style={{
     width: "100%",
     borderCollapse: "collapse",
-    marginBottom: "24px"
+    marginTop: "32px",
+    marginBottom: "32px"
   }}>
     <tbody>
       {children}

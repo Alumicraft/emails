@@ -43948,7 +43948,8 @@ var monoFont = "Courier, monospace";
 var InfoCard = ({ children }) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("table", { cellPadding: "0", cellSpacing: "0", style: {
   width: "100%",
   borderCollapse: "collapse",
-  marginBottom: "24px"
+  marginTop: "32px",
+  marginBottom: "32px"
 }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("tbody", { children }) });
 var InfoRow = ({ label, value, valueColor }) => /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("tr", { children: [
   /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("td", { style: {
