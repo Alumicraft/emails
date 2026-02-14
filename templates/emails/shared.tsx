@@ -263,9 +263,9 @@ export const Layout = ({
             backgroundColor: branding.background_color,
           }}
         >
-          <Container className="mx-auto my-0 pt-5 pb-12 max-w-[600px]">
+          <Container className="mx-auto my-0 max-w-[600px]">
             <Section
-              className="mt-8 px-6 py-8 email-card"
+              className="px-6 py-8 email-card"
               style={{
                 backgroundColor: "#ffffff",
               }}
