@@ -3,6 +3,8 @@
 
 frappe.ui.form.on("Email Service Settings", {
     refresh: function (frm) {
+        frm.set_title(__("Monocore Email"));
+
         // Add test connection button
         frm.add_custom_button(__("Test Connection"), function () {
             frappe.call({

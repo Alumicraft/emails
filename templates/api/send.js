@@ -47894,7 +47894,7 @@ var Logo = ({
   }
   return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(import_jsx_runtime16.Fragment, { children: [
     /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Img, { src: lightSrc, height, alt, className: `email-logo-light ${className || ""}` }),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Img, { src: darkSrc, height, alt, className: `email-logo-dark ${className || ""}`, style: { display: "none" } })
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Img, { src: darkSrc, height, alt: "", className: `email-logo-dark ${className || ""}`, style: { display: "none", maxHeight: 0, overflow: "hidden" } })
   ] });
 };
 var Footer = ({ branding }) => {
@@ -47913,8 +47913,7 @@ var Footer = ({ branding }) => {
         className: "mb-6"
       }
     ),
-    branding.mailing_address && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Text3, { className: "email-footer-text", style: { margin: "0 0 4px 0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }, children: branding.mailing_address }),
-    (branding.company_email || branding.company_phone) && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Text3, { className: "email-footer-text", style: { margin: "0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }, children: [
+    (branding.company_email || branding.company_phone) && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Text3, { className: "email-footer-text", style: { margin: "0 0 8px 0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }, children: [
       branding.company_email && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
         Link,
         {
@@ -47934,7 +47933,16 @@ var Footer = ({ branding }) => {
           children: branding.company_phone
         }
       )
-    ] })
+    ] }),
+    branding.mailing_address && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Text3, { className: "email-footer-text", style: { margin: "0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+      Link,
+      {
+        href: `https://maps.google.com/?q=${encodeURIComponent(branding.mailing_address)}`,
+        className: "email-footer-link",
+        style: { color: tertiaryColor, textDecoration: "none" },
+        children: branding.mailing_address
+      }
+    ) })
   ] });
 };
 var Confidentiality = () => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Text3, { className: "email-confidentiality", style: {
@@ -47968,12 +47976,19 @@ var Layout = ({
       .email-confidentiality { color: #6b7280 !important; }
       .email-button { color: ${buttonTextColorDark} !important; }
       .email-logo-light { display: none !important; }
-      .email-logo-dark { display: block !important; }
+      .email-logo-dark { display: block !important; max-height: none !important; overflow: visible !important; }
       .email-footer-text { color: ${tertiaryColorDark} !important; }
       .email-footer-link { color: ${tertiaryColorDark} !important; }
       .email-footer-divider { border-color: ${darkBorder} !important; }
       .email-info-card { background-color: ${darkTable} !important; }
       .email-amount-bg { background-color: ${darkHighlight} !important; }
+    }
+    @media screen {
+      u ~ div .email-logo-dark { display: none !important; max-height: 0 !important; overflow: hidden !important; }
+    }
+    @media screen and (prefers-color-scheme: dark) {
+      u ~ div .email-logo-light { display: none !important; }
+      u ~ div .email-logo-dark { display: block !important; max-height: none !important; overflow: visible !important; }
     }
   `;
   return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Html, { lang: "en", children: [
@@ -48028,6 +48043,7 @@ var InfoCard = ({ branding, children }) => /* @__PURE__ */ (0, import_jsx_runtim
   marginTop: "32px",
   marginBottom: "32px",
   backgroundColor: branding.table_color || branding.background_color,
+  borderRadius: "4px",
   overflow: "hidden"
 }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("tbody", { children }) });
 var InfoRow = ({ branding, label, value, valueColor }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("tr", { children: [
@@ -48045,6 +48061,7 @@ var InfoRow = ({ branding, label, value, valueColor }) => /* @__PURE__ */ (0, im
     color: valueColor || branding.secondary_color || "#1f2937",
     fontSize: "14px",
     fontFamily: monoFont,
+    fontWeight: 700,
     textAlign: "right"
   }, children: value })
 ] });
