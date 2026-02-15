@@ -345,6 +345,7 @@ export const InfoRow = ({ branding, label, value, valueColor }: { branding: Bran
       color: valueColor || branding.secondary_color || "#1f2937",
       fontSize: "14px",
       fontFamily: monoFont,
+      fontWeight: 700,
       textAlign: "right",
     }}>{value}</td>
   </tr>
