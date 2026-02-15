@@ -79,7 +79,7 @@ export const MagicLinkEmail = ({
               className="mt-8 p-8 email-card"
               style={{
                 backgroundColor: branding.card_color || "#ffffff",
-                borderRadius: "4px",
+                borderRadius: "6px",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                 backgroundImage: branding.background_image_url
                   ? `linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url(${branding.background_image_url})`

@@ -48037,7 +48037,7 @@ var Layout = ({
           /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
             Section,
             {
-              className: "px-6 py-8 rounded-[4px] email-card",
+              className: "px-6 py-8 rounded-[6px] email-card",
               style: {
                 backgroundColor: branding.card_color || "#ffffff"
               },
@@ -48177,7 +48177,7 @@ var MagicLinkEmail = ({
                   className: "mt-8 p-8 email-card",
                   style: {
                     backgroundColor: branding.card_color || "#ffffff",
-                    borderRadius: "4px",
+                    borderRadius: "6px",
                     boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                     backgroundImage: branding.background_image_url ? `linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url(${branding.background_image_url})` : void 0,
                     backgroundSize: "cover",
