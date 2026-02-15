@@ -156,16 +156,9 @@ export const Footer = ({ branding }: { branding: Branding }) => {
         />
       )}
 
-      {/* Address */}
-      {branding.mailing_address && (
-        <Text className="email-footer-text" style={{ margin: "0 0 4px 0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }}>
-          {branding.mailing_address}
-        </Text>
-      )}
-
       {/* Contact */}
       {(branding.company_email || branding.company_phone) && (
-        <Text className="email-footer-text" style={{ margin: "0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }}>
+        <Text className="email-footer-text" style={{ margin: "0 0 8px 0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }}>
           {branding.company_email && (
             <Link
               href={`mailto:${branding.company_email}`}
@@ -185,6 +178,19 @@ export const Footer = ({ branding }: { branding: Branding }) => {
               {branding.company_phone}
             </Link>
           )}
+        </Text>
+      )}
+
+      {/* Address */}
+      {branding.mailing_address && (
+        <Text className="email-footer-text" style={{ margin: "0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }}>
+          <Link
+            href={`https://maps.google.com/?q=${encodeURIComponent(branding.mailing_address)}`}
+            className="email-footer-link"
+            style={{ color: tertiaryColor, textDecoration: "none" }}
+          >
+            {branding.mailing_address}
+          </Link>
         </Text>
       )}
     </Section>
