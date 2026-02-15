@@ -127,7 +127,7 @@ export const Logo = ({
   return (
     <>
       <Img src={lightSrc} height={height} alt={alt} className={`email-logo-light ${className || ""}`} />
-      <Img src={darkSrc} height={height} alt={alt} className={`email-logo-dark ${className || ""}`} style={{ display: "none" }} />
+      <Img src={darkSrc} height={height} alt="" className={`email-logo-dark ${className || ""}`} style={{ display: "none", maxHeight: 0, overflow: "hidden" }} />
     </>
   );
 };
@@ -240,12 +240,19 @@ export const Layout = ({
       .email-confidentiality { color: #6b7280 !important; }
       .email-button { color: ${buttonTextColorDark} !important; }
       .email-logo-light { display: none !important; }
-      .email-logo-dark { display: block !important; }
+      .email-logo-dark { display: block !important; max-height: none !important; overflow: visible !important; }
       .email-footer-text { color: ${tertiaryColorDark} !important; }
       .email-footer-link { color: ${tertiaryColorDark} !important; }
       .email-footer-divider { border-color: ${darkBorder} !important; }
       .email-info-card { background-color: ${darkTable} !important; }
       .email-amount-bg { background-color: ${darkHighlight} !important; }
+    }
+    @media screen {
+      u ~ div .email-logo-dark { display: none !important; max-height: 0 !important; overflow: hidden !important; }
+    }
+    @media screen and (prefers-color-scheme: dark) {
+      u ~ div .email-logo-light { display: none !important; }
+      u ~ div .email-logo-dark { display: block !important; max-height: none !important; overflow: visible !important; }
     }
   `;
 
@@ -307,6 +314,7 @@ export const InfoCard = ({ branding, children }: { branding: Branding; children:
     marginTop: "32px",
     marginBottom: "32px",
     backgroundColor: branding.table_color || branding.background_color,
+    borderRadius: "4px",
     overflow: "hidden",
   }}>
     <tbody>
