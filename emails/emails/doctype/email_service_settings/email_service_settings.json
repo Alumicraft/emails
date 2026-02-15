@@ -38,8 +38,10 @@
         "primary_color",
         "secondary_color",
         "tertiary_color",
+        "table_color",
         "border_color",
-        "highlight_color",
+        "amount_bg_color",
+        "amount_text_color",
         "column_break_colors_light",
         "text_color",
         "background_color",
@@ -49,8 +51,10 @@
         "primary_color_dark",
         "secondary_color_dark",
         "tertiary_color_dark",
+        "table_color_dark",
         "border_color_dark",
-        "highlight_color_dark",
+        "amount_bg_color_dark",
+        "amount_text_color_dark",
         "column_break_colors_dark",
         "text_color_dark",
         "background_color_dark",
@@ -61,14 +65,8 @@
         "content_section",
         "preheader_text",
         "footer_text",
-        "social_section",
-        "website_url",
-        "instagram_url",
-        "tiktok_url",
-        "column_break_social",
-        "facebook_url",
-        "youtube_url",
-        "twitter_url"
+        "website_section",
+        "website_url"
     ],
     "fields": [
         {
@@ -276,6 +274,12 @@
             "description": "Muted text, footer, and disclaimers"
         },
         {
+            "fieldname": "table_color",
+            "fieldtype": "Color",
+            "label": "Table Color",
+            "description": "Info table background (defaults to background color)"
+        },
+        {
             "fieldname": "border_color",
             "fieldtype": "Color",
             "label": "Border Color",
@@ -283,11 +287,17 @@
             "description": "Table row dividers and footer separator"
         },
         {
-            "fieldname": "highlight_color",
+            "fieldname": "amount_bg_color",
             "fieldtype": "Color",
-            "label": "Highlight Color",
+            "label": "Amount Row Background",
             "default": "#e5e7eb",
             "description": "Amount row background in info tables"
+        },
+        {
+            "fieldname": "amount_text_color",
+            "fieldtype": "Color",
+            "label": "Amount Row Text",
+            "description": "Amount value text color (defaults to text color)"
         },
         {
             "fieldname": "column_break_colors_light",
@@ -344,16 +354,28 @@
             "description": "Muted text color for dark mode"
         },
         {
+            "fieldname": "table_color_dark",
+            "fieldtype": "Color",
+            "label": "Table Color (Dark)",
+            "description": "Info table background in dark mode"
+        },
+        {
             "fieldname": "border_color_dark",
             "fieldtype": "Color",
             "label": "Border Color (Dark)",
             "description": "Divider color in dark mode"
         },
         {
-            "fieldname": "highlight_color_dark",
+            "fieldname": "amount_bg_color_dark",
             "fieldtype": "Color",
-            "label": "Highlight Color (Dark)",
+            "label": "Amount Row Background (Dark)",
             "description": "Amount row background in dark mode"
+        },
+        {
+            "fieldname": "amount_text_color_dark",
+            "fieldtype": "Color",
+            "label": "Amount Row Text (Dark)",
+            "description": "Amount value text color in dark mode"
         },
         {
             "fieldname": "column_break_colors_dark",
@@ -411,49 +433,14 @@
             "description": "Supports Jinja: {{company}}, {{year}}"
         },
         {
-            "fieldname": "social_section",
+            "fieldname": "website_section",
             "fieldtype": "Section Break",
-            "label": "Social Links",
-            "collapsible": 1
+            "label": "Website"
         },
         {
             "fieldname": "website_url",
             "fieldtype": "Data",
             "label": "Website URL",
-            "options": "URL"
-        },
-        {
-            "fieldname": "instagram_url",
-            "fieldtype": "Data",
-            "label": "Instagram URL",
-            "options": "URL"
-        },
-        {
-            "fieldname": "tiktok_url",
-            "fieldtype": "Data",
-            "label": "TikTok URL",
-            "options": "URL"
-        },
-        {
-            "fieldname": "column_break_social",
-            "fieldtype": "Column Break"
-        },
-        {
-            "fieldname": "facebook_url",
-            "fieldtype": "Data",
-            "label": "Facebook URL",
-            "options": "URL"
-        },
-        {
-            "fieldname": "youtube_url",
-            "fieldtype": "Data",
-            "label": "YouTube URL",
-            "options": "URL"
-        },
-        {
-            "fieldname": "twitter_url",
-            "fieldtype": "Data",
-            "label": "X (Twitter) URL",
             "options": "URL"
         }
     ],

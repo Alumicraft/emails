@@ -75,14 +75,14 @@ export default function DocumentEmailPreview() {
         background_color: "#f5f5f5",
         card_color: "#ffffff",
         border_color: "#e5e7eb",
-        highlight_color: "#e5e7eb",
+        amount_bg_color: "#e5e7eb",
         primary_color_dark: "#4D8DFF",
         tertiary_color_dark: "#6B7280",
         text_color_dark: "#E5E7EB",
         background_color_dark: "#E5E7EB",
         card_color_dark: "#000000",
         border_color_dark: "#4b5563",
-        highlight_color_dark: "#374151",
+        amount_bg_color_dark: "#374151",
         font_family: "Arial, Helvetica, sans-serif",
       }}
       document_type="Delivery Note"

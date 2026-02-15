@@ -129,19 +129,6 @@ class EmailServiceSettings(Document):
         Includes both light and dark mode colors, logo info,
         contact info from Company, and rendered footer text.
         """
-        social_links = []
-        # Order: instagram, tiktok, facebook, youtube, x
-        platforms = [
-            ("instagram", getattr(self, "instagram_url", None)),
-            ("tiktok", getattr(self, "tiktok_url", None)),
-            ("facebook", getattr(self, "facebook_url", None)),
-            ("youtube", getattr(self, "youtube_url", None)),
-            ("twitter", getattr(self, "twitter_url", None)),
-        ]
-        for platform, url in platforms:
-            if url:
-                social_links.append({"platform": platform, "url": url})
-
         # Get contact info from Company
         company_email, company_phone, mailing_address = self._get_company_contact_info()
 
@@ -165,8 +152,10 @@ class EmailServiceSettings(Document):
             "text_color": self.text_color or "#333333",
             "background_color": self.background_color or "#f8f9fa",
             "card_color": getattr(self, "card_color", "") or "#ffffff",
+            "table_color": getattr(self, "table_color", "") or "",
             "border_color": getattr(self, "border_color", "") or "#e5e7eb",
-            "highlight_color": getattr(self, "highlight_color", "") or "#e5e7eb",
+            "amount_bg_color": getattr(self, "amount_bg_color", "") or "#e5e7eb",
+            "amount_text_color": getattr(self, "amount_text_color", "") or "",
             "button_text_color": getattr(self, "button_text_color", "") or "#ffffff",
 
             # Dark mode colors
@@ -176,8 +165,10 @@ class EmailServiceSettings(Document):
             "text_color_dark": self.text_color_dark or "#ffffff",
             "background_color_dark": self.background_color_dark or "#1a1a1a",
             "card_color_dark": getattr(self, "card_color_dark", "") or "#000000",
+            "table_color_dark": getattr(self, "table_color_dark", "") or "",
             "border_color_dark": getattr(self, "border_color_dark", "") or "#4b5563",
-            "highlight_color_dark": getattr(self, "highlight_color_dark", "") or "#374151",
+            "amount_bg_color_dark": getattr(self, "amount_bg_color_dark", "") or "#374151",
+            "amount_text_color_dark": getattr(self, "amount_text_color_dark", "") or "",
             "button_text_color_dark": getattr(self, "button_text_color_dark", "") or "",
 
             # Typography
@@ -192,14 +183,8 @@ class EmailServiceSettings(Document):
             "company_phone": company_phone,
             "mailing_address": mailing_address,
 
-            # Social
+            # Website
             "website_url": self.website_url or "",
-            "social_links": social_links,
-            "instagram_url": getattr(self, "instagram_url", "") or "",
-            "tiktok_url": getattr(self, "tiktok_url", "") or "",
-            "facebook_url": getattr(self, "facebook_url", "") or "",
-            "youtube_url": getattr(self, "youtube_url", "") or "",
-            "twitter_url": getattr(self, "twitter_url", "") or "",
         }
 
     def _format_phone_number(self, phone: str) -> str:

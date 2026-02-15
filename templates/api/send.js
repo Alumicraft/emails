@@ -47882,19 +47882,6 @@ var toTitleCase = (str) => {
     return "";
   return str.toLowerCase().split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 };
-var socialIconNames = {
-  instagram: "instagram-new",
-  tiktok: "tiktok--v1",
-  facebook: "facebook--v1",
-  youtube: "youtube-play",
-  twitter: "x",
-  x: "x"
-};
-var getSocialIconUrl = (platform, color) => {
-  const iconName = socialIconNames[platform.toLowerCase()] || "x";
-  const hexColor = color.replace("#", "");
-  return `https://img.icons8.com/ios-glyphs/50/${hexColor}/${iconName}.png`;
-};
 var Logo = ({
   lightSrc,
   darkSrc,
@@ -47911,19 +47898,9 @@ var Logo = ({
   ] });
 };
 var Footer = ({ branding }) => {
-  const socialLinks = branding.social_links?.length ? branding.social_links : [
-    branding.instagram_url && { platform: "instagram", url: branding.instagram_url },
-    branding.tiktok_url && { platform: "tiktok", url: branding.tiktok_url },
-    branding.facebook_url && { platform: "facebook", url: branding.facebook_url },
-    branding.youtube_url && { platform: "youtube", url: branding.youtube_url },
-    branding.twitter_url && { platform: "twitter", url: branding.twitter_url }
-  ].filter(Boolean);
   const footerLogo = branding.logo_url_secondary || branding.logo_url;
   const footerLogoDark = branding.logo_url_secondary_dark || branding.logo_url_dark;
   const tertiaryColor = branding.tertiary_color || "#6b7280";
-  const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
-  const iconColor = "000000";
-  const iconColorDark = tertiaryColorDark.replace("#", "");
   return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Section, { className: "mt-12 mb-8", children: [
     /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Hr2, { className: "email-footer-divider mb-8", style: { border: "none", borderTop: `1px solid ${tertiaryColor}`, marginTop: 0 } }),
     footerLogo && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
@@ -47936,24 +47913,6 @@ var Footer = ({ branding }) => {
         className: "mb-6"
       }
     ),
-    socialLinks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("table", { cellPadding: "0", cellSpacing: "0", className: "email-social-light mb-4", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("tr", { children: socialLinks.map((social, index) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { className: index === 0 ? "" : "pl-2", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Link, { href: social.url, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
-      Img,
-      {
-        alt: social.platform,
-        height: "20",
-        width: "20",
-        src: getSocialIconUrl(social.platform, iconColor)
-      }
-    ) }) }, index)) }) }),
-    socialLinks.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("table", { cellPadding: "0", cellSpacing: "0", className: "email-social-dark mb-4", style: { display: "none" }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("tr", { children: socialLinks.map((social, index) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { className: index === 0 ? "" : "pl-2", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Link, { href: social.url, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
-      Img,
-      {
-        alt: social.platform,
-        height: "20",
-        width: "20",
-        src: getSocialIconUrl(social.platform, iconColorDark)
-      }
-    ) }) }, index)) }) }),
     branding.mailing_address && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Text3, { className: "email-footer-text", style: { margin: "0 0 4px 0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }, children: branding.mailing_address }),
     (branding.company_email || branding.company_phone) && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Text3, { className: "email-footer-text", style: { margin: "0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }, children: [
       branding.company_email && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
@@ -47992,8 +47951,9 @@ var Layout = ({
 }) => {
   const darkBg = branding.background_color_dark || "#1a1a1a";
   const darkCard = branding.card_color_dark || "#000000";
+  const darkTable = branding.table_color_dark || darkBg;
   const darkBorder = branding.border_color_dark || "#4b5563";
-  const darkHighlight = branding.highlight_color_dark || "#374151";
+  const darkHighlight = branding.amount_bg_color_dark || "#374151";
   const darkText = branding.text_color_dark || "#ffffff";
   const buttonTextColorDark = branding.button_text_color_dark || branding.button_text_color || "#ffffff";
   const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
@@ -48009,12 +47969,10 @@ var Layout = ({
       .email-button { color: ${buttonTextColorDark} !important; }
       .email-logo-light { display: none !important; }
       .email-logo-dark { display: block !important; }
-      .email-social-light { display: none !important; }
-      .email-social-dark { display: inline-block !important; }
       .email-footer-text { color: ${tertiaryColorDark} !important; }
       .email-footer-link { color: ${tertiaryColorDark} !important; }
       .email-footer-divider { border-color: ${darkBorder} !important; }
-      .email-info-card { background-color: ${darkBg} !important; }
+      .email-info-card { background-color: ${darkTable} !important; }
       .email-amount-bg { background-color: ${darkHighlight} !important; }
     }
   `;
@@ -48037,7 +47995,7 @@ var Layout = ({
           /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
             Section,
             {
-              className: "px-6 py-8 rounded-[6px] email-card",
+              className: "px-6 py-8 email-card",
               style: {
                 backgroundColor: branding.card_color || "#ffffff"
               },
@@ -48069,8 +48027,7 @@ var InfoCard = ({ branding, children }) => /* @__PURE__ */ (0, import_jsx_runtim
   borderCollapse: "collapse",
   marginTop: "32px",
   marginBottom: "32px",
-  backgroundColor: branding.background_color,
-  borderRadius: "4px",
+  backgroundColor: branding.table_color || branding.background_color,
   overflow: "hidden"
 }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("tbody", { children }) });
 var InfoRow = ({ branding, label, value, valueColor }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("tr", { children: [
@@ -48098,16 +48055,16 @@ var InfoAmount = ({ branding, label, value }) => /* @__PURE__ */ (0, import_jsx_
     fontSize: "14px",
     fontWeight: 400,
     whiteSpace: "nowrap",
-    backgroundColor: branding.highlight_color || "#e5e7eb"
+    backgroundColor: branding.amount_bg_color || "#e5e7eb"
   }, children: label }),
   /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("td", { className: "email-row-value email-amount-bg", style: {
     padding: "12px 16px",
-    color: "#000000",
+    color: branding.amount_text_color || branding.text_color || "#000000",
     fontSize: "14px",
     fontFamily: monoFont,
     fontWeight: 700,
     textAlign: "right",
-    backgroundColor: branding.highlight_color || "#e5e7eb"
+    backgroundColor: branding.amount_bg_color || "#e5e7eb"
   }, children: value })
 ] });
 
@@ -48121,8 +48078,9 @@ var MagicLinkEmail = ({
 }) => {
   const darkBg = branding.background_color_dark || "#1a1a1a";
   const darkCard = branding.card_color_dark || "#000000";
+  const darkTable = branding.table_color_dark || darkBg;
   const darkBorder = branding.border_color_dark || "#4b5563";
-  const darkHighlight = branding.highlight_color_dark || "#374151";
+  const darkHighlight = branding.amount_bg_color_dark || "#374151";
   const darkText = branding.text_color_dark || "#ffffff";
   const buttonTextColorDark = branding.button_text_color_dark || branding.button_text_color || "#ffffff";
   const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
@@ -48138,12 +48096,10 @@ var MagicLinkEmail = ({
       .email-button { color: ${buttonTextColorDark} !important; }
       .email-logo-light { display: none !important; }
       .email-logo-dark { display: block !important; }
-      .email-social-light { display: none !important; }
-      .email-social-dark { display: inline-block !important; }
       .email-footer-text { color: ${tertiaryColorDark} !important; }
       .email-footer-link { color: ${tertiaryColorDark} !important; }
       .email-footer-divider { border-color: ${darkBorder} !important; }
-      .email-info-card { background-color: ${darkBg} !important; }
+      .email-info-card { background-color: ${darkTable} !important; }
       .email-amount-bg { background-color: ${darkHighlight} !important; }
     }
   `;
@@ -48177,7 +48133,6 @@ var MagicLinkEmail = ({
                   className: "mt-8 p-8 email-card",
                   style: {
                     backgroundColor: branding.card_color || "#ffffff",
-                    borderRadius: "6px",
                     boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                     backgroundImage: branding.background_image_url ? `linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url(${branding.background_image_url})` : void 0,
                     backgroundSize: "cover",

@@ -28,8 +28,9 @@ export const MagicLinkEmail = ({
 }: MagicLinkEmailProps) => {
   const darkBg = branding.background_color_dark || "#1a1a1a";
   const darkCard = branding.card_color_dark || "#000000";
+  const darkTable = branding.table_color_dark || darkBg;
   const darkBorder = branding.border_color_dark || "#4b5563";
-  const darkHighlight = branding.highlight_color_dark || "#374151";
+  const darkHighlight = branding.amount_bg_color_dark || "#374151";
   const darkText = branding.text_color_dark || "#ffffff";
   const buttonTextColorDark = branding.button_text_color_dark || branding.button_text_color || "#ffffff";
   const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
@@ -46,12 +47,10 @@ export const MagicLinkEmail = ({
       .email-button { color: ${buttonTextColorDark} !important; }
       .email-logo-light { display: none !important; }
       .email-logo-dark { display: block !important; }
-      .email-social-light { display: none !important; }
-      .email-social-dark { display: inline-block !important; }
       .email-footer-text { color: ${tertiaryColorDark} !important; }
       .email-footer-link { color: ${tertiaryColorDark} !important; }
       .email-footer-divider { border-color: ${darkBorder} !important; }
-      .email-info-card { background-color: ${darkBg} !important; }
+      .email-info-card { background-color: ${darkTable} !important; }
       .email-amount-bg { background-color: ${darkHighlight} !important; }
     }
   `;
@@ -79,7 +78,6 @@ export const MagicLinkEmail = ({
               className="mt-8 p-8 email-card"
               style={{
                 backgroundColor: branding.card_color || "#ffffff",
-                borderRadius: "6px",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                 backgroundImage: branding.background_image_url
                   ? `linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url(${branding.background_image_url})`
@@ -149,24 +147,19 @@ export default function MagicLinkEmailPreview() {
         background_color: "#f5f5f5",
         card_color: "#ffffff",
         border_color: "#e5e7eb",
-        highlight_color: "#e5e7eb",
+        amount_bg_color: "#e5e7eb",
         primary_color_dark: "#4D8DFF",
         tertiary_color_dark: "#6B7280",
         text_color_dark: "#E5E7EB",
         background_color_dark: "#E5E7EB",
         card_color_dark: "#000000",
         border_color_dark: "#4b5563",
-        highlight_color_dark: "#374151",
+        amount_bg_color_dark: "#374151",
         font_family: "Arial, Helvetica, sans-serif",
         website_url: "https://acme.com",
         mailing_address: "123 Main Street, San Francisco, CA 94102",
         company_email: "hello@acme.com",
         company_phone: "+1 (555) 123-4567",
-        instagram_url: "https://instagram.com/acme",
-        tiktok_url: "https://tiktok.com/@acme",
-        facebook_url: "https://facebook.com/acme",
-        youtube_url: "https://youtube.com/acme",
-        twitter_url: "https://twitter.com/acme",
       }}
       user_name="John"
       magic_link="https://acme.com/auth/verify?token=abc123xyz"

@@ -49,13 +49,17 @@ export interface Branding {
   text_color: string;
   background_color: string;
   card_color?: string;
+  table_color?: string;
   border_color?: string;
-  highlight_color?: string;
+  amount_bg_color?: string;
+  amount_text_color?: string;
   button_text_color?: string;
   primary_color_dark?: string;
   card_color_dark?: string;
+  table_color_dark?: string;
   border_color_dark?: string;
-  highlight_color_dark?: string;
+  amount_bg_color_dark?: string;
+  amount_text_color_dark?: string;
   secondary_color_dark?: string;
   tertiary_color_dark?: string;
   text_color_dark?: string;
@@ -68,13 +72,6 @@ export interface Branding {
   company_email?: string;
   company_phone?: string;
   mailing_address?: string;
-  // Social URLs
-  instagram_url?: string;
-  tiktok_url?: string;
-  facebook_url?: string;
-  youtube_url?: string;
-  twitter_url?: string;
-  social_links?: Array<{ platform: string; url: string }>;
 }
 
 export interface Item {
@@ -106,28 +103,6 @@ export const Button = ({ href, color, textColor, children }: { href: string; col
     {children}
   </EmailButton>
 );
-
-// ============================================================================
-// SOCIAL ICONS
-// ============================================================================
-
-// Social icon names for icons8
-const socialIconNames: Record<string, string> = {
-  instagram: "instagram-new",
-  tiktok: "tiktok--v1",
-  facebook: "facebook--v1",
-  youtube: "youtube-play",
-  twitter: "x",
-  x: "x",
-};
-
-const getSocialIconUrl = (platform: string, color: string): string => {
-  const iconName = socialIconNames[platform.toLowerCase()] || "x";
-  // Remove # from hex color
-  const hexColor = color.replace("#", "");
-  // ios-glyphs = solid filled icons without square backgrounds
-  return `https://img.icons8.com/ios-glyphs/50/${hexColor}/${iconName}.png`;
-};
 
 // ============================================================================
 // LOGO COMPONENT (dark mode swap via CSS show/hide)
@@ -162,24 +137,9 @@ export const Logo = ({
 // ============================================================================
 
 export const Footer = ({ branding }: { branding: Branding }) => {
-  // Build social links array from individual URLs if social_links not provided
-  // Order: instagram, tiktok, facebook, youtube, x
-  const socialLinks = branding.social_links?.length
-    ? branding.social_links
-    : [
-        branding.instagram_url && { platform: "instagram", url: branding.instagram_url },
-        branding.tiktok_url && { platform: "tiktok", url: branding.tiktok_url },
-        branding.facebook_url && { platform: "facebook", url: branding.facebook_url },
-        branding.youtube_url && { platform: "youtube", url: branding.youtube_url },
-        branding.twitter_url && { platform: "twitter", url: branding.twitter_url },
-      ].filter(Boolean) as Array<{ platform: string; url: string }>;
-
   const footerLogo = branding.logo_url_secondary || branding.logo_url;
   const footerLogoDark = branding.logo_url_secondary_dark || branding.logo_url_dark;
   const tertiaryColor = branding.tertiary_color || "#6b7280";
-  const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
-  const iconColor = "000000";
-  const iconColorDark = tertiaryColorDark.replace("#", "");
 
   return (
     <Section className="mt-12 mb-8">
@@ -194,46 +154,6 @@ export const Footer = ({ branding }: { branding: Branding }) => {
           height="24"
           className="mb-6"
         />
-      )}
-
-      {/* Social Links — light mode icons */}
-      {socialLinks.length > 0 && (
-        <table cellPadding="0" cellSpacing="0" className="email-social-light mb-4">
-          <tr>
-            {socialLinks.map((social, index) => (
-              <td key={index} className={index === 0 ? "" : "pl-2"}>
-                <Link href={social.url}>
-                  <Img
-                    alt={social.platform}
-                    height="20"
-                    width="20"
-                    src={getSocialIconUrl(social.platform, iconColor)}
-                  />
-                </Link>
-              </td>
-            ))}
-          </tr>
-        </table>
-      )}
-
-      {/* Social Links — dark mode icons (hidden by default, shown via CSS) */}
-      {socialLinks.length > 0 && (
-        <table cellPadding="0" cellSpacing="0" className="email-social-dark mb-4" style={{ display: "none" }}>
-          <tr>
-            {socialLinks.map((social, index) => (
-              <td key={index} className={index === 0 ? "" : "pl-2"}>
-                <Link href={social.url}>
-                  <Img
-                    alt={social.platform}
-                    height="20"
-                    width="20"
-                    src={getSocialIconUrl(social.platform, iconColorDark)}
-                  />
-                </Link>
-              </td>
-            ))}
-          </tr>
-        </table>
       )}
 
       {/* Address */}
@@ -302,8 +222,9 @@ export const Layout = ({
 }) => {
   const darkBg = branding.background_color_dark || "#1a1a1a";
   const darkCard = branding.card_color_dark || "#000000";
+  const darkTable = branding.table_color_dark || darkBg;
   const darkBorder = branding.border_color_dark || "#4b5563";
-  const darkHighlight = branding.highlight_color_dark || "#374151";
+  const darkHighlight = branding.amount_bg_color_dark || "#374151";
   const darkText = branding.text_color_dark || "#ffffff";
   const buttonTextColorDark = branding.button_text_color_dark || branding.button_text_color || "#ffffff";
   const tertiaryColorDark = branding.tertiary_color_dark || "#9ca3af";
@@ -320,12 +241,10 @@ export const Layout = ({
       .email-button { color: ${buttonTextColorDark} !important; }
       .email-logo-light { display: none !important; }
       .email-logo-dark { display: block !important; }
-      .email-social-light { display: none !important; }
-      .email-social-dark { display: inline-block !important; }
       .email-footer-text { color: ${tertiaryColorDark} !important; }
       .email-footer-link { color: ${tertiaryColorDark} !important; }
       .email-footer-divider { border-color: ${darkBorder} !important; }
-      .email-info-card { background-color: ${darkBg} !important; }
+      .email-info-card { background-color: ${darkTable} !important; }
       .email-amount-bg { background-color: ${darkHighlight} !important; }
     }
   `;
@@ -348,7 +267,7 @@ export const Layout = ({
         >
           <Container className="mx-auto my-0 pt-6 pb-8 max-w-[600px]">
             <Section
-              className="px-6 py-8 rounded-[6px] email-card"
+              className="px-6 py-8 email-card"
               style={{
                 backgroundColor: branding.card_color || "#ffffff",
               }}
@@ -387,8 +306,7 @@ export const InfoCard = ({ branding, children }: { branding: Branding; children:
     borderCollapse: "collapse",
     marginTop: "32px",
     marginBottom: "32px",
-    backgroundColor: branding.background_color,
-    borderRadius: "4px",
+    backgroundColor: branding.table_color || branding.background_color,
     overflow: "hidden",
   }}>
     <tbody>
@@ -426,16 +344,16 @@ export const InfoAmount = ({ branding, label, value }: { branding: Branding; lab
       fontSize: "14px",
       fontWeight: 400,
       whiteSpace: "nowrap",
-      backgroundColor: branding.highlight_color || "#e5e7eb",
+      backgroundColor: branding.amount_bg_color || "#e5e7eb",
     }}>{label}</td>
     <td className="email-row-value email-amount-bg" style={{
       padding: "12px 16px",
-      color: "#000000",
+      color: branding.amount_text_color || branding.text_color || "#000000",
       fontSize: "14px",
       fontFamily: monoFont,
       fontWeight: 700,
       textAlign: "right",
-      backgroundColor: branding.highlight_color || "#e5e7eb",
+      backgroundColor: branding.amount_bg_color || "#e5e7eb",
     }}>{value}</td>
   </tr>
 );
