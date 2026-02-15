@@ -207,7 +207,8 @@ export const Confidentiality = () => (
     lineHeight: "16px",
     color: "#9ca3af",
     textAlign: "center",
-    margin: "24px 0 0 0",
+    margin: "24px auto 0 auto",
+    maxWidth: "400px",
   }}>
     This email and any attachments are confidential and intended solely for the recipient. If you received this in error, please delete it and notify the sender.
   </Text>
@@ -345,7 +346,6 @@ export const InfoRow = ({ branding, label, value, valueColor }: { branding: Bran
       color: valueColor || branding.secondary_color || "#1f2937",
       fontSize: "14px",
       fontFamily: monoFont,
-      fontWeight: 700,
       textAlign: "right",
     }}>{value}</td>
   </tr>
@@ -357,7 +357,7 @@ export const InfoAmount = ({ branding, label, value }: { branding: Branding; lab
       padding: "12px 16px",
       color: branding.secondary_color || "#6b7280",
       fontSize: "14px",
-      fontWeight: 400,
+      fontWeight: 700,
       whiteSpace: "nowrap",
       backgroundColor: branding.amount_bg_color || "#e5e7eb",
     }}>{label}</td>

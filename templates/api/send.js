@@ -47950,7 +47950,8 @@ var Confidentiality = () => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Text3,
   lineHeight: "16px",
   color: "#9ca3af",
   textAlign: "center",
-  margin: "24px 0 0 0"
+  margin: "24px auto 0 auto",
+  maxWidth: "400px"
 }, children: "This email and any attachments are confidential and intended solely for the recipient. If you received this in error, please delete it and notify the sender." });
 var Layout = ({
   branding,
@@ -48061,7 +48062,6 @@ var InfoRow = ({ branding, label, value, valueColor }) => /* @__PURE__ */ (0, im
     color: valueColor || branding.secondary_color || "#1f2937",
     fontSize: "14px",
     fontFamily: monoFont,
-    fontWeight: 700,
     textAlign: "right"
   }, children: value })
 ] });
@@ -48070,7 +48070,7 @@ var InfoAmount = ({ branding, label, value }) => /* @__PURE__ */ (0, import_jsx_
     padding: "12px 16px",
     color: branding.secondary_color || "#6b7280",
     fontSize: "14px",
-    fontWeight: 400,
+    fontWeight: 700,
     whiteSpace: "nowrap",
     backgroundColor: branding.amount_bg_color || "#e5e7eb"
   }, children: label }),
