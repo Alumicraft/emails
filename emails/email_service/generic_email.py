@@ -9,6 +9,8 @@ doctype. It dynamically resolves recipients, builds template data from document
 fields, and handles PDF generation.
 """
 
+import re
+
 import frappe
 from frappe import _
 from frappe.utils import formatdate, fmt_money, get_url
@@ -426,6 +428,17 @@ def get_generic_party_email(doctype, party_name):
     return None
 
 
+def _strip_empty_html(value):
+    """Strip HTML that renders as empty/blank (e.g. Quill editor wrappers)."""
+    if not value or "<" not in value:
+        return value
+    # Remove all HTML tags and check if anything visible remains
+    stripped = re.sub(r"<[^>]+>", "", value).strip()
+    if not stripped:
+        return ""
+    return value
+
+
 def build_template_data(doc, doctype, company_info, custom_message=None):
     """
     Build template data dictionary from document fields.
@@ -504,7 +517,10 @@ def build_template_data(doc, doctype, company_info, custom_message=None):
             elif field.fieldtype == "Currency" and field_value:
                 data[field.fieldname] = fmt_money(field_value, currency=currency)
             else:
-                data[field.fieldname] = str(field_value) if field_value else ""
+                value = str(field_value) if field_value else ""
+                # Strip empty Quill editor HTML that adds no visible content
+                value = _strip_empty_html(value)
+                data[field.fieldname] = value
 
     # Extract items if present (for invoice-like documents)
     data["items"] = extract_items_summary(doc, currency)
