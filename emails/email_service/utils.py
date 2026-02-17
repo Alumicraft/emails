@@ -200,16 +200,17 @@ def create_communication_log(
         "reference_doctype": doctype,
         "reference_name": docname,
         "status": "Linked" if status == "Sent" else "Open",
-        "email_status": "Open",
+        "delivery_status": "Sent" if status == "Sent" else "Error",
     })
 
     if message_id:
         comm.message_id = message_id
 
+    comm.insert(ignore_permissions=True)
+
     if error_msg and status != "Sent":
         comm.add_comment("Comment", f"Email send failed: {error_msg}")
 
-    comm.insert(ignore_permissions=True)
     frappe.db.commit()
 
     return comm

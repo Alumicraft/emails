@@ -173,21 +173,24 @@ def _send_via_vercel(
             ],
         )
 
+        message_id = result.get("message_id")
+
         if not skip_communication:
+            preview = _build_email_preview(doctype, template_data, to_email)
             create_communication_log(
                 doctype=doctype,
                 docname=docname,
                 recipient=to_email,
                 subject=subject,
-                content=_("{0} email sent via Vercel").format(doctype),
+                content=preview,
                 status="Sent",
-                message_id=result.get("message_id"),
+                message_id=message_id,
             )
 
         return {
             "success": True,
             "message": _("{0} email sent successfully").format(doctype),
-            "message_id": result.get("message_id"),
+            "message_id": message_id,
             "recipient": to_email,
         }
 
@@ -198,7 +201,7 @@ def _send_via_vercel(
                 docname=docname,
                 recipient=to_email,
                 subject=subject,
-                content=_("{0} email failed").format(doctype),
+                content=_("{0} email failed: {1}").format(doctype, str(e)),
                 status="Error",
                 error_msg=str(e),
             )
@@ -244,21 +247,24 @@ def _send_via_resend(
             ],
         )
 
+        message_id = result.get("message_id")
+
         if not skip_communication:
+            preview = _build_email_preview(doctype, template_data, to_email)
             create_communication_log(
                 doctype=doctype,
                 docname=docname,
                 recipient=to_email,
                 subject=subject,
-                content=_("{0} email sent via Resend").format(doctype),
+                content=preview,
                 status="Sent",
-                message_id=result.get("message_id"),
+                message_id=message_id,
             )
 
         return {
             "success": True,
             "message": _("{0} email sent successfully").format(doctype),
-            "message_id": result.get("message_id"),
+            "message_id": message_id,
             "recipient": to_email,
         }
 
@@ -269,7 +275,7 @@ def _send_via_resend(
                 docname=docname,
                 recipient=to_email,
                 subject=subject,
-                content=_("{0} email failed").format(doctype),
+                content=_("{0} email failed: {1}").format(doctype, str(e)),
                 status="Error",
                 error_msg=str(e),
             )
@@ -426,6 +432,33 @@ def get_generic_party_email(doctype, party_name):
         pass
 
     return None
+
+
+def _build_email_preview(doctype, template_data, to_email):
+    """Build an HTML preview of the email for the Communication content field."""
+    customer = template_data.get("customer_name") or template_data.get("party_name") or ""
+    doc_number = template_data.get("document_number", "")
+    total = template_data.get("total_amount", "")
+    date = template_data.get("document_date", "")
+
+    rows = []
+    if doc_number:
+        rows.append(f"<b>{doctype}:</b> {doc_number}")
+    if total:
+        rows.append(f"<b>Amount:</b> {total}")
+    if date:
+        rows.append(f"<b>Date:</b> {date}")
+
+    details = "<br>".join(rows)
+
+    greeting = f"Dear {customer}," if customer else ""
+
+    return f"""<div>
+<p>{greeting}</p>
+<p>Please find attached your {doctype.lower()}.</p>
+{f'<p>{details}</p>' if details else ''}
+<p style="color: #999; font-size: 12px;">Sent to {to_email}</p>
+</div>"""
 
 
 def _strip_empty_html(value):
