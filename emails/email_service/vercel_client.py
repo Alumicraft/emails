@@ -139,7 +139,10 @@ def send_email(
                     title="Vercel Email Sent",
                     message=f"To: {to_email}\nSubject: {subject}\nMessage ID: {result.get('message_id')}"
                 )
-            return {"message_id": result.get("message_id")}
+            return {
+                "message_id": result.get("message_id"),
+                "html": result.get("html", ""),
+            }
 
         # Handle error response
         error_msg = result.get("error", "Unknown error")

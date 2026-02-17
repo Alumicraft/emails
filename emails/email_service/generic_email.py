@@ -174,15 +174,16 @@ def _send_via_vercel(
         )
 
         message_id = result.get("message_id")
+        rendered_html = result.get("html", "")
 
         if not skip_communication:
-            preview = _build_email_preview(doctype, template_data, to_email)
+            content = rendered_html or _build_email_preview(doctype, template_data, to_email)
             create_communication_log(
                 doctype=doctype,
                 docname=docname,
                 recipient=to_email,
                 subject=subject,
-                content=preview,
+                content=content,
                 status="Sent",
                 message_id=message_id,
             )
