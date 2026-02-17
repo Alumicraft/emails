@@ -48752,7 +48752,7 @@ async function handler(req, res) {
       console.error("Resend error:", result.error);
       return res.status(500).json({ error: result.error.message });
     }
-    return res.status(200).json({ message_id: result.data?.id });
+    return res.status(200).json({ message_id: result.data?.id, html });
   } catch (error) {
     console.error("Email send error:", error);
     return res.status(500).json({
