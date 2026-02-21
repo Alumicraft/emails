@@ -85,13 +85,15 @@ def send_email(
     """
     config = get_service_config()
 
-    # Normalize recipients to lists
-    if isinstance(to_email, str):
-        to_email = [to_email]
-    if cc and isinstance(cc, str):
-        cc = [cc]
-    if bcc and isinstance(bcc, str):
-        bcc = [bcc]
+    # Normalize and clean recipients
+    from emails.email_service.resend_client import clean_email_list
+
+    to_email = clean_email_list(to_email)
+    cc = clean_email_list(cc) if cc else None
+    bcc = clean_email_list(bcc) if bcc else None
+
+    if not to_email:
+        raise VercelEmailError(_("No valid recipient email addresses provided"))
 
     # Build request payload
     payload = {

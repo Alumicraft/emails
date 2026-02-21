@@ -19,6 +19,19 @@ import { Branding } from "../emails/shared";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ============================================================================
+// HELPERS
+// ============================================================================
+
+function cleanEmailList(input: string | string[] | undefined): string[] {
+  if (!input) return [];
+  const raw = Array.isArray(input) ? input : [input];
+  return raw
+    .flatMap((e) => e.split(","))
+    .map((e) => e.trim())
+    .filter((e) => e.length > 0 && e.includes("@"));
+}
+
+// ============================================================================
 // INTERFACES
 // ============================================================================
 
@@ -102,11 +115,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })
     );
 
+    const to = cleanEmailList(body.to);
+    if (to.length === 0) {
+      return res.status(400).json({ error: "No valid recipient email addresses" });
+    }
+    const cc = cleanEmailList(body.cc);
+    const bcc = cleanEmailList(body.bcc);
+
     const result = await resend.emails.send({
       from: body.from_name + " <" + body.from_email + ">",
-      to: Array.isArray(body.to) ? body.to : [body.to],
-      cc: body.cc ? (Array.isArray(body.cc) ? body.cc : [body.cc]) : undefined,
-      bcc: body.bcc ? (Array.isArray(body.bcc) ? body.bcc : [body.bcc]) : undefined,
+      to,
+      cc: cc.length > 0 ? cc : undefined,
+      bcc: bcc.length > 0 ? bcc : undefined,
       subject: body.subject,
       html,
       attachments: attachments.length > 0 ? attachments : undefined,

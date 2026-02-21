@@ -48599,7 +48599,7 @@ var PaymentRequestEmail = ({
       {
         className: "text-[24px] font-medium email-heading",
         style: { color: branding.text_color, marginTop: 0 },
-        children: "New Invoice"
+        children: "New Payment Request"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
@@ -48692,6 +48692,12 @@ var DocumentEmail = ({
 
 // src/send.tsx
 var resend = new Resend(process.env.RESEND_API_KEY);
+function cleanEmailList(input) {
+  if (!input)
+    return [];
+  const raw = Array.isArray(input) ? input : [input];
+  return raw.flatMap((e2) => e2.split(",")).map((e2) => e2.trim()).filter((e2) => e2.length > 0 && e2.includes("@"));
+}
 var templates = {
   "magic-link": MagicLinkEmail,
   "sales-invoice": SalesInvoiceEmail,
@@ -48737,11 +48743,17 @@ async function handler(req, res) {
         branding: { ...body.branding, logo_url: logoUrl }
       })
     );
+    const to4 = cleanEmailList(body.to);
+    if (to4.length === 0) {
+      return res.status(400).json({ error: "No valid recipient email addresses" });
+    }
+    const cc2 = cleanEmailList(body.cc);
+    const bcc = cleanEmailList(body.bcc);
     const result = await resend.emails.send({
       from: body.from_name + " <" + body.from_email + ">",
-      to: Array.isArray(body.to) ? body.to : [body.to],
-      cc: body.cc ? Array.isArray(body.cc) ? body.cc : [body.cc] : void 0,
-      bcc: body.bcc ? Array.isArray(body.bcc) ? body.bcc : [body.bcc] : void 0,
+      to: to4,
+      cc: cc2.length > 0 ? cc2 : void 0,
+      bcc: bcc.length > 0 ? bcc : void 0,
       subject: body.subject,
       html,
       attachments: attachments.length > 0 ? attachments : void 0,
