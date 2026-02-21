@@ -30,7 +30,7 @@ export const PaymentRequestEmail = ({
         className="text-[24px] font-medium email-heading"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
-        New Invoice
+        New Payment Request
       </Heading>
 
       <Text

@@ -101,7 +101,7 @@ def patched_sendmail(
         try:
             return _handle_document_email(
                 reference_doctype, reference_name, recipients,
-                cc=cc, bcc=bcc, message=message or content,
+                cc=cc, bcc=bcc,
             )
         except Exception as e:
             frappe.log_error(title="Document email via Vercel failed", message=str(e))
@@ -379,7 +379,7 @@ def _should_route_document_email(reference_doctype):
         return False
 
 
-def _handle_document_email(reference_doctype, reference_name, recipients, cc=None, bcc=None, message=None):
+def _handle_document_email(reference_doctype, reference_name, recipients, cc=None, bcc=None):
     """Route a document email through the generic email handler."""
     from emails.email_service.generic_email import send_document_email
 
@@ -390,7 +390,6 @@ def _handle_document_email(reference_doctype, reference_name, recipients, cc=Non
         to_email=to_email,
         cc=cc,
         bcc=bcc,
-        custom_message=message,
     )
 
 
