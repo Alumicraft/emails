@@ -179,6 +179,24 @@ cd templates
 npx email dev    # Opens react-email preview server
 ```
 
+## Send Email Button (`send_email_button.js`)
+
+The custom "Send Email" button appears on submitted documents for any doctype listed in `DOCTYPE_TEMPLATE_MAP`. It is controlled by:
+
+- **`check_doctype_email_enabled()`** in `api.py` — checks `Email Service Settings.enabled` and `resend_api_key`
+- **`get_email_supported_doctypes()`** in `api.py` — returns the list of doctypes from `DOCTYPE_TEMPLATE_MAP` so the JS can dynamically register form hooks
+- The JS fetches supported doctypes at page load and registers `frappe.ui.form.on()` handlers for each
+
+**Button behavior:**
+- Before first send: normal "Send Email" button
+- After first send: grey `btn-default` "Resend Email" button
+- Post-submit: confirmation dialog "Would you like to send an email?"
+- The standard Frappe "+ New Email" button is hidden for template-supported doctypes
+
+**Dialog fields:** Recipient Email (required), CC, BCC. No custom message field — templates handle content.
+
+**To add a new doctype to the button system:** just add it to `DOCTYPE_TEMPLATE_MAP` in `generic_email.py`. The JS dynamically picks it up — no JS change needed.
+
 ## Important Notes
 
 - `api/send.js` is a 1.9MB compiled bundle — never edit directly, always edit `src/send.tsx` or template files and rebuild

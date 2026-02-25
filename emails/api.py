@@ -207,9 +207,6 @@ def send_test_email(to_email):
 def check_doctype_email_enabled(doctype):
     """Check if email sending is enabled (service enabled and configured)."""
     try:
-        # Custom Send Email button disabled — using ERPNext's standard email flow
-        return {"enabled": False}
-
         settings = frappe.get_single("Email Service Settings")
 
         if not settings.enabled:
@@ -267,3 +264,11 @@ def get_document_recipient(doctype, docname):
     except Exception as e:
         frappe.log_error(title="Get Document Recipient Error", message=str(e))
         return {"email": None}
+
+
+@frappe.whitelist()
+def get_email_supported_doctypes():
+    """Return list of doctypes that have an email template configured."""
+    from emails.email_service.generic_email import DOCTYPE_TEMPLATE_MAP
+
+    return list(DOCTYPE_TEMPLATE_MAP.keys())

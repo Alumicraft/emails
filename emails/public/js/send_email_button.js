@@ -1,46 +1,13 @@
-// Send Email Button for supported doctypes
+// Send Email Button for doctypes with email templates
 // Shows popup after submit, and "Send Email" or "Resend Email" button based on status
 
 frappe.provide("emails");
 
-emails.SUPPORTED_DOCTYPES = [
-    "Quotation",
-    "Sales Order",
-    "Sales Invoice",
-    "Payment Entry",
-    "Purchase Order"
-];
-
-emails.check_email_sent = function(frm) {
-    // Check if an email was already sent for this document
-    return new Promise((resolve) => {
-        frappe.call({
-            method: "frappe.client.get_count",
-            args: {
-                doctype: "Communication",
-                filters: {
-                    reference_doctype: frm.doctype,
-                    reference_name: frm.doc.name,
-                    communication_medium: "Email",
-                    sent_or_received: "Sent"
-                }
-            },
-            async: false,
-            callback: function(r) {
-                resolve(r.message > 0);
-            }
-        });
-    });
-};
+emails.SUPPORTED_DOCTYPES = [];
 
 emails.setup_send_email_button = function(frm) {
     // Only show for submitted documents
     if (frm.doc.docstatus !== 1) {
-        return;
-    }
-
-    // Check if this doctype is supported
-    if (!emails.SUPPORTED_DOCTYPES.includes(frm.doctype)) {
         return;
     }
 
@@ -57,6 +24,9 @@ emails.setup_send_email_button = function(frm) {
         async: false,
         callback: function(r) {
             if (r.message && r.message.enabled) {
+                // Hide the standard email button in the timeline/activity section
+                emails.hide_standard_email_button(frm);
+
                 // Check if email was already sent
                 frappe.call({
                     method: "frappe.client.get_count",
@@ -76,6 +46,14 @@ emails.setup_send_email_button = function(frm) {
                         frm.add_custom_button(button_label, function() {
                             emails.show_send_email_dialog(frm);
                         });
+
+                        // Grey out the button for resend state
+                        if (email_sent) {
+                            frm.custom_buttons[__(button_label)]
+                                && frm.custom_buttons[__(button_label)]
+                                    .removeClass("btn-default btn-primary btn-secondary")
+                                    .addClass("btn-default");
+                        }
                     }
                 });
             }
@@ -83,12 +61,18 @@ emails.setup_send_email_button = function(frm) {
     });
 };
 
-emails.prompt_send_email_after_submit = function(frm) {
-    // Check if this doctype is supported
-    if (!emails.SUPPORTED_DOCTYPES.includes(frm.doctype)) {
-        return;
-    }
+emails.hide_standard_email_button = function(frm) {
+    // Hide the standard "+ New Email" button in the activity/timeline section
+    setTimeout(function() {
+        frm.$wrapper.find('.timeline-actions .btn-new-email, .comment-box .btn-new-email, .new-btn .btn-comment-email').hide();
+        frm.$wrapper.find('.reply-link, .reply-email-link').hide();
+        // Also hide the "New Email" action in the activity section
+        frm.$wrapper.find('.activity-actions .btn[data-action="new_email"]').hide();
+        frm.$wrapper.find('.timeline-item .action-btn[title="Reply"]').hide();
+    }, 500);
+};
 
+emails.prompt_send_email_after_submit = function(frm) {
     // Check if Resend is enabled and template is configured
     frappe.call({
         method: "emails.api.check_doctype_email_enabled",
@@ -98,7 +82,7 @@ emails.prompt_send_email_after_submit = function(frm) {
         callback: function(r) {
             if (r.message && r.message.enabled) {
                 frappe.confirm(
-                    __("Would you like to send an email to the customer?"),
+                    __("Would you like to send an email?"),
                     function() {
                         // Yes - show send email dialog
                         emails.show_send_email_dialog(frm);
@@ -141,9 +125,10 @@ emails.show_send_email_dialog = function(frm) {
                         options: "Email"
                     },
                     {
-                        fieldname: "custom_message",
-                        fieldtype: "Small Text",
-                        label: __("Additional Message (Optional)")
+                        fieldname: "bcc",
+                        fieldtype: "Data",
+                        label: __("BCC"),
+                        options: "Email"
                     }
                 ],
                 primary_action_label: __("Send"),
@@ -166,7 +151,7 @@ emails.send_document_email = function(frm, values) {
             docname: frm.doc.name,
             to_email: values.to_email,
             cc: values.cc,
-            custom_message: values.custom_message
+            bcc: values.bcc
         },
         freeze: true,
         freeze_message: __("Sending email..."),
@@ -189,8 +174,18 @@ emails.send_document_email = function(frm, values) {
     });
 };
 
-// Setup form hooks for all supported doctypes
+// Fetch supported doctypes from server and register form hooks dynamically
 $(document).ready(function() {
+    frappe.call({
+        method: "emails.api.get_email_supported_doctypes",
+        async: false,
+        callback: function(r) {
+            if (r.message && Array.isArray(r.message)) {
+                emails.SUPPORTED_DOCTYPES = r.message;
+            }
+        }
+    });
+
     emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
         frappe.ui.form.on(doctype, {
             refresh: function(frm) {
