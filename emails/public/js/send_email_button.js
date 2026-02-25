@@ -47,6 +47,14 @@ emails.setup_send_email_button = function(frm) {
                             emails.show_send_email_dialog(frm);
                         });
 
+                        // Style the Send Email button white
+                        if (!email_sent) {
+                            frm.custom_buttons[__(button_label)]
+                                && frm.custom_buttons[__(button_label)]
+                                    .removeClass("btn-default")
+                                    .addClass("btn-primary-light");
+                        }
+
                         // Grey out the button for resend state
                         if (email_sent) {
                             frm.custom_buttons[__(button_label)]
@@ -69,6 +77,10 @@ emails.hide_standard_email_button = function(frm) {
         // Also hide the "New Email" action in the activity section
         frm.$wrapper.find('.activity-actions .btn[data-action="new_email"]').hide();
         frm.$wrapper.find('.timeline-item .action-btn[title="Reply"]').hide();
+        // Hide "+ New Email" button in timeline action-buttons
+        frm.$wrapper.find('.action-buttons .action-btn').filter(function() {
+            return $(this).text().trim().indexOf("New Email") !== -1;
+        }).hide();
     }, 500);
 };
 
@@ -129,6 +141,11 @@ emails.show_send_email_dialog = function(frm) {
                         fieldtype: "Data",
                         label: __("BCC"),
                         options: "Email"
+                    },
+                    {
+                        fieldname: "custom_message",
+                        fieldtype: "Small Text",
+                        label: __("Custom Message")
                     }
                 ],
                 primary_action_label: __("Send"),
@@ -151,7 +168,8 @@ emails.send_document_email = function(frm, values) {
             docname: frm.doc.name,
             to_email: values.to_email,
             cc: values.cc,
-            bcc: values.bcc
+            bcc: values.bcc,
+            custom_message: values.custom_message
         },
         freeze: true,
         freeze_message: __("Sending email..."),
