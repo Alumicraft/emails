@@ -102,6 +102,15 @@ def send_document_email(
     # Generate PDF attachment
     attachments = generate_pdf_attachment(doctype, docname)
 
+    # For Payment Request, also attach the reference document's PDF
+    if doctype == "Payment Request" and getattr(doc, "reference_doctype", None) and getattr(doc, "reference_name", None):
+        ref_attachments = generate_pdf_attachment(doc.reference_doctype, doc.reference_name)
+        if ref_attachments:
+            if attachments:
+                attachments.extend(ref_attachments)
+            else:
+                attachments = ref_attachments
+
     # Check if Vercel service is configured
     use_vercel = bool(getattr(settings, "vercel_service_url", None))
 
