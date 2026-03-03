@@ -3,8 +3,6 @@
 
 frappe.provide("emails");
 
-emails.SUPPORTED_DOCTYPES = [];
-
 emails.setup_send_email_button = function(frm) {
     // Only show for submitted documents
     if (frm.doc.docstatus !== 1) {
@@ -189,26 +187,3 @@ emails.send_document_email = function(frm, values) {
         }
     });
 };
-
-// Fetch supported doctypes from server and register form hooks dynamically
-$(document).ready(function() {
-    frappe.call({
-        method: "emails.api.get_email_supported_doctypes",
-        callback: function(r) {
-            if (r.message && Array.isArray(r.message)) {
-                emails.SUPPORTED_DOCTYPES = r.message;
-
-                emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
-                    frappe.ui.form.on(doctype, {
-                        refresh: function(frm) {
-                            emails.setup_send_email_button(frm);
-                        },
-                        after_submit: function(frm) {
-                            emails.prompt_send_email_after_submit(frm);
-                        }
-                    });
-                });
-            }
-        }
-    });
-});
