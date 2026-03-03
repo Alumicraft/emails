@@ -23,6 +23,8 @@ emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
             emails.setup_send_email_button(frm);
         },
         after_submit: function(frm) {
+            // Payment Request auto-sends on submit via the override — skip prompt to avoid double-send
+            if (frm.doctype === "Payment Request") return;
             emails.prompt_send_email_after_submit(frm);
         }
     });
@@ -34,10 +36,6 @@ emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
 setInterval(function() {
     try {
         if (!cur_frm || !cur_frm.doc) return;
-        if (cur_frm.doctype === "Payment Request") {
-            console.log("[emails] setInterval: PR docstatus=" + cur_frm.doc.docstatus,
-                "custom_buttons=", Object.keys(cur_frm.custom_buttons || {}));
-        }
         if (cur_frm.doc.docstatus !== 1) return;
         if (emails.SUPPORTED_DOCTYPES.indexOf(cur_frm.doctype) === -1) return;
 
@@ -46,7 +44,6 @@ setInterval(function() {
 
         if (hasBtn) return;
 
-        console.log("[emails] setInterval: adding button for", cur_frm.doctype);
         emails._do_button_setup(cur_frm);
 
         // Remove ERPNext's native button AFTER our button is added
@@ -59,7 +56,6 @@ setInterval(function() {
 }, 2000);
 
 emails.setup_send_email_button = function(frm) {
-    console.log("[emails] setup_send_email_button called:", frm.doctype, "docstatus=" + frm.doc.docstatus);
     // Only show for submitted documents
     if (frm.doc.docstatus !== 1) {
         return;
@@ -68,7 +64,6 @@ emails.setup_send_email_button = function(frm) {
 };
 
 emails._do_button_setup = function(frm) {
-    console.log("[emails] _do_button_setup called:", frm.doctype);
     // Remove existing buttons (safe — no-op if button doesn't exist)
     emails._safe_remove_button(frm, "Send Email");
     emails._safe_remove_button(frm, "Resend Email");
@@ -85,8 +80,6 @@ emails._do_button_setup = function(frm) {
     });
 
     var btn = frm.custom_buttons[__("Send Email")];
-    console.log("[emails] after add_custom_button: btn exists=" + !!btn,
-        "all custom_buttons=", Object.keys(frm.custom_buttons || {}));
     if (btn) {
         btn.removeClass("btn-default").addClass("btn-primary-light");
     }
