@@ -21,7 +21,6 @@ emails.setup_send_email_button = function(frm) {
         args: {
             doctype: frm.doctype
         },
-        async: false,
         callback: function(r) {
             if (r.message && r.message.enabled) {
                 // Hide the standard email button in the timeline/activity section
@@ -39,7 +38,6 @@ emails.setup_send_email_button = function(frm) {
                             sent_or_received: "Sent"
                         }
                     },
-                    async: false,
                     callback: function(count_r) {
                         let email_sent = count_r.message > 0;
                         let button_label = email_sent ? __("Resend Email") : __("Send Email");
@@ -196,22 +194,21 @@ emails.send_document_email = function(frm, values) {
 $(document).ready(function() {
     frappe.call({
         method: "emails.api.get_email_supported_doctypes",
-        async: false,
         callback: function(r) {
             if (r.message && Array.isArray(r.message)) {
                 emails.SUPPORTED_DOCTYPES = r.message;
+
+                emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
+                    frappe.ui.form.on(doctype, {
+                        refresh: function(frm) {
+                            emails.setup_send_email_button(frm);
+                        },
+                        after_submit: function(frm) {
+                            emails.prompt_send_email_after_submit(frm);
+                        }
+                    });
+                });
             }
         }
-    });
-
-    emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
-        frappe.ui.form.on(doctype, {
-            refresh: function(frm) {
-                emails.setup_send_email_button(frm);
-            },
-            after_submit: function(frm) {
-                emails.prompt_send_email_after_submit(frm);
-            }
-        });
     });
 });
