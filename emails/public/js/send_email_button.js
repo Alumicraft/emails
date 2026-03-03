@@ -24,6 +24,22 @@ emails.setup_send_email_button = function(frm) {
         return;
     }
 
+    // Clear any pending retry
+    if (frm._email_btn_timer) clearTimeout(frm._email_btn_timer);
+
+    emails._do_button_setup(frm);
+
+    // Schedule a verification pass — handles forms where ERPNext's own
+    // async handlers clear custom buttons after ours are added (e.g. Payment Request)
+    frm._email_btn_timer = setTimeout(function() {
+        if (!frm.custom_buttons[__("Send Email")] &&
+            !frm.custom_buttons[__("Resend Email")]) {
+            emails._do_button_setup(frm);
+        }
+    }, 2000);
+};
+
+emails._do_button_setup = function(frm) {
     // Remove existing Send/Resend Email buttons first
     frm.remove_custom_button(__("Send Email"));
     frm.remove_custom_button(__("Resend Email"));
@@ -58,7 +74,7 @@ emails.setup_send_email_button = function(frm) {
                             emails.show_send_email_dialog(frm);
                         });
 
-                        // Style the Send Email button white
+                        // Style the Send Email button
                         if (!email_sent) {
                             frm.custom_buttons[__(button_label)]
                                 && frm.custom_buttons[__(button_label)]
@@ -131,7 +147,7 @@ emails.show_send_email_dialog = function(frm) {
             let default_email = r.message ? r.message.email : "";
 
             let dialog = new frappe.ui.Dialog({
-                title: __("Send Email via Resend"),
+                title: __("Send Email"),
                 fields: [
                     {
                         fieldname: "to_email",
