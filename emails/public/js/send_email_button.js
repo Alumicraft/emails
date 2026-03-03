@@ -3,6 +3,21 @@
 
 frappe.provide("emails");
 
+// Register form handlers for all supported doctypes
+// frappe.ui.form.on() just registers in a lookup table — safe to call at load time
+["Sales Invoice", "Quotation", "Sales Order", "Purchase Order",
+ "Request for Quotation", "Payment Request", "Payment Entry"
+].forEach(function(doctype) {
+    frappe.ui.form.on(doctype, {
+        refresh: function(frm) {
+            emails.setup_send_email_button(frm);
+        },
+        after_submit: function(frm) {
+            emails.prompt_send_email_after_submit(frm);
+        }
+    });
+});
+
 emails.setup_send_email_button = function(frm) {
     // Only show for submitted documents
     if (frm.doc.docstatus !== 1) {

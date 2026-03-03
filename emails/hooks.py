@@ -16,17 +16,6 @@ override_doctype_class = {
 # Include JS in desk
 app_include_js = "/assets/emails/js/send_email_button.js"
 
-# Per-doctype form handlers — loads at form init alongside ERPNext's own scripts
-doctype_js = {
-    "Sales Invoice": "public/js/email_form_handler.js",
-    "Quotation": "public/js/email_form_handler.js",
-    "Sales Order": "public/js/email_form_handler.js",
-    "Purchase Order": "public/js/email_form_handler.js",
-    "Request for Quotation": "public/js/email_form_handler.js",
-    "Payment Request": "public/js/email_form_handler.js",
-    "Payment Entry": "public/js/email_form_handler.js",
-}
-
 # Override the communication email make function to intercept BEFORE email is queued
 override_whitelisted_methods = {
     "frappe.core.doctype.communication.email.make": "emails.email_service.email_override.make_communication_email"

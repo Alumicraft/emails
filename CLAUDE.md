@@ -130,7 +130,7 @@ Maps doctypes to recipient resolution logic (which field holds the party, which 
 - `get_company_branding()` — Fetch branding from Email Service Settings
 
 ### Hooks overview
-- `doctype_js`: Loads `email_form_handler.js` for each supported doctype (registers refresh/after_submit handlers at form init time)
+- `app_include_js`: Loads `send_email_button.js` globally — registers form handlers for all supported doctypes synchronously at load time
 - `override_doctype_class`: PaymentRequest → CustomPaymentRequest
 - `override_whitelisted_methods`: Communication.email.make → custom handler
 - `on_session_creation`: Monkey-patches `frappe.sendmail` for system email routing
@@ -165,7 +165,7 @@ bench --site site.local install-app emails
 1. Create `templates/emails/{doctype-name}.tsx` following existing patterns
 2. Add component to template registry in `templates/src/send.tsx`
 3. Add doctype mapping in `generic_email.py` `DOCTYPE_TEMPLATE_MAP`
-4. Add doctype to `doctype_js` in `hooks.py` (for the Send Email button)
+4. Add doctype to the list in `send_email_button.js` (for the Send Email button)
 5. Add per-doctype prop mapping in `build_template_data()`
 6. Run `npm run build` in `templates/`
 
@@ -183,12 +183,11 @@ npx email dev    # Opens react-email preview server
 
 ## Send Email Button
 
-The custom "Send Email" button appears on submitted documents. Two JS files work together:
+The custom "Send Email" button appears on submitted documents. A single file handles everything:
 
-- **`send_email_button.js`** — Loaded globally via `app_include_js`. Defines the `emails.*` functions (setup button, show dialog, send email, etc.)
-- **`email_form_handler.js`** — Loaded per-doctype via `doctype_js` hook. Registers `refresh` and `after_submit` handlers that call the global functions.
+- **`send_email_button.js`** — Loaded globally via `app_include_js`. Registers `refresh` and `after_submit` handlers for all supported doctypes synchronously at load time, then defines the `emails.*` functions (setup button, show dialog, send email, etc.)
 
-Using `doctype_js` ensures handlers are registered at form init time (alongside ERPNext's own scripts), avoiding timing issues with ERPNext's "Create" button dropdown.
+`frappe.ui.form.on()` just registers handlers in a lookup table — it doesn't need the form to exist. Calling it synchronously at script load time is safe, avoids all timing issues, and doesn't interfere with ERPNext's own handlers (including the "Create" button dropdown).
 
 **Button behavior:**
 - Before first send: normal "Send Email" button
@@ -198,7 +197,7 @@ Using `doctype_js` ensures handlers are registered at form init time (alongside 
 
 **Dialog fields:** Recipient Email (required), CC, BCC, Custom Message.
 
-**To add a new doctype to the button system:** add to BOTH `DOCTYPE_TEMPLATE_MAP` in `generic_email.py` AND `doctype_js` in `hooks.py`.
+**To add a new doctype to the button system:** add to BOTH `DOCTYPE_TEMPLATE_MAP` in `generic_email.py` AND the doctype list in `send_email_button.js`.
 
 ## Important Notes
 
