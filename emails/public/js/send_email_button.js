@@ -1,5 +1,6 @@
 // Send Email Button for doctypes with email templates
-// Shows popup after submit, and "Send Email" or "Resend Email" button based on status
+// Shows "Send Email" or "Resend Email" button on submitted documents
+// v2 — 2025-06-02: removed async service check, fully synchronous button setup
 
 frappe.provide("emails");
 
@@ -8,23 +9,7 @@ emails.SUPPORTED_DOCTYPES = [
     "Request for Quotation", "Payment Request", "Payment Entry"
 ];
 
-// Cache the enabled check at load time to avoid async calls on every button setup
-emails._service_enabled = null;
-
-frappe.call({
-    method: "emails.api.check_doctype_email_enabled",
-    args: { doctype: "Sales Invoice" },
-    callback: function(r) {
-        emails._service_enabled = !!(r.message && r.message.enabled);
-        console.log("[emails] service enabled:", emails._service_enabled);
-    },
-    error: function(e) {
-        emails._service_enabled = false;
-        console.log("[emails] service enabled check FAILED:", e);
-    }
-});
-
-// Primary: register form handlers for all supported doctypes
+// Register form handlers for all supported doctypes
 // frappe.ui.form.on() just registers in a lookup table — safe to call at load time
 emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
     frappe.ui.form.on(doctype, {
@@ -54,17 +39,11 @@ setInterval(function() {
         var hasBtn = !!(cur_frm.custom_buttons[__("Send Email")] ||
             cur_frm.custom_buttons[__("Resend Email")]);
 
-        if (cur_frm.doctype === "Payment Request") {
-            console.log("[emails] interval tick — PR docstatus:", cur_frm.doc.docstatus,
-                "hasBtn:", hasBtn, "enabled:", emails._service_enabled,
-                "buttons:", Object.keys(cur_frm.custom_buttons));
-        }
-
         if (hasBtn) return;
 
         emails._do_button_setup(cur_frm);
     } catch(e) {
-        console.warn("[emails] setInterval error:", e);
+        // silently ignore
     }
 }, 2000);
 
@@ -77,19 +56,6 @@ emails.setup_send_email_button = function(frm) {
 };
 
 emails._do_button_setup = function(frm) {
-    console.log("[emails] _do_button_setup called for", frm.doctype, frm.doc.name,
-        "enabled:", emails._service_enabled);
-
-    // Use cached enabled check — don't make an API call
-    if (emails._service_enabled === false) {
-        console.log("[emails] SKIP: service disabled");
-        return;
-    }
-    if (emails._service_enabled === null) {
-        console.log("[emails] SKIP: service still loading");
-        return;
-    }
-
     // Remove existing buttons
     frm.remove_custom_button(__("Send Email"));
     frm.remove_custom_button(__("Resend Email"));
@@ -100,19 +66,14 @@ emails._do_button_setup = function(frm) {
     // Hide standard email button
     emails.hide_standard_email_button(frm);
 
-    // Add button SYNCHRONOUSLY — don't gate on async call
+    // Add button synchronously — server validates on send
     frm.add_custom_button(__("Send Email"), function() {
         emails.show_send_email_dialog(frm);
     });
 
-    var btnAdded = !!frm.custom_buttons[__("Send Email")];
-    console.log("[emails] add_custom_button result — in custom_buttons:", btnAdded,
-        "buttons after:", Object.keys(frm.custom_buttons));
-
-    if (btnAdded) {
-        frm.custom_buttons[__("Send Email")]
-            .removeClass("btn-default")
-            .addClass("btn-primary-light");
+    var btn = frm.custom_buttons[__("Send Email")];
+    if (btn) {
+        btn.removeClass("btn-default").addClass("btn-primary-light");
     }
 
     // Async: update label to "Resend" if email was already sent
@@ -128,16 +89,12 @@ emails._do_button_setup = function(frm) {
             }
         },
         callback: function(count_r) {
-            console.log("[emails] get_count result:", count_r.message);
             if (count_r.message > 0 && frm.custom_buttons[__("Send Email")]) {
                 frm.remove_custom_button(__("Send Email"));
                 frm.add_custom_button(__("Resend Email"), function() {
                     emails.show_send_email_dialog(frm);
                 });
             }
-        },
-        error: function(e) {
-            console.warn("[emails] get_count FAILED:", e);
         }
     });
 };
