@@ -8,6 +8,20 @@ emails.SUPPORTED_DOCTYPES = [
     "Request for Quotation", "Payment Request", "Payment Entry"
 ];
 
+// Cache the enabled check at load time to avoid async calls on every button setup
+emails._service_enabled = null;
+
+frappe.call({
+    method: "emails.api.check_doctype_email_enabled",
+    args: { doctype: "Sales Invoice" },
+    callback: function(r) {
+        emails._service_enabled = !!(r.message && r.message.enabled);
+    },
+    error: function() {
+        emails._service_enabled = false;
+    }
+});
+
 // Primary: register form handlers for all supported doctypes
 // frappe.ui.form.on() just registers in a lookup table — safe to call at load time
 emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
@@ -28,18 +42,22 @@ setInterval(function() {
     try {
         if (!cur_frm || !cur_frm.doc || cur_frm.doc.docstatus !== 1) return;
         if (emails.SUPPORTED_DOCTYPES.indexOf(cur_frm.doctype) === -1) return;
-        // Skip if button already exists
+
+        // ALWAYS remove ERPNext's button (unconditional)
+        if (cur_frm.doctype === "Payment Request") {
+            cur_frm.remove_custom_button(__("Resend Payment Email"));
+        }
+
+        // Skip if our button already exists
         if (cur_frm.custom_buttons[__("Send Email")] ||
             cur_frm.custom_buttons[__("Resend Email")]) {
-            // Still remove ERPNext's button if present
-            if (cur_frm.doctype === "Payment Request" &&
-                cur_frm.custom_buttons[__("Resend Payment Email")]) {
-                cur_frm.remove_custom_button(__("Resend Payment Email"));
-            }
             return;
         }
+
         emails._do_button_setup(cur_frm);
-    } catch(e) {}
+    } catch(e) {
+        console.warn("emails setInterval:", e);
+    }
 }, 2000);
 
 emails.setup_send_email_button = function(frm) {
@@ -51,63 +69,57 @@ emails.setup_send_email_button = function(frm) {
 };
 
 emails._do_button_setup = function(frm) {
-    // Remove existing Send/Resend Email buttons first
+    // Use cached enabled check — don't make an API call
+    if (emails._service_enabled === false) return;
+    if (emails._service_enabled === null) return; // Still loading, retry next tick
+
+    // Remove existing buttons
     frm.remove_custom_button(__("Send Email"));
     frm.remove_custom_button(__("Resend Email"));
-
-    // Hide ERPNext's built-in "Resend Payment Email" button on Payment Request
     if (frm.doctype === "Payment Request") {
         frm.remove_custom_button(__("Resend Payment Email"));
     }
 
-    // Check if Resend is enabled and template is configured for this doctype
+    // Hide standard email button
+    emails.hide_standard_email_button(frm);
+
+    // Single async call: check if email was already sent (for label)
     frappe.call({
-        method: "emails.api.check_doctype_email_enabled",
+        method: "frappe.client.get_count",
         args: {
-            doctype: frm.doctype
-        },
-        callback: function(r) {
-            if (r.message && r.message.enabled) {
-                // Hide the standard email button in the timeline/activity section
-                emails.hide_standard_email_button(frm);
-
-                // Check if email was already sent
-                frappe.call({
-                    method: "frappe.client.get_count",
-                    args: {
-                        doctype: "Communication",
-                        filters: {
-                            reference_doctype: frm.doctype,
-                            reference_name: frm.doc.name,
-                            communication_medium: "Email",
-                            sent_or_received: "Sent"
-                        }
-                    },
-                    callback: function(count_r) {
-                        let email_sent = count_r.message > 0;
-                        let button_label = email_sent ? __("Resend Email") : __("Send Email");
-                        frm.add_custom_button(button_label, function() {
-                            emails.show_send_email_dialog(frm);
-                        });
-
-                        // Style the Send Email button
-                        if (!email_sent) {
-                            frm.custom_buttons[__(button_label)]
-                                && frm.custom_buttons[__(button_label)]
-                                    .removeClass("btn-default")
-                                    .addClass("btn-primary-light");
-                        }
-
-                        // Grey out the button for resend state
-                        if (email_sent) {
-                            frm.custom_buttons[__(button_label)]
-                                && frm.custom_buttons[__(button_label)]
-                                    .removeClass("btn-default btn-primary btn-secondary")
-                                    .addClass("btn-default");
-                        }
-                    }
-                });
+            doctype: "Communication",
+            filters: {
+                reference_doctype: frm.doctype,
+                reference_name: frm.doc.name,
+                communication_medium: "Email",
+                sent_or_received: "Sent"
             }
+        },
+        callback: function(count_r) {
+            var email_sent = count_r.message > 0;
+            var button_label = email_sent ? __("Resend Email") : __("Send Email");
+            frm.add_custom_button(button_label, function() {
+                emails.show_send_email_dialog(frm);
+            });
+
+            // Style: primary-light for first send, default for resend
+            if (!email_sent) {
+                frm.custom_buttons[__(button_label)]
+                    && frm.custom_buttons[__(button_label)]
+                        .removeClass("btn-default")
+                        .addClass("btn-primary-light");
+            }
+        },
+        error: function() {
+            // If count check fails, still add button with default label
+            console.warn("emails: Communication count failed, adding button anyway");
+            frm.add_custom_button(__("Send Email"), function() {
+                emails.show_send_email_dialog(frm);
+            });
+            frm.custom_buttons[__("Send Email")]
+                && frm.custom_buttons[__("Send Email")]
+                    .removeClass("btn-default")
+                    .addClass("btn-primary-light");
         }
     });
 };
