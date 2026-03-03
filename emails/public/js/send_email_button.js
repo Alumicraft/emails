@@ -1,6 +1,6 @@
 // Send Email Button for doctypes with email templates
 // Shows "Send Email" or "Resend Email" button on submitted documents
-// v2 — 2025-06-02: removed async service check, fully synchronous button setup
+// v3 — uses DOM checks for robust button detection on Payment Request
 
 frappe.provide("emails");
 
@@ -13,6 +13,15 @@ emails._safe_remove_button = function(frm, label) {
     if (frm.custom_buttons[__(label)]) {
         frm.remove_custom_button(__(label));
     }
+};
+
+// Check if our button is actually visible in the DOM (not just a stale reference)
+emails._has_button_in_dom = function(frm) {
+    var sendBtn = frm.custom_buttons[__("Send Email")];
+    var resendBtn = frm.custom_buttons[__("Resend Email")];
+    var sendInDom = sendBtn && sendBtn.length && $.contains(document.documentElement, sendBtn[0]);
+    var resendInDom = resendBtn && resendBtn.length && $.contains(document.documentElement, resendBtn[0]);
+    return sendInDom || resendInDom;
 };
 
 // Register form handlers for all supported doctypes
@@ -30,19 +39,20 @@ emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
     });
 });
 
-// Fallback: Client Scripts can overwrite frappe.ui.form.on() handlers.
-// This periodic check ensures the button appears even when our refresh handler
-// is replaced by another script (e.g. a grid-row-fix Client Script on Payment Request).
+// Fallback: ERPNext's Payment Request refresh handler (or Client Scripts) can remove
+// our buttons after our refresh handler runs. This periodic check verifies the button
+// is actually in the DOM (not just a stale jQuery ref in custom_buttons) and re-adds it.
 setInterval(function() {
     try {
         if (!cur_frm || !cur_frm.doc) return;
         if (cur_frm.doc.docstatus !== 1) return;
         if (emails.SUPPORTED_DOCTYPES.indexOf(cur_frm.doctype) === -1) return;
 
-        var hasBtn = !!(cur_frm.custom_buttons[__("Send Email")] ||
-            cur_frm.custom_buttons[__("Resend Email")]);
+        if (emails._has_button_in_dom(cur_frm)) return;
 
-        if (hasBtn) return;
+        // Clean up stale references before re-adding
+        delete cur_frm.custom_buttons[__("Send Email")];
+        delete cur_frm.custom_buttons[__("Resend Email")];
 
         emails._do_button_setup(cur_frm);
 
@@ -60,7 +70,12 @@ emails.setup_send_email_button = function(frm) {
     if (frm.doc.docstatus !== 1) {
         return;
     }
-    emails._do_button_setup(frm);
+    // Delay slightly for Payment Request so we run AFTER ERPNext's own refresh handler
+    if (frm.doctype === "Payment Request") {
+        setTimeout(function() { emails._do_button_setup(frm); }, 500);
+    } else {
+        emails._do_button_setup(frm);
+    }
 };
 
 emails._do_button_setup = function(frm) {
