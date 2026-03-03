@@ -3,11 +3,14 @@
 
 frappe.provide("emails");
 
-// Register form handlers for all supported doctypes
+emails.SUPPORTED_DOCTYPES = [
+    "Sales Invoice", "Quotation", "Sales Order", "Purchase Order",
+    "Request for Quotation", "Payment Request", "Payment Entry"
+];
+
+// Primary: register form handlers for all supported doctypes
 // frappe.ui.form.on() just registers in a lookup table — safe to call at load time
-["Sales Invoice", "Quotation", "Sales Order", "Purchase Order",
- "Request for Quotation", "Payment Request", "Payment Entry"
-].forEach(function(doctype) {
+emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
     frappe.ui.form.on(doctype, {
         refresh: function(frm) {
             emails.setup_send_email_button(frm);
@@ -18,28 +21,33 @@ frappe.provide("emails");
     });
 });
 
+// Fallback: Client Scripts can overwrite frappe.ui.form.on() handlers.
+// This periodic check ensures the button appears even when our refresh handler
+// is replaced by another script (e.g. a grid-row-fix Client Script on Payment Request).
+setInterval(function() {
+    try {
+        if (!cur_frm || !cur_frm.doc || cur_frm.doc.docstatus !== 1) return;
+        if (emails.SUPPORTED_DOCTYPES.indexOf(cur_frm.doctype) === -1) return;
+        // Skip if button already exists
+        if (cur_frm.custom_buttons[__("Send Email")] ||
+            cur_frm.custom_buttons[__("Resend Email")]) {
+            // Still remove ERPNext's button if present
+            if (cur_frm.doctype === "Payment Request" &&
+                cur_frm.custom_buttons[__("Resend Payment Email")]) {
+                cur_frm.remove_custom_button(__("Resend Payment Email"));
+            }
+            return;
+        }
+        emails._do_button_setup(cur_frm);
+    } catch(e) {}
+}, 2000);
+
 emails.setup_send_email_button = function(frm) {
     // Only show for submitted documents
     if (frm.doc.docstatus !== 1) {
         return;
     }
-
-    // Clear any pending retry
-    if (frm._email_btn_timer) clearTimeout(frm._email_btn_timer);
-
     emails._do_button_setup(frm);
-
-    // Schedule a verification pass — handles forms where ERPNext's own
-    // async handlers clear custom buttons after ours are added (e.g. Payment Request)
-    frm._email_btn_timer = setTimeout(function() {
-        var missing_button = !frm.custom_buttons[__("Send Email")] &&
-            !frm.custom_buttons[__("Resend Email")];
-        var erpnext_button = frm.doctype === "Payment Request" &&
-            frm.custom_buttons[__("Resend Payment Email")];
-        if (missing_button || erpnext_button) {
-            emails._do_button_setup(frm);
-        }
-    }, 2000);
 };
 
 emails._do_button_setup = function(frm) {
