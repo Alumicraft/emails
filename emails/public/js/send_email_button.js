@@ -16,9 +16,11 @@ frappe.call({
     args: { doctype: "Sales Invoice" },
     callback: function(r) {
         emails._service_enabled = !!(r.message && r.message.enabled);
+        console.log("[emails] service enabled:", emails._service_enabled);
     },
-    error: function() {
+    error: function(e) {
         emails._service_enabled = false;
+        console.log("[emails] service enabled check FAILED:", e);
     }
 });
 
@@ -40,7 +42,8 @@ emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
 // is replaced by another script (e.g. a grid-row-fix Client Script on Payment Request).
 setInterval(function() {
     try {
-        if (!cur_frm || !cur_frm.doc || cur_frm.doc.docstatus !== 1) return;
+        if (!cur_frm || !cur_frm.doc) return;
+        if (cur_frm.doc.docstatus !== 1) return;
         if (emails.SUPPORTED_DOCTYPES.indexOf(cur_frm.doctype) === -1) return;
 
         // ALWAYS remove ERPNext's button (unconditional)
@@ -48,15 +51,20 @@ setInterval(function() {
             cur_frm.remove_custom_button(__("Resend Payment Email"));
         }
 
-        // Skip if our button already exists
-        if (cur_frm.custom_buttons[__("Send Email")] ||
-            cur_frm.custom_buttons[__("Resend Email")]) {
-            return;
+        var hasBtn = !!(cur_frm.custom_buttons[__("Send Email")] ||
+            cur_frm.custom_buttons[__("Resend Email")]);
+
+        if (cur_frm.doctype === "Payment Request") {
+            console.log("[emails] interval tick — PR docstatus:", cur_frm.doc.docstatus,
+                "hasBtn:", hasBtn, "enabled:", emails._service_enabled,
+                "buttons:", Object.keys(cur_frm.custom_buttons));
         }
+
+        if (hasBtn) return;
 
         emails._do_button_setup(cur_frm);
     } catch(e) {
-        console.warn("emails setInterval:", e);
+        console.warn("[emails] setInterval error:", e);
     }
 }, 2000);
 
@@ -69,9 +77,18 @@ emails.setup_send_email_button = function(frm) {
 };
 
 emails._do_button_setup = function(frm) {
+    console.log("[emails] _do_button_setup called for", frm.doctype, frm.doc.name,
+        "enabled:", emails._service_enabled);
+
     // Use cached enabled check — don't make an API call
-    if (emails._service_enabled === false) return;
-    if (emails._service_enabled === null) return; // Still loading, retry next tick
+    if (emails._service_enabled === false) {
+        console.log("[emails] SKIP: service disabled");
+        return;
+    }
+    if (emails._service_enabled === null) {
+        console.log("[emails] SKIP: service still loading");
+        return;
+    }
 
     // Remove existing buttons
     frm.remove_custom_button(__("Send Email"));
@@ -87,10 +104,16 @@ emails._do_button_setup = function(frm) {
     frm.add_custom_button(__("Send Email"), function() {
         emails.show_send_email_dialog(frm);
     });
-    frm.custom_buttons[__("Send Email")]
-        && frm.custom_buttons[__("Send Email")]
+
+    var btnAdded = !!frm.custom_buttons[__("Send Email")];
+    console.log("[emails] add_custom_button result — in custom_buttons:", btnAdded,
+        "buttons after:", Object.keys(frm.custom_buttons));
+
+    if (btnAdded) {
+        frm.custom_buttons[__("Send Email")]
             .removeClass("btn-default")
             .addClass("btn-primary-light");
+    }
 
     // Async: update label to "Resend" if email was already sent
     frappe.call({
@@ -105,12 +128,16 @@ emails._do_button_setup = function(frm) {
             }
         },
         callback: function(count_r) {
+            console.log("[emails] get_count result:", count_r.message);
             if (count_r.message > 0 && frm.custom_buttons[__("Send Email")]) {
                 frm.remove_custom_button(__("Send Email"));
                 frm.add_custom_button(__("Resend Email"), function() {
                     emails.show_send_email_dialog(frm);
                 });
             }
+        },
+        error: function(e) {
+            console.warn("[emails] get_count FAILED:", e);
         }
     });
 };
