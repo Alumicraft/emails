@@ -205,3 +205,30 @@ The custom "Send Email" button appears on submitted documents. A single file han
 - The `custom_message` prop on templates is for user-provided messages only — do not pass ERPNext-rendered HTML through it (it gets escaped by React)
 - `items` data is extracted by `build_template_data()` but not currently rendered by any template — it's available for future use
 - Payment Request subject uses the reference document number (e.g., "Invoice SINV-001 from Company") rather than Payment Request name
+
+## Known Issues / Changelog
+
+### Send Email button not appearing on Payment Request (ongoing)
+
+**Bug:** The custom "Send Email" button does not appear on submitted Payment Request documents, despite working on other doctypes (Sales Invoice, Quotation, etc.).
+
+**What's been tried and ruled out:**
+- **Async `_service_enabled` gate** — Was blocking button setup if the API call to check Email Service Settings hadn't returned yet. Removed; button setup is now fully synchronous. (`bb00e05`)
+- **Debug `console.log` statements** — Added during investigation, then cleaned up. (`921fd25`, `89af1cc`)
+- **Service check dependency** — Made button setup independent of the service enabled check so the button renders regardless. (`da3f398`)
+- **`setInterval` fallback** — Added polling every 2 seconds as a backup mechanism to attach the button if initial setup misses it. (`156d0a0`)
+- **Cleanup commit** — Removed all debug logging and consolidated fixes. (`156d0a0`)
+
+**Remaining suspects:**
+1. **Conflicting Client Script** — A site-level Client Script on Payment Request may be interfering with or overriding the button setup
+2. **Asset caching** — The browser or Frappe asset pipeline may be serving a stale version of `send_email_button.js`
+3. **Permission issue** — Payment Request may have different permission rules that prevent the button from rendering
+4. **ERPNext Payment Request handlers** — ERPNext's own Payment Request form logic (which adds its own "Send SMS", "Create Payment Entry" buttons) may be overriding or clearing custom buttons added by the hook
+
+**Related commits:** `156d0a0`, `bb00e05`, `921fd25`, `89af1cc`, `da3f398`
+
+**Next steps for debugging:**
+- Check for any Client Scripts on Payment Request in the ERPNext site (`/app/client-script?doctype=Payment+Request`)
+- Hard-refresh browser and clear Frappe cache (`bench clear-cache`)
+- Inspect the browser console on a submitted Payment Request to verify `send_email_button.js` is executing
+- Check if `frappe.ui.form.on("Payment Request", ...)` handlers are being registered but then overwritten by ERPNext's own handlers

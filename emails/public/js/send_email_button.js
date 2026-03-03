@@ -9,6 +9,12 @@ emails.SUPPORTED_DOCTYPES = [
     "Request for Quotation", "Payment Request", "Payment Entry"
 ];
 
+emails._safe_remove_button = function(frm, label) {
+    if (frm.custom_buttons[__(label)]) {
+        frm.remove_custom_button(__(label));
+    }
+};
+
 // Register form handlers for all supported doctypes
 // frappe.ui.form.on() just registers in a lookup table — safe to call at load time
 emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
@@ -31,19 +37,19 @@ setInterval(function() {
         if (cur_frm.doc.docstatus !== 1) return;
         if (emails.SUPPORTED_DOCTYPES.indexOf(cur_frm.doctype) === -1) return;
 
-        // ALWAYS remove ERPNext's button (unconditional)
-        if (cur_frm.doctype === "Payment Request") {
-            cur_frm.remove_custom_button(__("Resend Payment Email"));
-        }
-
         var hasBtn = !!(cur_frm.custom_buttons[__("Send Email")] ||
             cur_frm.custom_buttons[__("Resend Email")]);
 
         if (hasBtn) return;
 
         emails._do_button_setup(cur_frm);
+
+        // Remove ERPNext's native button AFTER our button is added
+        if (cur_frm.doctype === "Payment Request") {
+            emails._safe_remove_button(cur_frm, "Resend Payment Email");
+        }
     } catch(e) {
-        // silently ignore
+        console.warn("emails: setInterval fallback error", e);
     }
 }, 2000);
 
@@ -56,11 +62,11 @@ emails.setup_send_email_button = function(frm) {
 };
 
 emails._do_button_setup = function(frm) {
-    // Remove existing buttons
-    frm.remove_custom_button(__("Send Email"));
-    frm.remove_custom_button(__("Resend Email"));
+    // Remove existing buttons (safe — no-op if button doesn't exist)
+    emails._safe_remove_button(frm, "Send Email");
+    emails._safe_remove_button(frm, "Resend Email");
     if (frm.doctype === "Payment Request") {
-        frm.remove_custom_button(__("Resend Payment Email"));
+        emails._safe_remove_button(frm, "Resend Payment Email");
     }
 
     // Hide standard email button
