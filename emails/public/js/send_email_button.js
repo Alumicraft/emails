@@ -83,7 +83,16 @@ emails._do_button_setup = function(frm) {
     // Hide standard email button
     emails.hide_standard_email_button(frm);
 
-    // Single async call: check if email was already sent (for label)
+    // Add button SYNCHRONOUSLY — don't gate on async call
+    frm.add_custom_button(__("Send Email"), function() {
+        emails.show_send_email_dialog(frm);
+    });
+    frm.custom_buttons[__("Send Email")]
+        && frm.custom_buttons[__("Send Email")]
+            .removeClass("btn-default")
+            .addClass("btn-primary-light");
+
+    // Async: update label to "Resend" if email was already sent
     frappe.call({
         method: "frappe.client.get_count",
         args: {
@@ -96,30 +105,12 @@ emails._do_button_setup = function(frm) {
             }
         },
         callback: function(count_r) {
-            var email_sent = count_r.message > 0;
-            var button_label = email_sent ? __("Resend Email") : __("Send Email");
-            frm.add_custom_button(button_label, function() {
-                emails.show_send_email_dialog(frm);
-            });
-
-            // Style: primary-light for first send, default for resend
-            if (!email_sent) {
-                frm.custom_buttons[__(button_label)]
-                    && frm.custom_buttons[__(button_label)]
-                        .removeClass("btn-default")
-                        .addClass("btn-primary-light");
+            if (count_r.message > 0 && frm.custom_buttons[__("Send Email")]) {
+                frm.remove_custom_button(__("Send Email"));
+                frm.add_custom_button(__("Resend Email"), function() {
+                    emails.show_send_email_dialog(frm);
+                });
             }
-        },
-        error: function() {
-            // If count check fails, still add button with default label
-            console.warn("emails: Communication count failed, adding button anyway");
-            frm.add_custom_button(__("Send Email"), function() {
-                emails.show_send_email_dialog(frm);
-            });
-            frm.custom_buttons[__("Send Email")]
-                && frm.custom_buttons[__("Send Email")]
-                    .removeClass("btn-default")
-                    .addClass("btn-primary-light");
         }
     });
 };
