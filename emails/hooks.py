@@ -21,10 +21,13 @@ override_whitelisted_methods = {
     "frappe.core.doctype.communication.email.make": "emails.email_service.email_override.make_communication_email"
 }
 
-# Document Events - for webhook status updates
+# Document Events
 doc_events = {
     "Communication": {
         "on_update": "emails.email_service.email_override.on_communication_update"
+    },
+    "Payment Request": {
+        "on_submit": "emails.email_service.payment_request_override.on_payment_request_submit"
     }
 }
 
