@@ -26,9 +26,6 @@ doc_events = {
     "Communication": {
         "on_update": "emails.email_service.email_override.on_communication_update"
     },
-    "Payment Request": {
-        "on_submit": "emails.email_service.payment_request_override.on_payment_request_submit"
-    }
 }
 
 # Session creation hook - override sendmail for system emails
