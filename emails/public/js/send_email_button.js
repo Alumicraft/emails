@@ -32,8 +32,11 @@ emails.setup_send_email_button = function(frm) {
     // Schedule a verification pass — handles forms where ERPNext's own
     // async handlers clear custom buttons after ours are added (e.g. Payment Request)
     frm._email_btn_timer = setTimeout(function() {
-        if (!frm.custom_buttons[__("Send Email")] &&
-            !frm.custom_buttons[__("Resend Email")]) {
+        var missing_button = !frm.custom_buttons[__("Send Email")] &&
+            !frm.custom_buttons[__("Resend Email")];
+        var erpnext_button = frm.doctype === "Payment Request" &&
+            frm.custom_buttons[__("Resend Payment Email")];
+        if (missing_button || erpnext_button) {
             emails._do_button_setup(frm);
         }
     }, 2000);
@@ -43,6 +46,11 @@ emails._do_button_setup = function(frm) {
     // Remove existing Send/Resend Email buttons first
     frm.remove_custom_button(__("Send Email"));
     frm.remove_custom_button(__("Resend Email"));
+
+    // Hide ERPNext's built-in "Resend Payment Email" button on Payment Request
+    if (frm.doctype === "Payment Request") {
+        frm.remove_custom_button(__("Resend Payment Email"));
+    }
 
     // Check if Resend is enabled and template is configured for this doctype
     frappe.call({
