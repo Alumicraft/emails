@@ -318,6 +318,10 @@ def resolve_recipient_email(doc):
         if recipient_field:
             party_name = getattr(doc, recipient_field, None)
             if party_name:
+                # If the field value is already an email address, return it directly
+                if "@" in str(party_name):
+                    return party_name
+
                 # Handle Payment Entry special case where party_type is dynamic
                 if not recipient_doctype and hasattr(doc, "party_type"):
                     recipient_doctype = doc.party_type
@@ -326,11 +330,6 @@ def resolve_recipient_email(doc):
                     email = get_party_email(recipient_doctype, party_name)
                     if email:
                         return email
-
-                # If recipient_doctype is None (e.g., Payment Request email_to field),
-                # the field itself might be an email
-                if not recipient_doctype and party_name and "@" in str(party_name):
-                    return party_name
 
     # Fallback to legacy email resolution
     recipients = get_email_recipients_from_doc(doc)
