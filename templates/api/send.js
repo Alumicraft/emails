@@ -48647,7 +48647,6 @@ var PaymentEntryEmail = ({
   reference_no,
   paid_amount,
   applied_to,
-  remarks,
   custom_message
 }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(Layout, { branding, children: [
@@ -48674,11 +48673,6 @@ var PaymentEntryEmail = ({
       reference_no && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: "Reference No.", value: reference_no }),
       applied_to && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: "Applied To", value: applied_to }),
       /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoAmount, { branding, label: "Amount Paid", value: paid_amount })
-    ] }),
-    remarks && /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(Text3, { style: { color: branding.text_color, fontSize: "14px", lineHeight: "1.6", marginBottom: "16px" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("strong", { children: "Remarks:" }),
-      " ",
-      remarks
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
     /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(

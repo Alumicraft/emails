@@ -625,7 +625,6 @@ def build_template_data(doc, doctype, company_info, custom_message=None):
             data["applied_to"] = ", ".join(
                 ref.reference_name for ref in doc.references if ref.reference_name
             )
-        data["remarks"] = getattr(doc, "remarks", "") or ""
 
     return data
 

@@ -406,7 +406,6 @@ def send_test_email(template="magic-link"):
                 "reference_no": "TXN-123456",
                 "paid_amount": "$1,250.00",
                 "applied_to": "SINV-TEST-001, SINV-TEST-002",
-                "remarks": "Payment for January services",
             },
         },
         "document": {

@@ -11,7 +11,7 @@ export interface PaymentEntryEmailProps {
   reference_no?: string;
   paid_amount: string;
   applied_to?: string;
-  remarks?: string;
+
   custom_message?: string;
 }
 
@@ -23,7 +23,6 @@ export const PaymentEntryEmail = ({
   reference_no,
   paid_amount,
   applied_to,
-  remarks,
   custom_message,
 }: PaymentEntryEmailProps) => {
   return (
@@ -50,12 +49,6 @@ export const PaymentEntryEmail = ({
         {applied_to && <InfoRow branding={branding} label="Applied To" value={applied_to} />}
         <InfoAmount branding={branding} label="Amount Paid" value={paid_amount} />
       </InfoCard>
-
-      {remarks && (
-        <Text style={{ color: branding.text_color, fontSize: "14px", lineHeight: "1.6", marginBottom: "16px" }}>
-          <strong>Remarks:</strong> {remarks}
-        </Text>
-      )}
 
       {custom_message && (
         <Text style={{ color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }}>
@@ -102,7 +95,6 @@ export default function PaymentEntryEmailPreview() {
       reference_no="TXN-987654"
       paid_amount="$1,250.00"
       applied_to="SINV-2025-001, SINV-2025-002"
-      remarks="Payment for January services"
     />
   );
 }
