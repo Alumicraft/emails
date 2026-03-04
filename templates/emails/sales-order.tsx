@@ -28,7 +28,7 @@ export const SalesOrderEmail = ({
         className="text-[24px] font-medium email-heading"
         style={{ color: branding.text_color, marginTop: 0 }}
       >
-        Order Confirmation
+        Order Confirmation 🏁
       </Heading>
 
       <Text

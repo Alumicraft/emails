@@ -48322,7 +48322,7 @@ var SalesOrderEmail = ({
       {
         className: "text-[24px] font-medium email-heading",
         style: { color: branding.text_color, marginTop: 0 },
-        children: "Order Confirmation"
+        children: "Order Confirmation \u{1F3C1}"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
