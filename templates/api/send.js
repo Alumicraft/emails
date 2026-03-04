@@ -14383,11 +14383,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx27 = jsxWithValidationDynamic;
-        var jsxs16 = jsxWithValidationStatic;
+        var jsx28 = jsxWithValidationDynamic;
+        var jsxs17 = jsxWithValidationStatic;
         exports2.Fragment = REACT_FRAGMENT_TYPE;
-        exports2.jsx = jsx27;
-        exports2.jsxs = jsxs16;
+        exports2.jsx = jsx28;
+        exports2.jsxs = jsxs17;
       })();
     }
   }
@@ -48637,8 +48637,63 @@ var PaymentRequestEmail = ({
   ] });
 };
 
-// emails/document.tsx
+// emails/payment-entry.tsx
 var import_jsx_runtime27 = __toESM(require_jsx_runtime());
+var PaymentEntryEmail = ({
+  branding,
+  receipt_number,
+  payment_date,
+  mode_of_payment,
+  reference_no,
+  paid_amount,
+  applied_to,
+  remarks,
+  custom_message
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(Layout, { branding, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Payment Receipt"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Thank you for your payment. Please find your receipt details below."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: "Receipt No.", value: receipt_number }),
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: "Date", value: payment_date }),
+      mode_of_payment && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: "Payment Method", value: mode_of_payment }),
+      reference_no && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: "Reference No.", value: reference_no }),
+      applied_to && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: "Applied To", value: applied_to }),
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoAmount, { branding, label: "Amount Paid", value: paid_amount })
+    ] }),
+    remarks && /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(Text3, { style: { color: branding.text_color, fontSize: "14px", lineHeight: "1.6", marginBottom: "16px" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("strong", { children: "Remarks:" }),
+      " ",
+      remarks
+    ] }),
+    custom_message && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
+    /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6",
+        style: { color: branding.tertiary_color },
+        children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("em", { children: "Thank you for your payment!" })
+      }
+    )
+  ] });
+};
+
+// emails/document.tsx
+var import_jsx_runtime28 = __toESM(require_jsx_runtime());
 var DocumentEmail = ({
   branding,
   document_type,
@@ -48649,8 +48704,8 @@ var DocumentEmail = ({
   party_name,
   custom_message
 }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(Layout, { branding, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(Layout, { branding, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(
       Heading,
       {
         className: "text-[24px] font-medium email-heading",
@@ -48661,7 +48716,7 @@ var DocumentEmail = ({
         ]
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(
       Text3,
       {
         className: "text-[15px] leading-6 email-text",
@@ -48673,18 +48728,18 @@ var DocumentEmail = ({
         ]
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(InfoCard, { branding, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: document_type || "Document", value: document_number }),
-      document_date && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoRow, { branding, label: "Date", value: document_date }),
-      total_amount && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(InfoAmount, { branding, label: "Total", value: total_amount })
+    /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(InfoRow, { branding, label: document_type || "Document", value: document_number }),
+      document_date && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(InfoRow, { branding, label: "Date", value: document_date }),
+      total_amount && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(InfoAmount, { branding, label: "Total", value: total_amount })
     ] }),
-    custom_message && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
-    /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+    custom_message && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
+    /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
       Text3,
       {
         className: "text-[15px] leading-6",
         style: { color: branding.tertiary_color },
-        children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("em", { children: "Thank you for your business!" })
+        children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("em", { children: "Thank you for your business!" })
       }
     )
   ] });
@@ -48709,6 +48764,7 @@ var templates = {
   "email-verification": EmailVerificationEmail,
   "welcome": WelcomeEmail,
   "payment-request": PaymentRequestEmail,
+  "payment-entry": PaymentEntryEmail,
   "document": DocumentEmail
 };
 async function handler(req, res) {

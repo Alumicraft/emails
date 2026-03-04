@@ -292,6 +292,7 @@ def get_available_templates():
         {"value": "purchase-order", "label": "Purchase Order"},
         {"value": "request-for-quotation", "label": "Request for Quotation"},
         {"value": "payment-request", "label": "Payment Request"},
+        {"value": "payment-entry", "label": "Payment Entry"},
         {"value": "document", "label": "Generic Document"},
         {"value": "password-reset", "label": "Password Reset"},
         {"value": "email-verification", "label": "Email Verification"},
@@ -393,6 +394,19 @@ def send_test_email(template="magic-link"):
                 "customer_name": user_name,
                 "amount_requested": "$500.00",
                 "stripe_payment_url": "https://example.com/pay/test",
+            },
+        },
+        "payment-entry": {
+            "subject": _("Payment Receipt PE-TEST-001 from {0}").format(branding_doc.company or "Company"),
+            "data": {
+                "receipt_number": "PE-TEST-001",
+                "payment_date": today,
+                "party_name": user_name,
+                "mode_of_payment": "Bank Transfer",
+                "reference_no": "TXN-123456",
+                "paid_amount": "$1,250.00",
+                "applied_to": "SINV-TEST-001, SINV-TEST-002",
+                "remarks": "Payment for January services",
             },
         },
         "document": {

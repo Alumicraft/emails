@@ -100,7 +100,7 @@ emails._do_button_setup = function(frm) {
 
     var btn = frm.custom_buttons[__("Send Email")];
     if (btn) {
-        btn.removeClass("btn-default").addClass("btn-primary-light");
+        btn.removeClass("btn-default").addClass("btn-primary");
     }
 
     // Async: update label to "Resend" if email was already sent

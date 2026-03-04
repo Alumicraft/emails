@@ -13,6 +13,7 @@ import { PasswordResetEmail } from "../emails/password-reset";
 import { EmailVerificationEmail } from "../emails/email-verification";
 import { WelcomeEmail } from "../emails/welcome";
 import { PaymentRequestEmail } from "../emails/payment-request";
+import { PaymentEntryEmail } from "../emails/payment-entry";
 import { DocumentEmail } from "../emails/document";
 import { Branding } from "../emails/shared";
 
@@ -65,6 +66,7 @@ const templates: Record<string, React.FC<any>> = {
   "email-verification": EmailVerificationEmail,
   "welcome": WelcomeEmail,
   "payment-request": PaymentRequestEmail,
+  "payment-entry": PaymentEntryEmail,
   "document": DocumentEmail,
 };
 

@@ -39,7 +39,7 @@ DOCTYPE_TEMPLATE_MAP = {
     "Purchase Order": "purchase-order",
     "Request for Quotation": "request-for-quotation",
     "Payment Request": "payment-request",
-    "Payment Entry": "payment-request",
+    "Payment Entry": "payment-entry",
 }
 
 
@@ -530,6 +530,10 @@ def build_template_data(doc, doctype, company_info, custom_message=None):
         data["subject"] = _("Invoice {0} from {1}").format(
             doc.reference_name, company_info.get("company_name", "Company")
         )
+    elif doctype == "Payment Entry":
+        data["subject"] = _("Payment Receipt {0} from {1}").format(
+            doc.name, company_info.get("company_name", "Company")
+        )
     else:
         data["subject"] = _("{0} {1} from {2}").format(
             doctype, doc.name, company_info.get("company_name", "Company")
@@ -609,6 +613,19 @@ def build_template_data(doc, doctype, company_info, custom_message=None):
     elif doctype == "Request for Quotation":
         data["rfq_number"] = doc.name
         data["rfq_date"] = formatdate(getattr(doc, "transaction_date", "")) if getattr(doc, "transaction_date", None) else ""
+    elif doctype == "Payment Entry":
+        pe_currency = getattr(doc, "paid_from_account_currency", None) or currency
+        data["receipt_number"] = doc.name
+        data["payment_date"] = formatdate(getattr(doc, "posting_date", "")) if getattr(doc, "posting_date", None) else ""
+        data["paid_amount"] = fmt_money(getattr(doc, "paid_amount", 0), currency=pe_currency)
+        data["mode_of_payment"] = getattr(doc, "mode_of_payment", "") or ""
+        data["reference_no"] = getattr(doc, "reference_no", "") or ""
+        # Comma-joined invoice/reference names from the references child table
+        if hasattr(doc, "references") and doc.references:
+            data["applied_to"] = ", ".join(
+                ref.reference_name for ref in doc.references if ref.reference_name
+            )
+        data["remarks"] = getattr(doc, "remarks", "") or ""
 
     return data
 
