@@ -189,6 +189,8 @@ The custom "Send Email" button appears on submitted documents. A single file han
 
 `frappe.ui.form.on()` just registers handlers in a lookup table — it doesn't need the form to exist. Calling it synchronously at script load time is safe, avoids all timing issues, and doesn't interfere with ERPNext's own handlers (including the "Create" button dropdown).
 
+**Payment Request anti-flicker:** For Payment Request, a `setup` handler monkey-patches `frm.add_custom_button` to silently block any call with the label "Resend Payment Email" (returning an empty jQuery object). Since `setup` fires once at form init before any `refresh` handlers, ERPNext's native button is never created — eliminating the flicker that occurred with reactive DOM removal. A `setInterval` fallback (every 2s) still re-adds our button if something removes it from the DOM.
+
 **Button behavior:**
 - Before first send: normal "Send Email" button
 - After first send: grey `btn-default` "Resend Email" button
@@ -208,27 +210,10 @@ The custom "Send Email" button appears on submitted documents. A single file han
 
 ## Known Issues / Changelog
 
-### Send Email button not appearing on Payment Request (ongoing)
+### Payment Request button flicker (resolved)
 
-**Bug:** The custom "Send Email" button does not appear on submitted Payment Request documents, despite working on other doctypes (Sales Invoice, Quotation, etc.).
+**Bug:** ERPNext's "Resend Payment Email" button and our "Send Email" button both briefly appeared before ERPNext's was removed, causing visible flicker.
 
-**What's been tried and ruled out:**
-- **Async `_service_enabled` gate** — Was blocking button setup if the API call to check Email Service Settings hadn't returned yet. Removed; button setup is now fully synchronous. (`bb00e05`)
-- **Debug `console.log` statements** — Added during investigation, then cleaned up. (`921fd25`, `89af1cc`)
-- **Service check dependency** — Made button setup independent of the service enabled check so the button renders regardless. (`da3f398`)
-- **`setInterval` fallback** — Added polling every 2 seconds as a backup mechanism to attach the button if initial setup misses it. (`156d0a0`)
-- **Cleanup commit** — Removed all debug logging and consolidated fixes. (`156d0a0`)
+**Root cause:** Both handlers ran on `refresh`. Our reactive approach (add button → scan DOM → remove ERPNext's) was inherently racy.
 
-**Remaining suspects:**
-1. **Conflicting Client Script** — A site-level Client Script on Payment Request may be interfering with or overriding the button setup
-2. **Asset caching** — The browser or Frappe asset pipeline may be serving a stale version of `send_email_button.js`
-3. **Permission issue** — Payment Request may have different permission rules that prevent the button from rendering
-4. **ERPNext Payment Request handlers** — ERPNext's own Payment Request form logic (which adds its own "Send SMS", "Create Payment Entry" buttons) may be overriding or clearing custom buttons added by the hook
-
-**Related commits:** `156d0a0`, `bb00e05`, `921fd25`, `89af1cc`, `da3f398`
-
-**Next steps for debugging:**
-- Check for any Client Scripts on Payment Request in the ERPNext site (`/app/client-script?doctype=Payment+Request`)
-- Hard-refresh browser and clear Frappe cache (`bench clear-cache`)
-- Inspect the browser console on a submitted Payment Request to verify `send_email_button.js` is executing
-- Check if `frappe.ui.form.on("Payment Request", ...)` handlers are being registered but then overwritten by ERPNext's own handlers
+**Fix:** Monkey-patch `frm.add_custom_button` in the `setup` event (fires once before `refresh`) to silently block "Resend Payment Email" creation. Removed all reactive DOM removal code (`_hide_erpnext_payment_button`, `setTimeout` delays, DOM scans).

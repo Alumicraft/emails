@@ -1,6 +1,6 @@
 // Send Email Button for doctypes with email templates
 // Shows "Send Email" or "Resend Email" button on submitted documents
-// v3 — uses DOM checks for robust button detection on Payment Request
+// v4 — monkey-patches add_custom_button to prevent ERPNext's "Resend Payment Email" flicker
 
 frappe.provide("emails");
 
@@ -15,27 +15,6 @@ emails._safe_remove_button = function(frm, label) {
     }
 };
 
-// Hide ERPNext's native "Resend Payment Email" button via custom_buttons ref AND DOM scan
-emails._hide_erpnext_payment_button = function(frm) {
-    // Try via custom_buttons first
-    emails._safe_remove_button(frm, "Resend Payment Email");
-    // Also scan DOM for the button by text — ERPNext may add it outside custom_buttons
-    if (frm.page && frm.page.inner_toolbar) {
-        frm.page.inner_toolbar.find("button").filter(function() {
-            return $(this).text().trim() === __("Resend Payment Email");
-        }).remove();
-    }
-    // Delayed pass to catch buttons added after our setup
-    setTimeout(function() {
-        emails._safe_remove_button(frm, "Resend Payment Email");
-        if (frm.page && frm.page.inner_toolbar) {
-            frm.page.inner_toolbar.find("button").filter(function() {
-                return $(this).text().trim() === __("Resend Payment Email");
-            }).remove();
-        }
-    }, 1000);
-};
-
 // Check if our button is actually visible in the DOM (not just a stale reference)
 emails._has_button_in_dom = function(frm) {
     var sendBtn = frm.custom_buttons[__("Send Email")];
@@ -48,7 +27,7 @@ emails._has_button_in_dom = function(frm) {
 // Register form handlers for all supported doctypes
 // frappe.ui.form.on() just registers in a lookup table — safe to call at load time
 emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
-    frappe.ui.form.on(doctype, {
+    var handlers = {
         refresh: function(frm) {
             emails.setup_send_email_button(frm);
         },
@@ -57,7 +36,24 @@ emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
             if (frm.doctype === "Payment Request") return;
             emails.prompt_send_email_after_submit(frm);
         }
-    });
+    };
+
+    // For Payment Request, use setup to monkey-patch add_custom_button BEFORE
+    // ERPNext's refresh handler runs — prevents "Resend Payment Email" from ever
+    // being created, eliminating flicker.
+    if (doctype === "Payment Request") {
+        handlers.setup = function(frm) {
+            var _original_add_button = frm.add_custom_button.bind(frm);
+            frm.add_custom_button = function(label) {
+                if (label === __("Resend Payment Email")) {
+                    return $();  // silently block, return empty jQuery object
+                }
+                return _original_add_button.apply(frm, arguments);
+            };
+        };
+    }
+
+    frappe.ui.form.on(doctype, handlers);
 });
 
 // Fallback: ERPNext's Payment Request refresh handler (or Client Scripts) can remove
@@ -76,11 +72,6 @@ setInterval(function() {
         delete cur_frm.custom_buttons[__("Resend Email")];
 
         emails._do_button_setup(cur_frm);
-
-        // Remove ERPNext's native button AFTER our button is added
-        if (cur_frm.doctype === "Payment Request") {
-            emails._hide_erpnext_payment_button(cur_frm);
-        }
     } catch(e) {
         console.warn("emails: setInterval fallback error", e);
     }
@@ -91,21 +82,13 @@ emails.setup_send_email_button = function(frm) {
     if (frm.doc.docstatus !== 1) {
         return;
     }
-    // Delay slightly for Payment Request so we run AFTER ERPNext's own refresh handler
-    if (frm.doctype === "Payment Request") {
-        setTimeout(function() { emails._do_button_setup(frm); }, 500);
-    } else {
-        emails._do_button_setup(frm);
-    }
+    emails._do_button_setup(frm);
 };
 
 emails._do_button_setup = function(frm) {
     // Remove existing buttons (safe — no-op if button doesn't exist)
     emails._safe_remove_button(frm, "Send Email");
     emails._safe_remove_button(frm, "Resend Email");
-    if (frm.doctype === "Payment Request") {
-        emails._hide_erpnext_payment_button(frm);
-    }
 
     // Hide standard email button
     emails.hide_standard_email_button(frm);
