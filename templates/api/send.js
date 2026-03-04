@@ -48245,7 +48245,7 @@ var SalesInvoiceEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(InfoCard, { branding, children: [
       /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoRow, { branding, label: "Invoice No.", value: invoice_number }),
       project_name && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoRow, { branding, label: "Project", value: project_name }),
-      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoRow, { branding, label: "Due Date", value: due_date, valueColor: "#d97706" }),
+      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoRow, { branding, label: "Due Date", value: due_date }),
       /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(InfoAmount, { branding, label: "Amount Due", value: amount_due })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
@@ -48290,7 +48290,7 @@ var QuotationEmail = ({
     ),
     /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(InfoCard, { branding, children: [
       /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(InfoRow, { branding, label: "Quotation No.", value: quotation_number }),
-      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(InfoRow, { branding, label: "Valid Until", value: valid_until, valueColor: "#d97706" }),
+      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(InfoRow, { branding, label: "Valid Until", value: valid_until }),
       /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(InfoAmount, { branding, label: "Estimated Total", value: total_amount })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
@@ -48613,7 +48613,7 @@ var PaymentRequestEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(InfoCard, { branding, children: [
       reference_number && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoRow, { branding, label: "Reference No.", value: reference_number }),
       project_name && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoRow, { branding, label: "Project", value: project_name }),
-      due_date && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoRow, { branding, label: "Due Date", value: due_date, valueColor: "#d97706" }),
+      due_date && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoRow, { branding, label: "Due Date", value: due_date }),
       /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(InfoAmount, { branding, label: "Amount", value: amount_requested })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),

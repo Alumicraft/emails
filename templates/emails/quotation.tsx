@@ -40,7 +40,7 @@ export const QuotationEmail = ({
 
       <InfoCard branding={branding}>
         <InfoRow branding={branding} label="Quotation No." value={quotation_number} />
-        <InfoRow branding={branding} label="Valid Until" value={valid_until} valueColor="#d97706" />
+        <InfoRow branding={branding} label="Valid Until" value={valid_until} />
         <InfoAmount branding={branding} label="Estimated Total" value={total_amount} />
       </InfoCard>
 

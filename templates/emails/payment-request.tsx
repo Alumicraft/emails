@@ -43,7 +43,7 @@ export const PaymentRequestEmail = ({
       <InfoCard branding={branding}>
         {reference_number && <InfoRow branding={branding} label="Reference No." value={reference_number} />}
         {project_name && <InfoRow branding={branding} label="Project" value={project_name} />}
-        {due_date && <InfoRow branding={branding} label="Due Date" value={due_date} valueColor="#d97706" />}
+        {due_date && <InfoRow branding={branding} label="Due Date" value={due_date} />}
         <InfoAmount branding={branding} label="Amount" value={amount_requested} />
       </InfoCard>
 

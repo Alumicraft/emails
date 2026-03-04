@@ -45,7 +45,7 @@ export const SalesInvoiceEmail = ({
       <InfoCard branding={branding}>
         <InfoRow branding={branding} label="Invoice No." value={invoice_number} />
         {project_name && <InfoRow branding={branding} label="Project" value={project_name} />}
-        <InfoRow branding={branding} label="Due Date" value={due_date} valueColor="#d97706" />
+        <InfoRow branding={branding} label="Due Date" value={due_date} />
         <InfoAmount branding={branding} label="Amount Due" value={amount_due} />
       </InfoCard>
 
