@@ -15,6 +15,27 @@ emails._safe_remove_button = function(frm, label) {
     }
 };
 
+// Hide ERPNext's native "Resend Payment Email" button via custom_buttons ref AND DOM scan
+emails._hide_erpnext_payment_button = function(frm) {
+    // Try via custom_buttons first
+    emails._safe_remove_button(frm, "Resend Payment Email");
+    // Also scan DOM for the button by text — ERPNext may add it outside custom_buttons
+    if (frm.page && frm.page.inner_toolbar) {
+        frm.page.inner_toolbar.find("button").filter(function() {
+            return $(this).text().trim() === __("Resend Payment Email");
+        }).remove();
+    }
+    // Delayed pass to catch buttons added after our setup
+    setTimeout(function() {
+        emails._safe_remove_button(frm, "Resend Payment Email");
+        if (frm.page && frm.page.inner_toolbar) {
+            frm.page.inner_toolbar.find("button").filter(function() {
+                return $(this).text().trim() === __("Resend Payment Email");
+            }).remove();
+        }
+    }, 1000);
+};
+
 // Check if our button is actually visible in the DOM (not just a stale reference)
 emails._has_button_in_dom = function(frm) {
     var sendBtn = frm.custom_buttons[__("Send Email")];
@@ -29,9 +50,6 @@ emails._has_button_in_dom = function(frm) {
 emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
     frappe.ui.form.on(doctype, {
         refresh: function(frm) {
-            if (frm.doctype === "Payment Request") {
-                console.log("[emails] PR refresh handler fired, docstatus=" + frm.doc.docstatus);
-            }
             emails.setup_send_email_button(frm);
         },
         after_submit: function(frm) {
@@ -51,25 +69,17 @@ setInterval(function() {
         if (cur_frm.doc.docstatus !== 1) return;
         if (emails.SUPPORTED_DOCTYPES.indexOf(cur_frm.doctype) === -1) return;
 
-        var inDom = emails._has_button_in_dom(cur_frm);
-        if (cur_frm.doctype === "Payment Request") {
-            console.log("[emails] setInterval: PR check — inDom=" + inDom +
-                ", custom_buttons keys=" + Object.keys(cur_frm.custom_buttons).join(","));
-        }
-        if (inDom) return;
+        if (emails._has_button_in_dom(cur_frm)) return;
 
         // Clean up stale references before re-adding
         delete cur_frm.custom_buttons[__("Send Email")];
         delete cur_frm.custom_buttons[__("Resend Email")];
 
-        if (cur_frm.doctype === "Payment Request") {
-            console.log("[emails] setInterval: adding button for PR");
-        }
         emails._do_button_setup(cur_frm);
 
         // Remove ERPNext's native button AFTER our button is added
         if (cur_frm.doctype === "Payment Request") {
-            emails._safe_remove_button(cur_frm, "Resend Payment Email");
+            emails._hide_erpnext_payment_button(cur_frm);
         }
     } catch(e) {
         console.warn("emails: setInterval fallback error", e);
@@ -90,15 +100,11 @@ emails.setup_send_email_button = function(frm) {
 };
 
 emails._do_button_setup = function(frm) {
-    if (frm.doctype === "Payment Request") {
-        console.log("[emails] _do_button_setup: running for PR " + frm.doc.name);
-    }
-
     // Remove existing buttons (safe — no-op if button doesn't exist)
     emails._safe_remove_button(frm, "Send Email");
     emails._safe_remove_button(frm, "Resend Email");
     if (frm.doctype === "Payment Request") {
-        emails._safe_remove_button(frm, "Resend Payment Email");
+        emails._hide_erpnext_payment_button(frm);
     }
 
     // Hide standard email button
@@ -110,11 +116,6 @@ emails._do_button_setup = function(frm) {
     });
 
     var btn = frm.custom_buttons[__("Send Email")];
-    if (frm.doctype === "Payment Request") {
-        console.log("[emails] _do_button_setup: btn created=" + !!btn +
-            ", in DOM=" + (btn && btn.length ? $.contains(document.documentElement, btn[0]) : false) +
-            ", inner_toolbar children=" + (frm.page && frm.page.inner_toolbar ? frm.page.inner_toolbar.children().length : "N/A"));
-    }
     if (btn) {
         btn.removeClass("btn-default").addClass("btn-primary-light");
     }
