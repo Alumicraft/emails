@@ -29,6 +29,9 @@ emails._has_button_in_dom = function(frm) {
 emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
     frappe.ui.form.on(doctype, {
         refresh: function(frm) {
+            if (frm.doctype === "Payment Request") {
+                console.log("[emails] PR refresh handler fired, docstatus=" + frm.doc.docstatus);
+            }
             emails.setup_send_email_button(frm);
         },
         after_submit: function(frm) {
@@ -48,12 +51,20 @@ setInterval(function() {
         if (cur_frm.doc.docstatus !== 1) return;
         if (emails.SUPPORTED_DOCTYPES.indexOf(cur_frm.doctype) === -1) return;
 
-        if (emails._has_button_in_dom(cur_frm)) return;
+        var inDom = emails._has_button_in_dom(cur_frm);
+        if (cur_frm.doctype === "Payment Request") {
+            console.log("[emails] setInterval: PR check — inDom=" + inDom +
+                ", custom_buttons keys=" + Object.keys(cur_frm.custom_buttons).join(","));
+        }
+        if (inDom) return;
 
         // Clean up stale references before re-adding
         delete cur_frm.custom_buttons[__("Send Email")];
         delete cur_frm.custom_buttons[__("Resend Email")];
 
+        if (cur_frm.doctype === "Payment Request") {
+            console.log("[emails] setInterval: adding button for PR");
+        }
         emails._do_button_setup(cur_frm);
 
         // Remove ERPNext's native button AFTER our button is added
@@ -79,6 +90,10 @@ emails.setup_send_email_button = function(frm) {
 };
 
 emails._do_button_setup = function(frm) {
+    if (frm.doctype === "Payment Request") {
+        console.log("[emails] _do_button_setup: running for PR " + frm.doc.name);
+    }
+
     // Remove existing buttons (safe — no-op if button doesn't exist)
     emails._safe_remove_button(frm, "Send Email");
     emails._safe_remove_button(frm, "Resend Email");
@@ -95,6 +110,11 @@ emails._do_button_setup = function(frm) {
     });
 
     var btn = frm.custom_buttons[__("Send Email")];
+    if (frm.doctype === "Payment Request") {
+        console.log("[emails] _do_button_setup: btn created=" + !!btn +
+            ", in DOM=" + (btn && btn.length ? $.contains(document.documentElement, btn[0]) : false) +
+            ", inner_toolbar children=" + (frm.page && frm.page.inner_toolbar ? frm.page.inner_toolbar.children().length : "N/A"));
+    }
     if (btn) {
         btn.removeClass("btn-default").addClass("btn-primary-light");
     }
