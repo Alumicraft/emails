@@ -47,6 +47,7 @@ templates/                           # Vercel deployment (TypeScript frontend)
 │   ├── purchase-order.tsx
 │   ├── request-for-quotation.tsx
 │   ├── payment-request.tsx
+│   ├── payment-entry.tsx
 │   ├── document.tsx                 # Generic fallback template
 │   ├── magic-link.tsx
 │   ├── password-reset.tsx
@@ -116,7 +117,7 @@ Maps ERPNext doctypes to React template names:
 "Purchase Order"         → "purchase-order"
 "Request for Quotation"  → "request-for-quotation"
 "Payment Request"        → "payment-request"
-"Payment Entry"          → "payment-request"
+"Payment Entry"          → "payment-entry"
 # Anything else          → "document" (generic fallback)
 ```
 
@@ -192,7 +193,7 @@ The custom "Send Email" button appears on submitted documents. A single file han
 **Payment Request anti-flicker:** For Payment Request, a `setup` handler monkey-patches `frm.add_custom_button` to silently block any call with the label "Resend Payment Email" (returning an empty jQuery object). Since `setup` fires once at form init before any `refresh` handlers, ERPNext's native button is never created — eliminating the flicker that occurred with reactive DOM removal. A `setInterval` fallback (every 2s) still re-adds our button if something removes it from the DOM.
 
 **Button behavior:**
-- Before first send: normal "Send Email" button
+- Before first send: `btn-primary` "Send Email" button
 - After first send: grey `btn-default` "Resend Email" button
 - Post-submit: confirmation dialog "Would you like to send an email?"
 - The standard Frappe "+ New Email" button is hidden for template-supported doctypes
@@ -217,3 +218,15 @@ The custom "Send Email" button appears on submitted documents. A single file han
 **Root cause:** Both handlers ran on `refresh`. Our reactive approach (add button → scan DOM → remove ERPNext's) was inherently racy.
 
 **Fix:** Monkey-patch `frm.add_custom_button` in the `setup` event (fires once before `refresh`) to silently block "Resend Payment Email" creation. Removed all reactive DOM removal code (`_hide_erpnext_payment_button`, `setTimeout` delays, DOM scans).
+
+### Payment Entry receipt email template (added)
+
+Added a dedicated `payment-entry` template replacing the reused `payment-request` template. Displays Receipt No., Date, Payment Method, Reference No., Applied To (invoice/SO names from references child table), and Amount Paid. Subject line: "Payment Receipt PE-00001 from Company". Uses `paid_from_account_currency` for correct currency formatting.
+
+### Send Email button styling (fixed)
+
+Changed Send Email button from `btn-primary-light` to `btn-primary` so it matches the Update button styling instead of appearing greyed out.
+
+### Sales Order emoji (added)
+
+Added 🏁 emoji to the Sales Order confirmation heading.

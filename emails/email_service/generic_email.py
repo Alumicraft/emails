@@ -99,17 +99,21 @@ def send_document_email(
     # Use default subject
     subject = template_data["subject"]
 
-    # Generate PDF attachment
-    attachments = generate_pdf_attachment(doctype, docname)
-
-    # For Payment Request, also attach the reference document's PDF
-    if doctype == "Payment Request" and getattr(doc, "reference_doctype", None) and getattr(doc, "reference_name", None):
-        ref_attachments = generate_pdf_attachment(doc.reference_doctype, doc.reference_name)
-        if ref_attachments:
-            if attachments:
+    # Generate PDF attachment (skip for Payment Request — only attach reference doc)
+    if doctype == "Payment Request":
+        attachments = []
+        # Attach reference document PDF (e.g., Sales Invoice)
+        if getattr(doc, "reference_doctype", None) and getattr(doc, "reference_name", None):
+            ref_attachments = generate_pdf_attachment(doc.reference_doctype, doc.reference_name)
+            if ref_attachments:
                 attachments.extend(ref_attachments)
-            else:
-                attachments = ref_attachments
+        # Attach wire instructions PDF if enabled
+        if getattr(settings, "attach_wire_instructions", 0) and getattr(settings, "wire_instructions_url", None):
+            wire_attachment = fetch_url_pdf_attachment(settings.wire_instructions_url, "wire_instructions.pdf")
+            if wire_attachment:
+                attachments.append(wire_attachment)
+    else:
+        attachments = generate_pdf_attachment(doctype, docname)
 
     # Check if Vercel service is configured
     use_vercel = bool(getattr(settings, "vercel_service_url", None))
@@ -719,6 +723,21 @@ def generate_pdf_attachment(doctype, docname, print_format=None):
         frappe.log_error(
             title=_("{0} PDF Generation Failed").format(doctype), message=str(e)
         )
+        return None
+
+
+def fetch_url_pdf_attachment(url, filename="attachment.pdf"):
+    """Fetch a PDF from a public URL and return as an attachment dict."""
+    try:
+        import requests
+        import base64
+
+        response = requests.get(url, timeout=15)
+        response.raise_for_status()
+        content_b64 = base64.b64encode(response.content).decode("utf-8")
+        return {"filename": filename, "content": content_b64}
+    except Exception as e:
+        frappe.log_error(title="Wire Instructions PDF Fetch Failed", message=str(e))
         return None
 
 

@@ -20,6 +20,10 @@
         "column_break_vercel",
         "vercel_service_key",
         "handle_system_emails",
+        "payment_request_attachments_section",
+        "attach_wire_instructions",
+        "column_break_wire",
+        "wire_instructions_url",
         "branding_tab",
         "branding_general_section",
         "company",
@@ -162,6 +166,29 @@
             "label": "Route System Emails Through Vercel",
             "default": "1",
             "description": "Send password reset, welcome, and notification emails via Vercel with branding"
+        },
+        {
+            "fieldname": "payment_request_attachments_section",
+            "fieldtype": "Section Break",
+            "label": "Payment Request Attachments"
+        },
+        {
+            "default": "0",
+            "fieldname": "attach_wire_instructions",
+            "fieldtype": "Check",
+            "label": "Attach Wire Instructions",
+            "description": "Attach wire instructions PDF to Payment Request emails"
+        },
+        {
+            "fieldname": "column_break_wire",
+            "fieldtype": "Column Break"
+        },
+        {
+            "fieldname": "wire_instructions_url",
+            "fieldtype": "Data",
+            "label": "Wire Instructions PDF URL",
+            "description": "Public URL to the wire instructions PDF",
+            "depends_on": "attach_wire_instructions"
         },
         {
             "fieldname": "branding_tab",
