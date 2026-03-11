@@ -331,6 +331,7 @@ def _build_template_data(template_type: str, args: dict, subject: str, html_cont
 
     elif template_type == "welcome":
         # new_user / user_invitation provides: link, first_name, last_name, site_url
+        data["login_link"] = args.get("link", "")
         data["action_link"] = args.get("link", "")
         data["action_label"] = _("Get Started")
 
