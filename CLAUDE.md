@@ -12,8 +12,15 @@ ERPNext (Python/Frappe)  →  Vercel Serverless (TypeScript/React)  →  Resend 
 ```
 
 **Two deployment targets:**
-- `emails/` — Frappe app installed on the ERPNext site
+- `emails/` — Frappe app installed on each ERPNext site
 - `templates/` — Vercel serverless function at `/api/send`
+
+**Multi-site setup:** Each ERPNext site gets its own Vercel project (same repo, different env vars) pointing to its own Resend account. This avoids Resend's single-domain-per-free-account limitation.
+
+| Site | Vercel Project | Resend Account | Domain |
+|------|---------------|----------------|--------|
+| Alumicraft | `emails-alumicraft` | Alumicraft account | alumicraft.com |
+| Dealer Capital | `emails-dcr` | send2tristan account | dealercapital.net |
 
 ## Project Structure
 
@@ -149,6 +156,17 @@ npm run build          # esbuild → api/send.js
 
 The build output `api/send.js` is a single bundled file. It IS committed to git (required by Vercel).
 
+Vercel Root Directory must be set to `templates/` in each project's Build and Deployment settings.
+
+### Adding a new site deployment
+1. Create a new Vercel project from the same `email` GitHub repo
+2. Set Root Directory to `templates/`
+3. Add `RESEND_API_KEY` and `SERVICE_API_KEY` environment variables (for Production)
+4. Deploy
+5. In the new ERPNext site's Email Service Settings:
+   - Set Vercel Service URL to `https://<project-name>.vercel.app` (no `/api/send` — the client appends it automatically)
+   - Set Vercel Service API Key to match the `SERVICE_API_KEY` in Vercel
+
 ### Backend (Frappe)
 Standard Frappe app install:
 ```bash
@@ -157,8 +175,10 @@ bench --site site.local install-app emails
 ```
 
 ## Environment Variables (Vercel)
-- `RESEND_API_KEY` — Resend API key
-- `SERVICE_API_KEY` — Auth token for incoming requests from ERPNext
+- `RESEND_API_KEY` — Resend API key (from the Resend account that owns the sending domain)
+- `SERVICE_API_KEY` — Auth token for incoming requests from ERPNext (must match the Vercel Service API Key in Email Service Settings)
+
+Each Vercel project has its own set of env vars. The same git repo is deployed to multiple Vercel projects with different environment variables.
 
 ## Common Tasks
 
@@ -208,6 +228,8 @@ The custom "Send Email" button appears on submitted documents. A single file han
 - The `custom_message` prop on templates is for user-provided messages only — do not pass ERPNext-rendered HTML through it (it gets escaped by React)
 - `items` data is extracted by `build_template_data()` but not currently rendered by any template — it's available for future use
 - Payment Request subject uses the reference document number (e.g., "Invoice SINV-001 from Company") rather than Payment Request name
+- The Vercel Service URL in ERPNext should NOT include `/api/send` — `vercel_client.py` appends it automatically
+- Each Resend free account only supports one domain — use separate Vercel deployments (same repo) for multi-domain setups
 
 ## Known Issues / Changelog
 
