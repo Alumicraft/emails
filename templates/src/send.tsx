@@ -15,6 +15,17 @@ import { WelcomeEmail } from "../emails/welcome";
 import { PaymentRequestEmail } from "../emails/payment-request";
 import { PaymentEntryEmail } from "../emails/payment-entry";
 import { DocumentEmail } from "../emails/document";
+import { AchPaymentUpcoming } from "../emails/ach-payment-upcoming";
+import { AchPaymentSuccess } from "../emails/ach-payment-success";
+import { AchPaymentFailure } from "../emails/ach-payment-failure";
+import { RetailerApplication } from "../emails/retailer-application";
+import { DealerWelcome } from "../emails/dealer-welcome";
+import { DealerAgreementSent } from "../emails/dealer-agreement-sent";
+import { DealerAgreementSigned } from "../emails/dealer-agreement-signed";
+import { FlooringPacketSent } from "../emails/flooring-packet-sent";
+import { FlooringPacketSigned } from "../emails/flooring-packet-signed";
+import { LoanDisbursed } from "../emails/loan-disbursed";
+import { FactoryLoaReceived } from "../emails/factory-loa-received";
 import { Branding } from "../emails/shared";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -68,6 +79,17 @@ const templates: Record<string, React.FC<any>> = {
   "payment-request": PaymentRequestEmail,
   "payment-entry": PaymentEntryEmail,
   "document": DocumentEmail,
+  "ach-payment-upcoming": AchPaymentUpcoming,
+  "ach-payment-success": AchPaymentSuccess,
+  "ach-payment-failure": AchPaymentFailure,
+  "retailer-application": RetailerApplication,
+  "dealer-welcome": DealerWelcome,
+  "dealer-agreement-sent": DealerAgreementSent,
+  "dealer-agreement-signed": DealerAgreementSigned,
+  "flooring-packet-sent": FlooringPacketSent,
+  "flooring-packet-signed": FlooringPacketSigned,
+  "loan-disbursed": LoanDisbursed,
+  "factory-loa-received": FactoryLoaReceived,
 };
 
 // ============================================================================
