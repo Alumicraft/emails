@@ -219,8 +219,10 @@ emails.show_send_email_dialog = function(frm) {
 
 // Email Service Settings — test buttons
 // Registered here (app_include_js) instead of doctype_js for reliable loading
+console.log("emails: registering Email Service Settings handlers");
 frappe.ui.form.on("Email Service Settings", {
     refresh: function(frm) {
+        console.log("emails: Email Service Settings refresh fired");
         frm.add_custom_button(__("Test Connection"), function() {
             frappe.call({
                 method: "emails.api.test_resend_connection",
