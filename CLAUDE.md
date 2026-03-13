@@ -167,8 +167,10 @@ Vercel Root Directory must be set to `templates/` in each project's Build and De
    - Set Vercel Service URL to `https://<project-name>.vercel.app` (no `/api/send` — the client appends it automatically)
    - Set Vercel Service API Key to match the `SERVICE_API_KEY` in Vercel
 
-### Backend (Frappe)
-Standard Frappe app install:
+### Backend (Frappe Cloud)
+ERPNext sites are hosted on **Frappe Cloud** (not self-hosted bench). Deployments happen via git push — Frappe Cloud picks up the changes automatically. There is no manual `bench build` or `bench restart` step; Frappe Cloud handles builds and restarts on deploy.
+
+Standard Frappe app install (for local dev only):
 ```bash
 bench get-app emails
 bench --site site.local install-app emails
@@ -182,13 +184,14 @@ Each Vercel project has its own set of env vars. The same git repo is deployed t
 
 ## Common Tasks
 
-### Adding a new document email template
-1. Create `templates/emails/{doctype-name}.tsx` following existing patterns
+### Adding a new email template
+1. Create `templates/emails/{template-name}.tsx` following existing patterns
 2. Add component to template registry in `templates/src/send.tsx`
-3. Add doctype mapping in `generic_email.py` `DOCTYPE_TEMPLATE_MAP`
-4. Add doctype to the list in `send_email_button.js` (for the Send Email button)
-5. Add per-doctype prop mapping in `build_template_data()`
-6. Run `npm run build` in `templates/`
+3. If it's a document email: add doctype mapping in `generic_email.py` `DOCTYPE_TEMPLATE_MAP`
+4. If it's a document email: add doctype to `emails.SUPPORTED_DOCTYPES` in `send_email_button.js` (for the Send Email button)
+5. If it's a document email: add per-doctype prop mapping in `build_template_data()`
+6. **Always** add the template to the "Send Test Email" dialog options in `send_email_button.js` (search for `send_test_email`)
+7. Run `npm run build` in `templates/`
 
 ### Modifying branding/styling
 - Shared styles: `templates/emails/shared.tsx`
