@@ -14383,11 +14383,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx28 = jsxWithValidationDynamic;
-        var jsxs17 = jsxWithValidationStatic;
+        var jsx39 = jsxWithValidationDynamic;
+        var jsxs28 = jsxWithValidationStatic;
         exports2.Fragment = REACT_FRAGMENT_TYPE;
-        exports2.jsx = jsx28;
-        exports2.jsxs = jsxs17;
+        exports2.jsx = jsx39;
+        exports2.jsxs = jsxs28;
       })();
     }
   }
@@ -48739,6 +48739,387 @@ var DocumentEmail = ({
   ] });
 };
 
+// emails/ach-payment-upcoming.tsx
+var import_jsx_runtime29 = __toESM(require_jsx_runtime());
+var AchPaymentUpcoming = ({
+  branding,
+  loan,
+  customer_name,
+  scheduled_date,
+  amount,
+  account_last4
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(Layout, { branding, preview: `Upcoming payment of $${amount} on ${scheduled_date}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Upcoming Payment"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: [
+          "Your scheduled payment will be debited from your account ending in ",
+          account_last4,
+          " on the date below."
+        ]
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(InfoRow, { branding, label: "Loan", value: loan }),
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(InfoRow, { branding, label: "Debit Date", value: scheduled_date }),
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(InfoAmount, { branding, label: "Amount", value: `$${amount}` })
+    ] })
+  ] });
+};
+
+// emails/ach-payment-success.tsx
+var import_jsx_runtime30 = __toESM(require_jsx_runtime());
+var AchPaymentSuccess = ({
+  branding,
+  loan,
+  customer_name,
+  scheduled_date,
+  amount
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(Layout, { branding, preview: `Payment of $${amount} processed successfully`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Payment Successful"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Your payment has been processed successfully."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(InfoRow, { branding, label: "Loan", value: loan }),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(InfoRow, { branding, label: "Payment Date", value: scheduled_date }),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(InfoAmount, { branding, label: "Amount Paid", value: `$${amount}` })
+    ] })
+  ] });
+};
+
+// emails/ach-payment-failure.tsx
+var import_jsx_runtime31 = __toESM(require_jsx_runtime());
+var AchPaymentFailure = ({
+  branding,
+  loan,
+  customer_name,
+  scheduled_date,
+  failure_reason,
+  amount
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(Layout, { branding, preview: `Payment of $${amount} could not be processed`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Payment Failed"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Your scheduled payment could not be processed. Please contact us to resolve this issue."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(InfoRow, { branding, label: "Loan", value: loan }),
+      /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(InfoRow, { branding, label: "Scheduled Date", value: scheduled_date }),
+      /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(InfoRow, { branding, label: "Reason", value: failure_reason }),
+      /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(InfoAmount, { branding, label: "Amount", value: `$${amount}` })
+    ] })
+  ] });
+};
+
+// emails/retailer-application.tsx
+var import_jsx_runtime32 = __toESM(require_jsx_runtime());
+var RetailerApplication = ({
+  branding,
+  customer_name,
+  dealer_license_no,
+  factory_name
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)(Layout, { branding, preview: `New dealer application for ${customer_name}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "New Dealer Application"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Dealer Capital Resources is submitting the following dealer for your review and approval to order manufactured homes through your factory. Please find the required documents attached."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(InfoRow, { branding, label: "Dealer License No", value: dealer_license_no }),
+      /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(InfoAmount, { branding, label: "Factory", value: factory_name })
+    ] })
+  ] });
+};
+
+// emails/dealer-welcome.tsx
+var import_jsx_runtime33 = __toESM(require_jsx_runtime());
+var DealerWelcome = ({
+  branding,
+  customer_name,
+  dcr_account_no
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(Layout, { branding, preview: `Welcome to Dealer Capital Resources, ${customer_name}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Welcome to DCR"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Your dealer account has been approved. Below are your account details."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(InfoRow, { branding, label: "DCR Account No", value: dcr_account_no }),
+      /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(InfoAmount, { branding, label: "Status", value: "Approved" })
+    ] })
+  ] });
+};
+
+// emails/dealer-agreement-sent.tsx
+var import_jsx_runtime34 = __toESM(require_jsx_runtime());
+var DealerAgreementSent = ({
+  branding,
+  customer_name,
+  email
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(Layout, { branding, preview: "Your Dealer Agreement is ready for signature", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Dealer Agreement"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Your Dealer Agreement is ready for review and signature. You will receive a separate email from DocuSign with the signing link."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(InfoRow, { branding, label: "Sent To", value: email }),
+      /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(InfoAmount, { branding, label: "Document", value: "Dealer Agreement" })
+    ] })
+  ] });
+};
+
+// emails/dealer-agreement-signed.tsx
+var import_jsx_runtime35 = __toESM(require_jsx_runtime());
+var DealerAgreementSigned = ({
+  branding,
+  customer_name,
+  signed_date
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)(Layout, { branding, preview: "Your Dealer Agreement has been fully executed", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Agreement Signed"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Your Dealer Agreement has been fully executed. A signed copy is attached for your records."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(InfoRow, { branding, label: "Signed Date", value: signed_date }),
+      /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(InfoAmount, { branding, label: "Status", value: "Fully Executed" })
+    ] })
+  ] });
+};
+
+// emails/flooring-packet-sent.tsx
+var import_jsx_runtime36 = __toESM(require_jsx_runtime());
+var FlooringPacketSent = ({
+  branding,
+  customer_name,
+  loan_application,
+  requested_advance_amount,
+  factory_name
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(Layout, { branding, preview: "Your flooring packet is ready for signature", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Flooring Packet"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Your Exhibit A and ACH Approval documents are ready for review and signature. You will receive a separate email from DocuSign with the signing link."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Loan Application", value: loan_application }),
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Advance Amount", value: `$${requested_advance_amount}` }),
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoAmount, { branding, label: "Factory", value: factory_name })
+    ] })
+  ] });
+};
+
+// emails/flooring-packet-signed.tsx
+var import_jsx_runtime37 = __toESM(require_jsx_runtime());
+var FlooringPacketSigned = ({
+  branding,
+  customer_name,
+  loan_application,
+  signed_date
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(Layout, { branding, preview: "Your flooring packet has been fully executed", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Flooring Packet Signed"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Your Exhibit A and ACH Approval have been fully executed. A signed copy is attached for your records."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(InfoRow, { branding, label: "Loan Application", value: loan_application }),
+      /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(InfoRow, { branding, label: "Signed Date", value: signed_date }),
+      /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(InfoAmount, { branding, label: "Status", value: "Fully Executed" })
+    ] })
+  ] });
+};
+
+// emails/loan-disbursed.tsx
+var import_jsx_runtime38 = __toESM(require_jsx_runtime());
+var LoanDisbursed = ({
+  branding,
+  customer_name,
+  factory_name,
+  loan,
+  home_build_request,
+  amount
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(Layout, { branding, preview: `Advance of $${amount} disbursed to ${factory_name}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Advance Disbursed"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "The advance for your home build has been sent to the factory on your behalf."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(InfoRow, { branding, label: "Factory", value: factory_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(InfoRow, { branding, label: "Loan", value: loan }),
+      /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(InfoRow, { branding, label: "Home Build", value: home_build_request }),
+      /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(InfoAmount, { branding, label: "Amount Advanced", value: `$${amount}` })
+    ] })
+  ] });
+};
+
+// emails/factory-loa-received.tsx
+var import_jsx_runtime39 = __toESM(require_jsx_runtime());
+var FactoryLoaReceived = ({
+  branding,
+  customer_name,
+  factory_name,
+  loa_date
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime39.jsxs)(Layout, { branding, preview: `You have been approved to order through ${factory_name}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Factory Approved"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "You have been approved to order manufactured homes through the factory below."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime39.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(InfoRow, { branding, label: "Factory", value: factory_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(InfoRow, { branding, label: "Approval Date", value: loa_date }),
+      /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(InfoAmount, { branding, label: "Status", value: "Approved" })
+    ] })
+  ] });
+};
+
 // src/send.tsx
 var resend = new Resend(process.env.RESEND_API_KEY);
 function cleanEmailList(input) {
@@ -48759,7 +49140,18 @@ var templates = {
   "welcome": WelcomeEmail,
   "payment-request": PaymentRequestEmail,
   "payment-entry": PaymentEntryEmail,
-  "document": DocumentEmail
+  "document": DocumentEmail,
+  "ach-payment-upcoming": AchPaymentUpcoming,
+  "ach-payment-success": AchPaymentSuccess,
+  "ach-payment-failure": AchPaymentFailure,
+  "retailer-application": RetailerApplication,
+  "dealer-welcome": DealerWelcome,
+  "dealer-agreement-sent": DealerAgreementSent,
+  "dealer-agreement-signed": DealerAgreementSigned,
+  "flooring-packet-sent": FlooringPacketSent,
+  "flooring-packet-signed": FlooringPacketSigned,
+  "loan-disbursed": LoanDisbursed,
+  "factory-loa-received": FactoryLoaReceived
 };
 async function handler(req, res) {
   if (req.method === "GET") {
