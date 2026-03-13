@@ -16,11 +16,6 @@ override_doctype_class = {
 # Include JS in desk
 app_include_js = "/assets/emails/js/send_email_button.js"
 
-# Explicitly load doctype JS
-doctype_js = {
-    "Email Service Settings": "emails/doctype/email_service_settings/email_service_settings.js"
-}
-
 # Override the communication email make function to intercept BEFORE email is queued
 override_whitelisted_methods = {
     "frappe.core.doctype.communication.email.make": "emails.email_service.email_override.make_communication_email"
