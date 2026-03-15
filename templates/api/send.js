@@ -47887,22 +47887,32 @@ var Logo = ({
   darkSrc,
   alt,
   height,
-  className
+  style: extraStyle
 }) => {
+  const h2 = typeof height === "number" ? `${height}px` : height;
+  const baseStyle = {
+    display: "block",
+    height: h2,
+    width: "auto",
+    border: 0,
+    outline: "none",
+    textDecoration: "none",
+    ...extraStyle
+  };
   if (!darkSrc) {
-    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Img, { src: lightSrc, height, alt, className });
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Img, { src: lightSrc, height, width: "auto", alt, style: baseStyle });
   }
   return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(import_jsx_runtime16.Fragment, { children: [
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Img, { src: lightSrc, height, alt, className: `email-logo-light ${className || ""}` }),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Img, { src: darkSrc, height, alt: "", className: `email-logo-dark ${className || ""}`, style: { display: "none", maxHeight: 0, overflow: "hidden" } })
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Img, { src: lightSrc, height, width: "auto", alt, className: "email-logo-light", style: baseStyle }),
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Img, { src: darkSrc, height, width: "auto", alt: "", className: "email-logo-dark", style: { ...baseStyle, display: "none", maxHeight: 0, overflow: "hidden" } })
   ] });
 };
 var Footer = ({ branding }) => {
   const footerLogo = branding.logo_url_secondary || branding.logo_url;
   const footerLogoDark = branding.logo_url_secondary_dark || branding.logo_url_dark;
   const tertiaryColor = branding.tertiary_color || "#6b7280";
-  return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Section, { className: "mt-12 mb-8", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Hr2, { className: "email-footer-divider mb-8", style: { border: "none", borderTop: `1px solid ${tertiaryColor}`, marginTop: 0 } }),
+  return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Section, { style: { marginTop: "48px", marginBottom: "32px" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Hr2, { className: "email-footer-divider", style: { border: "none", borderTop: `1px solid ${tertiaryColor}`, marginTop: 0, marginBottom: "32px" } }),
     footerLogo && /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
       Logo,
       {
@@ -47910,7 +47920,7 @@ var Footer = ({ branding }) => {
         darkSrc: footerLogoDark,
         alt: branding.logo_alt || branding.company,
         height: "24",
-        className: "mb-6"
+        style: { marginBottom: "24px" }
       }
     ),
     (branding.company_email || branding.company_phone) && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Text3, { className: "email-footer-text", style: { margin: "0 0 8px 0", fontSize: "14px", color: tertiaryColor, lineHeight: "20px" }, children: [
@@ -48002,17 +48012,22 @@ var Layout = ({
     /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(pd, { config: tailwind_config_default, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
       Body,
       {
-        className: "mx-auto my-0 font-sans email-body",
+        className: "email-body",
         style: {
+          margin: "0 auto",
+          padding: 0,
           fontFamily: branding.font_family,
-          backgroundColor: branding.background_color
+          backgroundColor: branding.background_color,
+          WebkitTextSizeAdjust: "100%",
+          msTextSizeAdjust: "100%"
         },
-        children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Container, { className: "mx-auto my-0 pt-6 pb-8 max-w-[600px]", children: [
+        children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Container, { style: { margin: "0 auto", paddingTop: "24px", paddingBottom: "32px", maxWidth: "600px" }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
             Section,
             {
-              className: "px-6 py-8 email-card",
+              className: "email-card",
               style: {
+                padding: "32px 24px",
                 backgroundColor: branding.card_color || "#ffffff"
               },
               children: [
@@ -48023,7 +48038,7 @@ var Layout = ({
                     darkSrc: branding.logo_url_dark,
                     alt: branding.logo_alt || branding.company,
                     height: branding.logo_height || 48,
-                    className: "mt-4 mb-8"
+                    style: { marginTop: "16px", marginBottom: "32px" }
                   }
                 ),
                 children,
@@ -48134,21 +48149,27 @@ var MagicLinkEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(pd, { config: tailwind_config_default, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
       Body,
       {
-        className: "mx-auto my-0 font-sans email-body",
+        className: "email-body",
         style: {
+          margin: "0 auto",
+          padding: 0,
           fontFamily: branding.font_family,
-          backgroundColor: branding.background_color
+          backgroundColor: branding.background_color,
+          WebkitTextSizeAdjust: "100%",
+          msTextSizeAdjust: "100%"
         },
         children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(
           Container,
           {
-            className: "mx-auto my-0 pt-5 px-6 pb-12 max-w-[600px]",
+            style: { margin: "0 auto", paddingTop: "20px", paddingLeft: "24px", paddingRight: "24px", paddingBottom: "48px", maxWidth: "600px" },
             children: [
               /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(
                 Section,
                 {
-                  className: "mt-8 p-8 email-card",
+                  className: "email-card",
                   style: {
+                    marginTop: "32px",
+                    padding: "32px",
                     backgroundColor: branding.card_color || "#ffffff",
                     boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                     backgroundImage: branding.background_image_url ? `linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url(${branding.background_image_url})` : void 0,
@@ -48163,35 +48184,49 @@ var MagicLinkEmail = ({
                         darkSrc: branding.logo_url_dark,
                         alt: branding.logo_alt || branding.company,
                         height: branding.logo_height || 48,
-                        className: "mt-4 mb-8"
+                        style: { marginTop: "16px", marginBottom: "32px" }
                       }
                     ),
                     /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
                       Heading,
                       {
-                        className: "text-[24px] font-medium email-heading",
-                        style: { color: branding.text_color },
+                        className: "email-heading",
+                        style: { color: branding.text_color, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
                         children: user_name ? `Hello ${toTitleCase(user_name)}, sign in.` : "Sign in"
                       }
                     ),
                     /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
                       Text3,
                       {
-                        className: "text-[15px] leading-6 email-text",
-                        style: { color: branding.text_color },
+                        className: "email-text",
+                        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
                         children: "Click the button below to sign in."
                       }
                     ),
-                    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+                    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
                       Button,
                       {
-                        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
-                        style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
+                        className: "email-button",
+                        style: {
+                          backgroundColor: branding.primary_color,
+                          color: branding.button_text_color || "#ffffff",
+                          display: "inline-block",
+                          boxSizing: "border-box",
+                          width: "100%",
+                          borderRadius: "4px",
+                          padding: "12px",
+                          textAlign: "center",
+                          fontWeight: 500,
+                          fontSize: "16px",
+                          lineHeight: "1.2",
+                          textDecoration: "none",
+                          border: "none"
+                        },
                         href: magic_link,
                         children: "Login"
                       }
                     ) }),
-                    /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Text3, { className: "text-[12px]", style: { color: branding.tertiary_color || "#6b7280" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Text3, { style: { color: branding.tertiary_color || "#6b7280", fontSize: "12px", lineHeight: "18px" }, children: [
                       "This link will expire in ",
                       expiry_time,
                       ".",
@@ -48229,16 +48264,16 @@ var SalesInvoiceEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: "New Invoice"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: "Please review the attached invoice and submit payment at your earliest convenience."
       }
     ),
@@ -48252,8 +48287,7 @@ var SalesInvoiceEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6",
-        style: { color: branding.tertiary_color },
+        style: { color: branding.tertiary_color, fontSize: "15px", lineHeight: "24px" },
         children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("em", { children: "Thank you for your business!" })
       }
     )
@@ -48275,16 +48309,16 @@ var QuotationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: "New Quotation"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: "Please review the attached quotation at your earliest convenience."
       }
     ),
@@ -48297,8 +48331,7 @@ var QuotationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6",
-        style: { color: branding.tertiary_color },
+        style: { color: branding.tertiary_color, fontSize: "15px", lineHeight: "24px" },
         children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("em", { children: "We look forward to working with you!" })
       }
     )
@@ -48320,16 +48353,16 @@ var SalesOrderEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: "Order Confirmation \u{1F3C1}"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: "Your order has been confirmed. Please review the attached PDF."
       }
     ),
@@ -48342,8 +48375,7 @@ var SalesOrderEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6",
-        style: { color: branding.tertiary_color },
+        style: { color: branding.tertiary_color, fontSize: "15px", lineHeight: "24px" },
         children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("em", { children: "Thank you for your business!" })
       }
     )
@@ -48363,16 +48395,16 @@ var PurchaseOrderEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: "New Purchase Order"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: "Please review the attached purchase order."
       }
     ),
@@ -48384,8 +48416,7 @@ var PurchaseOrderEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6",
-        style: { color: branding.text_color },
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: "The PDF is attached for your review. Please reach out if you have any questions or concerns."
       }
     )
@@ -48406,16 +48437,16 @@ var RequestForQuotationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: "Request for Quotation"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: "Please review the attached request for quotation and respond with your pricing."
       }
     ),
@@ -48424,11 +48455,25 @@ var RequestForQuotationEmail = ({
       /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(InfoRow, { branding, label: "Date", value: rfq_date })
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
-    document_link && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+    document_link && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
       Button,
       {
-        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
-        style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
+        className: "email-button",
+        style: {
+          backgroundColor: branding.primary_color,
+          color: branding.button_text_color || "#ffffff",
+          display: "inline-block",
+          boxSizing: "border-box",
+          width: "100%",
+          borderRadius: "4px",
+          padding: "12px",
+          textAlign: "center",
+          fontWeight: 500,
+          fontSize: "16px",
+          lineHeight: "1.2",
+          textDecoration: "none",
+          border: "none"
+        },
         href: document_link,
         children: "View Request for Quotation"
       }
@@ -48448,24 +48493,38 @@ var PasswordResetEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: user_name ? `Hello ${toTitleCase(user_name)},` : "Reset your password"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: "Click the button below to reset your password."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
       Button,
       {
-        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
-        style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
+        className: "email-button",
+        style: {
+          backgroundColor: branding.primary_color,
+          color: branding.button_text_color || "#ffffff",
+          display: "inline-block",
+          boxSizing: "border-box",
+          width: "100%",
+          borderRadius: "4px",
+          padding: "12px",
+          textAlign: "center",
+          fontWeight: 500,
+          fontSize: "16px",
+          lineHeight: "1.2",
+          textDecoration: "none",
+          border: "none"
+        },
         href: reset_link,
         children: "Reset Password"
       }
@@ -48473,8 +48532,7 @@ var PasswordResetEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(
       Text3,
       {
-        className: "text-xs leading-6",
-        style: { color: branding.tertiary_color },
+        style: { color: branding.tertiary_color, fontSize: "12px", lineHeight: "24px" },
         children: [
           "This link will expire in ",
           expiry_time,
@@ -48500,24 +48558,38 @@ var EmailVerificationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: user_name ? `Hello ${toTitleCase(user_name)},` : "Verify your email"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: "Click the button below to verify your email."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       Button,
       {
-        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
-        style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
+        className: "email-button",
+        style: {
+          backgroundColor: branding.primary_color,
+          color: branding.button_text_color || "#ffffff",
+          display: "inline-block",
+          boxSizing: "border-box",
+          width: "100%",
+          borderRadius: "4px",
+          padding: "12px",
+          textAlign: "center",
+          fontWeight: 500,
+          fontSize: "16px",
+          lineHeight: "1.2",
+          textDecoration: "none",
+          border: "none"
+        },
         href: verification_link,
         children: "Verify Email"
       }
@@ -48525,8 +48597,7 @@ var EmailVerificationEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(
       Text3,
       {
-        className: "text-xs leading-6",
-        style: { color: branding.tertiary_color },
+        style: { color: branding.tertiary_color, fontSize: "12px", lineHeight: "24px" },
         children: [
           "This link will expire in ",
           expiry_time,
@@ -48552,8 +48623,8 @@ var WelcomeEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: [
           "Your account is ready",
           user_name ? `, ${toTitleCase(user_name)}` : "",
@@ -48564,16 +48635,30 @@ var WelcomeEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: custom_message || "Log in to access company resources."
       }
     ),
-    login_link && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+    login_link && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
       Button,
       {
-        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
-        style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
+        className: "email-button",
+        style: {
+          backgroundColor: branding.primary_color,
+          color: branding.button_text_color || "#ffffff",
+          display: "inline-block",
+          boxSizing: "border-box",
+          width: "100%",
+          borderRadius: "4px",
+          padding: "12px",
+          textAlign: "center",
+          fontWeight: 500,
+          fontSize: "16px",
+          lineHeight: "1.2",
+          textDecoration: "none",
+          border: "none"
+        },
         href: login_link,
         children: "Log In"
       }
@@ -48597,16 +48682,16 @@ var PaymentRequestEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: "New Payment Request"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: "Please review the attached PDF and submit payment at your earliest convenience."
       }
     ),
@@ -48620,16 +48705,29 @@ var PaymentRequestEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6",
-        style: { color: branding.tertiary_color },
+        style: { color: branding.tertiary_color, fontSize: "15px", lineHeight: "24px" },
         children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("em", { children: "Thank you for your business!" })
       }
     ),
-    stripe_payment_url && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Section, { className: "my-8", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+    stripe_payment_url && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       Button,
       {
-        className: "email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]",
-        style: { backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" },
+        className: "email-button",
+        style: {
+          backgroundColor: branding.primary_color,
+          color: branding.button_text_color || "#ffffff",
+          display: "inline-block",
+          boxSizing: "border-box",
+          width: "100%",
+          borderRadius: "4px",
+          padding: "12px",
+          textAlign: "center",
+          fontWeight: 500,
+          fontSize: "16px",
+          lineHeight: "1.2",
+          textDecoration: "none",
+          border: "none"
+        },
         href: stripe_payment_url,
         children: "Pay Invoice"
       }
@@ -48653,16 +48751,16 @@ var PaymentEntryEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: "Payment Receipt"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: "Thank you for your payment. Please find your receipt details below."
       }
     ),
@@ -48678,8 +48776,7 @@ var PaymentEntryEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6",
-        style: { color: branding.tertiary_color },
+        style: { color: branding.tertiary_color, fontSize: "15px", lineHeight: "24px" },
         children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("em", { children: "Thank you for your payment!" })
       }
     )
@@ -48702,8 +48799,8 @@ var DocumentEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(
       Heading,
       {
-        className: "text-[24px] font-medium email-heading",
-        style: { color: branding.text_color, marginTop: 0 },
+        className: "email-heading",
+        style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
         children: [
           "New ",
           document_type || "Document"
@@ -48713,8 +48810,8 @@ var DocumentEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(
       Text3,
       {
-        className: "text-[15px] leading-6 email-text",
-        style: { color: branding.text_color },
+        className: "email-text",
+        style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
         children: [
           "Please find the attached ",
           document_type?.toLowerCase() || "document",
@@ -48731,8 +48828,7 @@ var DocumentEmail = ({
     /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
       Text3,
       {
-        className: "text-[15px] leading-6",
-        style: { color: branding.tertiary_color },
+        style: { color: branding.tertiary_color, fontSize: "15px", lineHeight: "24px" },
         children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("em", { children: "Thank you for your business!" })
       }
     )
