@@ -27,15 +27,15 @@ export const PaymentRequestEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[24px] font-medium email-heading"
-        style={{ color: branding.text_color, marginTop: 0 }}
+        className="email-heading"
+        style={{ color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" }}
       >
         New Payment Request
       </Heading>
 
       <Text
-        className="text-[15px] leading-6 email-text"
-        style={{ color: branding.text_color }}
+        className="email-text"
+        style={{ color: branding.text_color, fontSize: "15px", lineHeight: "24px" }}
       >
         Please review the attached PDF and submit payment at your earliest convenience.
       </Text>
@@ -54,17 +54,30 @@ export const PaymentRequestEmail = ({
       )}
 
       <Text
-        className="text-[15px] leading-6"
-        style={{ color: branding.tertiary_color }}
+        style={{ color: branding.tertiary_color, fontSize: "15px", lineHeight: "24px" }}
       >
         <em>Thank you for your business!</em>
       </Text>
 
       {stripe_payment_url && (
-        <Section className="my-8">
+        <Section style={{ marginTop: "32px", marginBottom: "32px" }}>
           <Button
-            className="email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]"
-            style={{ backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" }}
+            className="email-button"
+            style={{
+              backgroundColor: branding.primary_color,
+              color: branding.button_text_color || "#ffffff",
+              display: "inline-block",
+              boxSizing: "border-box" as const,
+              width: "100%",
+              borderRadius: "4px",
+              padding: "12px",
+              textAlign: "center" as const,
+              fontWeight: 500,
+              fontSize: "16px",
+              lineHeight: "1.2",
+              textDecoration: "none",
+              border: "none",
+            }}
             href={stripe_payment_url}
           >
             Pay Invoice

@@ -21,15 +21,15 @@ export const PurchaseOrderEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[24px] font-medium email-heading"
-        style={{ color: branding.text_color, marginTop: 0 }}
+        className="email-heading"
+        style={{ color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" }}
       >
         New Purchase Order
       </Heading>
 
       <Text
-        className="text-[15px] leading-6 email-text"
-        style={{ color: branding.text_color }}
+        className="email-text"
+        style={{ color: branding.text_color, fontSize: "15px", lineHeight: "24px" }}
       >
         Please review the attached purchase order.
       </Text>
@@ -46,8 +46,7 @@ export const PurchaseOrderEmail = ({
       )}
 
       <Text
-        className="text-[15px] leading-6"
-        style={{ color: branding.text_color }}
+        style={{ color: branding.text_color, fontSize: "15px", lineHeight: "24px" }}
       >
         The PDF is attached for your review. Please reach out if you have any questions or concerns.
       </Text>

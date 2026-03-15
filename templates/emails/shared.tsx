@@ -96,8 +96,12 @@ export const Button = ({ href, color, textColor, children }: { href: string; col
       padding: "12px 24px",
       borderRadius: "4px",
       fontWeight: 400,
+      fontSize: "16px",
+      lineHeight: "1.2",
       textDecoration: "none",
+      textAlign: "center" as const,
       border: "none",
+      boxSizing: "border-box" as const,
     }}
   >
     {children}
@@ -113,21 +117,31 @@ export const Logo = ({
   darkSrc,
   alt,
   height,
-  className,
+  style: extraStyle,
 }: {
   lightSrc: string;
   darkSrc?: string;
   alt: string;
   height: string | number;
-  className?: string;
+  style?: React.CSSProperties;
 }) => {
+  const h = typeof height === "number" ? `${height}px` : height;
+  const baseStyle: React.CSSProperties = {
+    display: "block",
+    height: h,
+    width: "auto",
+    border: 0,
+    outline: "none",
+    textDecoration: "none",
+    ...extraStyle,
+  };
   if (!darkSrc) {
-    return <Img src={lightSrc} height={height} alt={alt} className={className} />;
+    return <Img src={lightSrc} height={height} width="auto" alt={alt} style={baseStyle} />;
   }
   return (
     <>
-      <Img src={lightSrc} height={height} alt={alt} className={`email-logo-light ${className || ""}`} />
-      <Img src={darkSrc} height={height} alt="" className={`email-logo-dark ${className || ""}`} style={{ display: "none", maxHeight: 0, overflow: "hidden" }} />
+      <Img src={lightSrc} height={height} width="auto" alt={alt} className="email-logo-light" style={baseStyle} />
+      <Img src={darkSrc} height={height} width="auto" alt="" className="email-logo-dark" style={{ ...baseStyle, display: "none", maxHeight: 0, overflow: "hidden" }} />
     </>
   );
 };
@@ -142,9 +156,9 @@ export const Footer = ({ branding }: { branding: Branding }) => {
   const tertiaryColor = branding.tertiary_color || "#6b7280";
 
   return (
-    <Section className="mt-12 mb-8">
+    <Section style={{ marginTop: "48px", marginBottom: "32px" }}>
       {/* Divider line */}
-      <Hr className="email-footer-divider mb-8" style={{ border: "none", borderTop: `1px solid ${tertiaryColor}`, marginTop: 0 }} />
+      <Hr className="email-footer-divider" style={{ border: "none", borderTop: `1px solid ${tertiaryColor}`, marginTop: 0, marginBottom: "32px" }} />
       {/* Logo */}
       {footerLogo && (
         <Logo
@@ -152,7 +166,7 @@ export const Footer = ({ branding }: { branding: Branding }) => {
           darkSrc={footerLogoDark}
           alt={branding.logo_alt || branding.company}
           height="24"
-          className="mb-6"
+          style={{ marginBottom: "24px" }}
         />
       )}
 
@@ -273,16 +287,21 @@ export const Layout = ({
       {preview && <Preview>{preview}</Preview>}
       <Tailwind config={tailwindConfig}>
         <Body
-          className="mx-auto my-0 font-sans email-body"
+          className="email-body"
           style={{
+            margin: "0 auto",
+            padding: 0,
             fontFamily: branding.font_family,
             backgroundColor: branding.background_color,
+            WebkitTextSizeAdjust: "100%",
+            msTextSizeAdjust: "100%",
           }}
         >
-          <Container className="mx-auto my-0 pt-6 pb-8 max-w-[600px]">
+          <Container style={{ margin: "0 auto", paddingTop: "24px", paddingBottom: "32px", maxWidth: "600px" }}>
             <Section
-              className="px-6 py-8 email-card"
+              className="email-card"
               style={{
+                padding: "32px 24px",
                 backgroundColor: branding.card_color || "#ffffff",
               }}
             >
@@ -292,7 +311,7 @@ export const Layout = ({
                   darkSrc={branding.logo_url_dark}
                   alt={branding.logo_alt || branding.company}
                   height={branding.logo_height || 48}
-                  className="mt-4 mb-8"
+                  style={{ marginTop: "16px", marginBottom: "32px" }}
                 />
               )}
 

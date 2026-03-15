@@ -19,23 +19,37 @@ export const EmailVerificationEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[24px] font-medium email-heading"
-        style={{ color: branding.text_color, marginTop: 0 }}
+        className="email-heading"
+        style={{ color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" }}
       >
         {user_name ? `Hello ${toTitleCase(user_name)},` : "Verify your email"}
       </Heading>
 
       <Text
-        className="text-[15px] leading-6 email-text"
-        style={{ color: branding.text_color }}
+        className="email-text"
+        style={{ color: branding.text_color, fontSize: "15px", lineHeight: "24px" }}
       >
         Click the button below to verify your email.
       </Text>
 
-      <Section className="my-8">
+      <Section style={{ marginTop: "32px", marginBottom: "32px" }}>
         <Button
-          className="email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]"
-          style={{ backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" }}
+          className="email-button"
+          style={{
+            backgroundColor: branding.primary_color,
+            color: branding.button_text_color || "#ffffff",
+            display: "inline-block",
+            boxSizing: "border-box" as const,
+            width: "100%",
+            borderRadius: "4px",
+            padding: "12px",
+            textAlign: "center" as const,
+            fontWeight: 500,
+            fontSize: "16px",
+            lineHeight: "1.2",
+            textDecoration: "none",
+            border: "none",
+          }}
           href={verification_link}
         >
           Verify Email
@@ -43,8 +57,7 @@ export const EmailVerificationEmail = ({
       </Section>
 
       <Text
-        className="text-xs leading-6"
-        style={{ color: branding.tertiary_color }}
+        style={{ color: branding.tertiary_color, fontSize: "12px", lineHeight: "24px" }}
       >
         This link will expire in {expiry_time}.
         <br /><br />

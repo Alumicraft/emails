@@ -29,15 +29,15 @@ export const SalesInvoiceEmail = ({
   return (
     <Layout branding={branding}>
       <Heading
-        className="text-[24px] font-medium email-heading"
-        style={{ color: branding.text_color, marginTop: 0 }}
+        className="email-heading"
+        style={{ color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" }}
       >
         New Invoice
       </Heading>
 
       <Text
-        className="text-[15px] leading-6 email-text"
-        style={{ color: branding.text_color }}
+        className="email-text"
+        style={{ color: branding.text_color, fontSize: "15px", lineHeight: "24px" }}
       >
         Please review the attached invoice and submit payment at your earliest convenience.
       </Text>
@@ -56,8 +56,7 @@ export const SalesInvoiceEmail = ({
       )}
 
       <Text
-        className="text-[15px] leading-6"
-        style={{ color: branding.tertiary_color }}
+        style={{ color: branding.tertiary_color, fontSize: "15px", lineHeight: "24px" }}
       >
         <em>Thank you for your business!</em>
       </Text>

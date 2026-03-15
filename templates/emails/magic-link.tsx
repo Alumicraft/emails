@@ -65,18 +65,24 @@ export const MagicLinkEmail = ({
       <Preview>Sign in to {branding.company} with this magic link</Preview>
       <Tailwind config={tailwindConfig}>
         <Body
-          className="mx-auto my-0 font-sans email-body"
+          className="email-body"
           style={{
+            margin: "0 auto",
+            padding: 0,
             fontFamily: branding.font_family,
             backgroundColor: branding.background_color,
+            WebkitTextSizeAdjust: "100%",
+            msTextSizeAdjust: "100%",
           }}
         >
           <Container
-            className="mx-auto my-0 pt-5 px-6 pb-12 max-w-[600px]"
+            style={{ margin: "0 auto", paddingTop: "20px", paddingLeft: "24px", paddingRight: "24px", paddingBottom: "48px", maxWidth: "600px" }}
           >
             <Section
-              className="mt-8 p-8 email-card"
+              className="email-card"
               style={{
+                marginTop: "32px",
+                padding: "32px",
                 backgroundColor: branding.card_color || "#ffffff",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                 backgroundImage: branding.background_image_url
@@ -92,31 +98,45 @@ export const MagicLinkEmail = ({
                   darkSrc={branding.logo_url_dark}
                   alt={branding.logo_alt || branding.company}
                   height={branding.logo_height || 48}
-                  className="mt-4 mb-8"
+                  style={{ marginTop: "16px", marginBottom: "32px" }}
                 />
               )}
               <Heading
-                className="text-[24px] font-medium email-heading"
-                style={{ color: branding.text_color }}
+                className="email-heading"
+                style={{ color: branding.text_color, fontSize: "24px", fontWeight: 500, lineHeight: "32px" }}
               >
                 {user_name ? `Hello ${toTitleCase(user_name)}, sign in.` : "Sign in"}
               </Heading>
               <Text
-                className="text-[15px] leading-6 email-text"
-                style={{ color: branding.text_color }}
+                className="email-text"
+                style={{ color: branding.text_color, fontSize: "15px", lineHeight: "24px" }}
               >
                 Click the button below to sign in.
               </Text>
-              <Section className="my-8">
+              <Section style={{ marginTop: "32px", marginBottom: "32px" }}>
                 <Button
-                  className="email-button box-border w-full rounded-[4px] px-[12px] py-[12px] text-center font-medium text-[16px]"
-                  style={{ backgroundColor: branding.primary_color, color: branding.button_text_color || "#ffffff" }}
+                  className="email-button"
+                  style={{
+                    backgroundColor: branding.primary_color,
+                    color: branding.button_text_color || "#ffffff",
+                    display: "inline-block",
+                    boxSizing: "border-box" as const,
+                    width: "100%",
+                    borderRadius: "4px",
+                    padding: "12px",
+                    textAlign: "center" as const,
+                    fontWeight: 500,
+                    fontSize: "16px",
+                    lineHeight: "1.2",
+                    textDecoration: "none",
+                    border: "none",
+                  }}
                   href={magic_link}
                 >
                   Login
                 </Button>
               </Section>
-              <Text className="text-[12px]" style={{ color: branding.tertiary_color || "#6b7280" }}>
+              <Text style={{ color: branding.tertiary_color || "#6b7280", fontSize: "12px", lineHeight: "18px" }}>
                 This link will expire in {expiry_time}.
                 <br /><br />
                 If you didn't try to login, you can safely ignore this email.
