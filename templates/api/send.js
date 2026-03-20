@@ -14383,11 +14383,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx39 = jsxWithValidationDynamic;
-        var jsxs28 = jsxWithValidationStatic;
+        var jsx40 = jsxWithValidationDynamic;
+        var jsxs29 = jsxWithValidationStatic;
         exports2.Fragment = REACT_FRAGMENT_TYPE;
-        exports2.jsx = jsx39;
-        exports2.jsxs = jsxs28;
+        exports2.jsx = jsx40;
+        exports2.jsxs = jsxs29;
       })();
     }
   }
@@ -49216,6 +49216,47 @@ var FactoryLoaReceived = ({
   ] });
 };
 
+// emails/pre-approval.tsx
+var import_jsx_runtime40 = __toESM(require_jsx_runtime());
+var PreApproval = ({
+  branding,
+  customer_name,
+  loan_application,
+  loan_amount
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)(Layout, { branding, preview: "Your Advance Pre-Approval letter is attached", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Advance Pre-Approval"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Please find attached your Advance Pre-Approval letter for your review. This letter confirms that your flooring application has been pre-approved."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(InfoRow, { branding, label: "Application", value: loan_application }),
+      loan_amount && /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(InfoAmount, { branding, label: "Pre-Approved Amount", value: `$${loan_amount}` })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "If you have any questions, please don't hesitate to contact us."
+      }
+    )
+  ] });
+};
+
 // src/send.tsx
 var resend = new Resend(process.env.RESEND_API_KEY);
 function cleanEmailList(input) {
@@ -49247,7 +49288,8 @@ var templates = {
   "flooring-packet-sent": FlooringPacketSent,
   "flooring-packet-signed": FlooringPacketSigned,
   "loan-disbursed": LoanDisbursed,
-  "factory-loa-received": FactoryLoaReceived
+  "factory-loa-received": FactoryLoaReceived,
+  "pre-approval": PreApproval
 };
 async function handler(req, res) {
   if (req.method === "GET") {
