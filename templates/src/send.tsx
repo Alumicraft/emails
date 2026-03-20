@@ -26,6 +26,7 @@ import { FlooringPacketSent } from "../emails/flooring-packet-sent";
 import { FlooringPacketSigned } from "../emails/flooring-packet-signed";
 import { LoanDisbursed } from "../emails/loan-disbursed";
 import { FactoryLoaReceived } from "../emails/factory-loa-received";
+import { PreApproval } from "../emails/pre-approval";
 import { Branding } from "../emails/shared";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -90,6 +91,7 @@ const templates: Record<string, React.FC<any>> = {
   "flooring-packet-signed": FlooringPacketSigned,
   "loan-disbursed": LoanDisbursed,
   "factory-loa-received": FactoryLoaReceived,
+  "pre-approval": PreApproval,
 };
 
 // ============================================================================
