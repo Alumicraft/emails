@@ -1,5 +1,5 @@
-import { Heading, Text } from "@react-email/components";
-import { Layout, Button, InfoCard, InfoRow, InfoAmount, Branding } from "./shared";
+import { Heading, Text, Section } from "@react-email/components";
+import { Layout, InfoCard, InfoRow, InfoAmount, Button, Branding } from "./shared";
 
 export { Branding } from "./shared";
 
@@ -19,7 +19,7 @@ export const AutopaySetup = ({
   setup_url,
 }: AutopaySetupProps) => {
   return (
-    <Layout branding={branding} preview={`Set up Auto-Pay for loan ${loan_name}`}>
+    <Layout branding={branding} preview={`Set up auto-pay for Loan ${loan_name}`}>
       <Heading
         className="text-[24px] font-medium email-heading"
         style={{ color: branding.text_color, marginTop: 0 }}
@@ -31,8 +31,7 @@ export const AutopaySetup = ({
         className="text-[15px] leading-6 email-text"
         style={{ color: branding.text_color }}
       >
-        A new flooring loan has been created. Connect your business bank account
-        to enable automatic payments.
+        Your loan has been created. Please connect your bank account to enable automatic payments.
       </Text>
 
       <InfoCard branding={branding}>
@@ -41,20 +40,15 @@ export const AutopaySetup = ({
         <InfoAmount branding={branding} label="Loan Amount" value={`$${loan_amount}`} />
       </InfoCard>
 
-      <Section style={{ textAlign: "center" as const, marginTop: "24px", marginBottom: "24px" }}>
-        <Button href={setup_url} color={branding.primary_color}>
+      <Section className="my-8 text-center">
+        <Button
+          href={setup_url}
+          color={branding.primary_color}
+          textColor={branding.button_text_color}
+        >
           Connect Bank Account
         </Button>
       </Section>
-
-      <Text
-        className="text-[14px] leading-5 email-text"
-        style={{ color: branding.tertiary_color }}
-      >
-        Payments will not begin until a bank account is connected. Once
-        connected, this account will also be used for any future loans unless
-        you set up a different account.
-      </Text>
     </Layout>
   );
 };
@@ -74,10 +68,10 @@ export default function AutopaySetupPreview() {
         amount_bg_color: "#e5e7eb",
         font_family: "Arial, Helvetica, sans-serif",
       }}
-      customer_name="Goldey Homes LLC"
+      customer_name="ABC Homes"
       loan_name="LOAN-2026-001"
-      loan_amount="85,000.00"
-      setup_url="https://dcr.frappe.cloud/plaid-setup?loan=LOAN-2026-001"
+      loan_amount="355,000.00"
+      setup_url="https://example.com/plaid-setup?loan=LOAN-2026-001"
     />
   );
 }

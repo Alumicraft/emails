@@ -278,6 +278,8 @@ frappe.ui.form.on("Email Service Settings", {
                         { value: "ach-payment-failure", label: __("ACH Payment Failure") },
                         { value: "ach-payment-success", label: __("ACH Payment Success") },
                         { value: "ach-payment-upcoming", label: __("ACH Payment Upcoming") },
+                        { value: "autopay-setup", label: __("Autopay Setup") },
+                        { value: "autopay-update", label: __("Autopay Update") },
                         { value: "dealer-agreement-sent", label: __("Dealer Agreement Sent") },
                         { value: "dealer-agreement-signed", label: __("Dealer Agreement Signed") },
                         { value: "dealer-welcome", label: __("Dealer Welcome") },

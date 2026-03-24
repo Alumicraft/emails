@@ -14383,11 +14383,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx40 = jsxWithValidationDynamic;
-        var jsxs29 = jsxWithValidationStatic;
+        var jsx42 = jsxWithValidationDynamic;
+        var jsxs31 = jsxWithValidationStatic;
         exports2.Fragment = REACT_FRAGMENT_TYPE;
-        exports2.jsx = jsx40;
-        exports2.jsxs = jsxs29;
+        exports2.jsx = jsx42;
+        exports2.jsxs = jsxs31;
       })();
     }
   }
@@ -47882,6 +47882,28 @@ var toTitleCase = (str) => {
     return "";
   return str.toLowerCase().split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
 };
+var Button2 = ({ href, color, textColor, children }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+  Button,
+  {
+    href,
+    className: "email-button",
+    style: {
+      backgroundColor: color,
+      color: textColor || "#ffffff",
+      display: "inline-block",
+      padding: "12px 24px",
+      borderRadius: "4px",
+      fontWeight: 400,
+      fontSize: "16px",
+      lineHeight: "1.2",
+      textDecoration: "none",
+      textAlign: "center",
+      border: "none",
+      boxSizing: "border-box"
+    },
+    children
+  }
+);
 var Logo = ({
   lightSrc,
   darkSrc,
@@ -49257,6 +49279,89 @@ var PreApproval = ({
   ] });
 };
 
+// emails/autopay-setup.tsx
+var import_jsx_runtime41 = __toESM(require_jsx_runtime());
+var AutopaySetup = ({
+  branding,
+  customer_name,
+  loan_name,
+  loan_amount,
+  setup_url
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)(Layout, { branding, preview: `Set up auto-pay for Loan ${loan_name}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Set Up Auto-Pay"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Your loan has been created. Please connect your bank account to enable automatic payments."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(InfoRow, { branding, label: "Loan", value: loan_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(InfoAmount, { branding, label: "Loan Amount", value: `$${loan_amount}` })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Section, { className: "my-8 text-center", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+      Button2,
+      {
+        href: setup_url,
+        color: branding.primary_color,
+        textColor: branding.button_text_color,
+        children: "Connect Bank Account"
+      }
+    ) })
+  ] });
+};
+
+// emails/autopay-update.tsx
+var import_jsx_runtime42 = __toESM(require_jsx_runtime());
+var AutopayUpdate = ({
+  branding,
+  customer_name,
+  setup_url
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)(Layout, { branding, preview: "Update your auto-pay bank account", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Update Auto-Pay"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: [
+          "Hi ",
+          customer_name,
+          ", please update your bank account for automatic payments by clicking the button below."
+        ]
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Section, { className: "my-8 text-center", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+      Button2,
+      {
+        href: setup_url,
+        color: branding.primary_color,
+        textColor: branding.button_text_color,
+        children: "Update Bank Account"
+      }
+    ) })
+  ] });
+};
+
 // src/send.tsx
 var resend = new Resend(process.env.RESEND_API_KEY);
 function cleanEmailList(input) {
@@ -49289,7 +49394,9 @@ var templates = {
   "flooring-packet-signed": FlooringPacketSigned,
   "loan-disbursed": LoanDisbursed,
   "factory-loa-received": FactoryLoaReceived,
-  "pre-approval": PreApproval
+  "pre-approval": PreApproval,
+  "autopay-setup": AutopaySetup,
+  "autopay-update": AutopayUpdate
 };
 async function handler(req, res) {
   if (req.method === "GET") {
