@@ -78,6 +78,31 @@ DOCTYPE_REGISTRY = {
         "recipient_field": "applicant",
         "recipient_doctype": "Customer",
     },
+    # DCR
+    "Home Build Request": {
+        "app": "dcr",
+        "category": "DCR",
+        "recipient_field": "customer",
+        "recipient_doctype": "Customer",
+    },
+    "Factory Assignment": {
+        "app": "dcr",
+        "category": "DCR",
+        "recipient_field": "factory",
+        "recipient_doctype": "Supplier",
+    },
+    "Customer": {
+        "app": "dcr",
+        "category": "DCR",
+        "recipient_field": None,
+        "recipient_doctype": "Customer",
+    },
+    "Loan Disbursement": {
+        "app": "dcr",
+        "category": "DCR",
+        "recipient_field": "applicant",
+        "recipient_doctype": "Customer",
+    },
 }
 
 

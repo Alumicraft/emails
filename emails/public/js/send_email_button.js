@@ -6,7 +6,9 @@ frappe.provide("emails");
 
 emails.SUPPORTED_DOCTYPES = [
     "Sales Invoice", "Quotation", "Sales Order", "Purchase Order",
-    "Request for Quotation", "Payment Request", "Payment Entry"
+    "Request for Quotation", "Payment Request", "Payment Entry",
+    "Home Build Request", "Customer", "Factory Assignment",
+    "Loan Application", "Loan", "Loan Disbursement"
 ];
 
 emails._safe_remove_button = function(frm, label) {

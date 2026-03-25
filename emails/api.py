@@ -59,10 +59,17 @@ def send_payment_request_email(payment_request_name, to_email=None, cc=None, bcc
 
 
 @frappe.whitelist()
-def send_document_email(doctype, docname, to_email=None, cc=None, bcc=None, custom_message=None):
+def send_document_email(doctype, docname, to_email=None, cc=None, bcc=None, custom_message=None, extra_data=None, attachments=None, template_override=None, subject_override=None):
     """Generic method to send email for any document type."""
     try:
         frappe.has_permission(doctype, "email", docname, throw=True)
+
+        # Deserialize JSON params if passed as strings from frontend
+        import json
+        if isinstance(extra_data, str):
+            extra_data = json.loads(extra_data)
+        if isinstance(attachments, str):
+            attachments = json.loads(attachments)
 
         settings = frappe.get_single("Email Service Settings")
 
@@ -81,6 +88,10 @@ def send_document_email(doctype, docname, to_email=None, cc=None, bcc=None, cust
             cc=cc,
             bcc=bcc,
             custom_message=custom_message,
+            extra_data=extra_data,
+            attachments=attachments,
+            template_override=template_override,
+            subject_override=subject_override,
         )
 
     except frappe.PermissionError:

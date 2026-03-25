@@ -40,6 +40,14 @@ DOCTYPE_TEMPLATE_MAP = {
     "Request for Quotation": "request-for-quotation",
     "Payment Request": "payment-request",
     "Payment Entry": "payment-entry",
+    # DCR templates — these use template_override per-email, but registering
+    # the most common template lets the Send Email button work generically.
+    "Home Build Request": "document",
+    "Customer": "document",
+    "Factory Assignment": "retailer-application",
+    "Loan Application": "document",
+    "Loan": "document",
+    "Loan Disbursement": "document",
 }
 
 
@@ -51,6 +59,10 @@ def send_document_email(
     bcc=None,
     custom_message=None,
     skip_communication=False,
+    extra_data=None,
+    attachments=None,
+    template_override=None,
+    subject_override=None,
 ):
     """
     Generic email sender that works with any doctype.
@@ -96,11 +108,18 @@ def send_document_email(
     # Build template data dynamically
     template_data = build_template_data(doc, doctype, company_info, custom_message)
 
-    # Use default subject
-    subject = template_data["subject"]
+    # Merge caller-provided extra data (runtime context like DocuSign URLs, Plaid links)
+    if extra_data:
+        template_data.update(extra_data)
 
-    # Generate PDF attachment (skip for Payment Request — only attach reference doc)
-    if doctype == "Payment Request":
+    # Use override subject or default
+    subject = subject_override or template_data["subject"]
+
+    # Attachments: use explicit if provided, otherwise auto-generate PDF
+    if attachments is not None:
+        # Caller provided attachments (may be empty list to skip PDF)
+        pass
+    elif doctype == "Payment Request":
         attachments = []
         # Attach reference document PDF (e.g., Sales Invoice)
         if getattr(doc, "reference_doctype", None) and getattr(doc, "reference_name", None):
@@ -132,6 +151,7 @@ def send_document_email(
             attachments=attachments,
             skip_communication=skip_communication,
             settings=settings,
+            template_override=template_override,
         )
     else:
         # Fall back to direct Resend template
@@ -162,13 +182,14 @@ def _send_via_vercel(
     attachments,
     skip_communication,
     settings,
+    template_override=None,
 ):
     """Send email via Vercel react-email service with branding."""
     # Get branding
     branding = get_company_branding(company_name)
 
     # Determine template from DOCTYPE_TEMPLATE_MAP, fallback to generic "document"
-    template = DOCTYPE_TEMPLATE_MAP.get(doctype, "document")
+    template = template_override or DOCTYPE_TEMPLATE_MAP.get(doctype, "document")
 
     try:
         result = vercel_send_email(
@@ -629,6 +650,35 @@ def build_template_data(doc, doctype, company_info, custom_message=None):
             data["applied_to"] = ", ".join(
                 ref.reference_name for ref in doc.references if ref.reference_name
             )
+
+    # DCR doctypes
+    elif doctype == "Home Build Request":
+        data["customer_name"] = frappe.db.get_value("Customer", getattr(doc, "customer", ""), "customer_name") or ""
+        data["factory_name"] = frappe.db.get_value("Supplier", getattr(doc, "factory", ""), "supplier_name") or ""
+        data["subject"] = _("{0} — {1}").format("Home Build Request", doc.name)
+    elif doctype == "Factory Assignment":
+        customer_name = frappe.db.get_value("Customer", getattr(doc, "customer", ""), "customer_name") or ""
+        data["customer_name"] = customer_name
+        data["factory_name"] = frappe.db.get_value("Supplier", getattr(doc, "factory", ""), "supplier_name") or ""
+        data["dealer_license_no"] = frappe.db.get_value("Customer", getattr(doc, "customer", ""), "dealer_license_no") or ""
+        data["subject"] = _("New Dealer Application — {0}").format(customer_name)
+    elif doctype == "Customer":
+        data["customer_name"] = getattr(doc, "customer_name", "") or doc.name
+        data["account_id"] = doc.name
+        data["subject"] = _("{0}").format(doc.customer_name or doc.name)
+    elif doctype == "Loan Application":
+        data["customer_name"] = getattr(doc, "applicant_name", "") or ""
+        data["factory_name"] = frappe.db.get_value("Supplier", getattr(doc, "factory", ""), "supplier_name") or ""
+        data["subject"] = _("Loan Application {0}").format(doc.name)
+    elif doctype == "Loan":
+        data["customer_name"] = getattr(doc, "applicant_name", "") or ""
+        data["factory_name"] = frappe.db.get_value("Supplier", getattr(doc, "factory", ""), "supplier_name") or ""
+        data["buyer_name"] = getattr(doc, "buyer_name", "") or ""
+        data["subject"] = _("Loan {0}").format(doc.name)
+    elif doctype == "Loan Disbursement":
+        data["customer_name"] = getattr(doc, "applicant_name", "") or ""
+        data["factory_name"] = frappe.db.get_value("Supplier", getattr(doc, "factory", ""), "supplier_name") or ""
+        data["subject"] = _("Loan Disbursement {0}").format(doc.name)
 
     return data
 
