@@ -84,8 +84,9 @@ def send_document_email(
     # Get the document
     doc = frappe.get_doc(doctype, docname)
 
-    # Check submission status for submittable documents
-    if hasattr(doc, "docstatus") and doc.docstatus != 1:
+    # Check submission status for submittable documents only
+    meta = frappe.get_meta(doctype)
+    if meta.is_submittable and doc.docstatus != 1:
         frappe.throw(
             _("{0} {1} must be submitted before sending email").format(doctype, docname)
         )

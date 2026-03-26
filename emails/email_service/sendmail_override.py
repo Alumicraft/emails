@@ -371,6 +371,11 @@ def _get_action_label(subject: str) -> str:
 def _should_route_document_email(reference_doctype):
     """Check if a document email should be routed through Vercel."""
     try:
+        from emails.email_service.generic_email import DOCTYPE_TEMPLATE_MAP
+
+        if reference_doctype not in DOCTYPE_TEMPLATE_MAP:
+            return False
+
         settings = frappe.get_single("Email Service Settings")
         return bool(
             settings.enabled
