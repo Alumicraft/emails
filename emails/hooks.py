@@ -31,6 +31,10 @@ doc_events = {
 # Session creation hook - override sendmail for system emails
 on_session_creation = "emails.email_service.sendmail_override.override_sendmail"
 
+# Also patch on every request in case session was restored from cache
+# (on_session_creation only fires on fresh login, not session restore)
+before_request = ["emails.email_service.sendmail_override.override_sendmail"]
+
 # Fixtures - Export Email Service Settings custom fields
 fixtures = [
     {
