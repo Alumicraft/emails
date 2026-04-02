@@ -48976,12 +48976,12 @@ var DealerAgreementSent = ({
         children: "Your Dealer Agreement is ready for review and signature. Click the button below to sign your document."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(Section, { style: { textAlign: "center", marginTop: "24px", marginBottom: "8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(Button2, { href: signing_url, color: branding.primary_color, textColor: branding.button_text_color, children: "Sign Document" }) }),
     /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(InfoCard, { branding, children: [
       /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
       /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(InfoRow, { branding, label: "Sent To", value: email }),
       /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(InfoAmount, { branding, label: "Document", value: "Dealer Agreement" })
-    ] })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(Section, { style: { textAlign: "center", marginTop: "8px", marginBottom: "24px" }, children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(Button2, { href: signing_url, color: branding.primary_color, textColor: branding.button_text_color, children: "Sign Document" }) })
   ] });
 };
 
@@ -49044,13 +49044,13 @@ var FlooringPacketSent = ({
         children: "Your Exhibit A and ACH Approval documents are ready for review and signature. Click the button below to sign your documents."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Section, { style: { textAlign: "center", marginTop: "24px", marginBottom: "8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Button2, { href: signing_url, color: branding.primary_color, textColor: branding.button_text_color, children: "Sign Documents" }) }),
     /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(InfoCard, { branding, children: [
       /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
       /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Loan Application", value: loan_application }),
       /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Advance Amount", value: `$${loan_amount}` }),
       /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoAmount, { branding, label: "Factory", value: factory_name })
-    ] })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Section, { style: { textAlign: "center", marginTop: "8px", marginBottom: "24px" }, children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Button2, { href: signing_url, color: branding.primary_color, textColor: branding.button_text_color, children: "Sign Documents" }) })
   ] });
 };
 

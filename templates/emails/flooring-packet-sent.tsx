@@ -36,18 +36,18 @@ export const FlooringPacketSent = ({
         Your Exhibit A and ACH Approval documents are ready for review and signature. Click the button below to sign your documents.
       </Text>
 
-      <Section style={{ textAlign: "center", marginTop: "24px", marginBottom: "8px" }}>
-        <Button href={signing_url} color={branding.primary_color} textColor={branding.button_text_color}>
-          Sign Documents
-        </Button>
-      </Section>
-
       <InfoCard branding={branding}>
         <InfoRow branding={branding} label="Dealer" value={customer_name} />
         <InfoRow branding={branding} label="Loan Application" value={loan_application} />
         <InfoRow branding={branding} label="Advance Amount" value={`$${loan_amount}`} />
         <InfoAmount branding={branding} label="Factory" value={factory_name} />
       </InfoCard>
+
+      <Section style={{ textAlign: "center", marginTop: "8px", marginBottom: "24px" }}>
+        <Button href={signing_url} color={branding.primary_color} textColor={branding.button_text_color}>
+          Sign Documents
+        </Button>
+      </Section>
     </Layout>
   );
 };

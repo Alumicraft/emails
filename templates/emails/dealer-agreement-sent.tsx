@@ -32,17 +32,17 @@ export const DealerAgreementSent = ({
         Your Dealer Agreement is ready for review and signature. Click the button below to sign your document.
       </Text>
 
-      <Section style={{ textAlign: "center", marginTop: "24px", marginBottom: "8px" }}>
-        <Button href={signing_url} color={branding.primary_color} textColor={branding.button_text_color}>
-          Sign Document
-        </Button>
-      </Section>
-
       <InfoCard branding={branding}>
         <InfoRow branding={branding} label="Dealer" value={customer_name} />
         <InfoRow branding={branding} label="Sent To" value={email} />
         <InfoAmount branding={branding} label="Document" value="Dealer Agreement" />
       </InfoCard>
+
+      <Section style={{ textAlign: "center", marginTop: "8px", marginBottom: "24px" }}>
+        <Button href={signing_url} color={branding.primary_color} textColor={branding.button_text_color}>
+          Sign Document
+        </Button>
+      </Section>
     </Layout>
   );
 };
