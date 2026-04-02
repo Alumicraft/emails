@@ -48956,7 +48956,8 @@ var import_jsx_runtime34 = __toESM(require_jsx_runtime());
 var DealerAgreementSent = ({
   branding,
   customer_name,
-  email
+  email,
+  signing_url
 }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(Layout, { branding, preview: "Your Dealer Agreement is ready for signature", children: [
     /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
@@ -48972,9 +48973,10 @@ var DealerAgreementSent = ({
       {
         className: "text-[15px] leading-6 email-text",
         style: { color: branding.text_color },
-        children: "Your Dealer Agreement is ready for review and signature. You will receive a separate email from DocuSign with the signing link."
+        children: "Your Dealer Agreement is ready for review and signature. Click the button below to sign your document."
       }
     ),
+    /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(Section, { style: { textAlign: "center", marginTop: "24px", marginBottom: "8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(Button2, { href: signing_url, color: branding.primary_color, textColor: branding.button_text_color, children: "Sign Document" }) }),
     /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(InfoCard, { branding, children: [
       /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
       /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(InfoRow, { branding, label: "Sent To", value: email }),
@@ -49021,8 +49023,9 @@ var FlooringPacketSent = ({
   branding,
   customer_name,
   loan_application,
-  requested_advance_amount,
-  factory_name
+  loan_amount,
+  factory_name,
+  signing_url
 }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(Layout, { branding, preview: "Your flooring packet is ready for signature", children: [
     /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
@@ -49038,13 +49041,14 @@ var FlooringPacketSent = ({
       {
         className: "text-[15px] leading-6 email-text",
         style: { color: branding.text_color },
-        children: "Your Exhibit A and ACH Approval documents are ready for review and signature. You will receive a separate email from DocuSign with the signing link."
+        children: "Your Exhibit A and ACH Approval documents are ready for review and signature. Click the button below to sign your documents."
       }
     ),
+    /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Section, { style: { textAlign: "center", marginTop: "24px", marginBottom: "8px" }, children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Button2, { href: signing_url, color: branding.primary_color, textColor: branding.button_text_color, children: "Sign Documents" }) }),
     /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(InfoCard, { branding, children: [
       /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
       /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Loan Application", value: loan_application }),
-      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Advance Amount", value: `$${requested_advance_amount}` }),
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Advance Amount", value: `$${loan_amount}` }),
       /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoAmount, { branding, label: "Factory", value: factory_name })
     ] })
   ] });
