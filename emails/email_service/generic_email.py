@@ -85,8 +85,10 @@ def send_document_email(
     doc = frappe.get_doc(doctype, docname)
 
     # Check submission status for submittable documents only
+    # Skip when template_override is provided — caller is routing programmatically
+    # (e.g. DCR sends autopay-setup email on Loan after_insert, before submission)
     meta = frappe.get_meta(doctype)
-    if meta.is_submittable and doc.docstatus != 1:
+    if not template_override and meta.is_submittable and doc.docstatus != 1:
         frappe.throw(
             _("{0} {1} must be submitted before sending email").format(doctype, docname)
         )
