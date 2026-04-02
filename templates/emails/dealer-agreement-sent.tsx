@@ -1,5 +1,5 @@
-import { Heading, Text } from "@react-email/components";
-import { Layout, InfoCard, InfoRow, InfoAmount, Branding } from "./shared";
+import { Heading, Text, Section } from "@react-email/components";
+import { Layout, Button, InfoCard, InfoRow, InfoAmount, Branding } from "./shared";
 
 export { Branding } from "./shared";
 
@@ -7,12 +7,14 @@ export interface DealerAgreementSentProps {
   branding: Branding;
   customer_name: string;
   email: string;
+  signing_url: string;
 }
 
 export const DealerAgreementSent = ({
   branding,
   customer_name,
   email,
+  signing_url,
 }: DealerAgreementSentProps) => {
   return (
     <Layout branding={branding} preview="Your Dealer Agreement is ready for signature">
@@ -27,8 +29,14 @@ export const DealerAgreementSent = ({
         className="text-[15px] leading-6 email-text"
         style={{ color: branding.text_color }}
       >
-        Your Dealer Agreement is ready for review and signature. You will receive a separate email from DocuSign with the signing link.
+        Your Dealer Agreement is ready for review and signature. Click the button below to sign your document.
       </Text>
+
+      <Section style={{ textAlign: "center", marginTop: "24px", marginBottom: "8px" }}>
+        <Button href={signing_url} color={branding.primary_color} textColor={branding.button_text_color}>
+          Sign Document
+        </Button>
+      </Section>
 
       <InfoCard branding={branding}>
         <InfoRow branding={branding} label="Dealer" value={customer_name} />
@@ -56,6 +64,7 @@ export default function DealerAgreementSentPreview() {
       }}
       customer_name="ABC Homes"
       email="dealer@abchomes.com"
+      signing_url="https://example.com/sign"
     />
   );
 }

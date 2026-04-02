@@ -1,5 +1,5 @@
-import { Heading, Text } from "@react-email/components";
-import { Layout, InfoCard, InfoRow, InfoAmount, Branding } from "./shared";
+import { Heading, Text, Section } from "@react-email/components";
+import { Layout, Button, InfoCard, InfoRow, InfoAmount, Branding } from "./shared";
 
 export { Branding } from "./shared";
 
@@ -7,16 +7,18 @@ export interface FlooringPacketSentProps {
   branding: Branding;
   customer_name: string;
   loan_application: string;
-  requested_advance_amount: string;
+  loan_amount: string;
   factory_name: string;
+  signing_url: string;
 }
 
 export const FlooringPacketSent = ({
   branding,
   customer_name,
   loan_application,
-  requested_advance_amount,
+  loan_amount,
   factory_name,
+  signing_url,
 }: FlooringPacketSentProps) => {
   return (
     <Layout branding={branding} preview="Your flooring packet is ready for signature">
@@ -31,13 +33,19 @@ export const FlooringPacketSent = ({
         className="text-[15px] leading-6 email-text"
         style={{ color: branding.text_color }}
       >
-        Your Exhibit A and ACH Approval documents are ready for review and signature. You will receive a separate email from DocuSign with the signing link.
+        Your Exhibit A and ACH Approval documents are ready for review and signature. Click the button below to sign your documents.
       </Text>
+
+      <Section style={{ textAlign: "center", marginTop: "24px", marginBottom: "8px" }}>
+        <Button href={signing_url} color={branding.primary_color} textColor={branding.button_text_color}>
+          Sign Documents
+        </Button>
+      </Section>
 
       <InfoCard branding={branding}>
         <InfoRow branding={branding} label="Dealer" value={customer_name} />
         <InfoRow branding={branding} label="Loan Application" value={loan_application} />
-        <InfoRow branding={branding} label="Advance Amount" value={`$${requested_advance_amount}`} />
+        <InfoRow branding={branding} label="Advance Amount" value={`$${loan_amount}`} />
         <InfoAmount branding={branding} label="Factory" value={factory_name} />
       </InfoCard>
     </Layout>
@@ -61,8 +69,9 @@ export default function FlooringPacketSentPreview() {
       }}
       customer_name="ABC Homes"
       loan_application="LA-2026-001"
-      requested_advance_amount="85,000.00"
+      loan_amount="85,000"
       factory_name="Champion Home Builders"
+      signing_url="https://example.com/sign"
     />
   );
 }
