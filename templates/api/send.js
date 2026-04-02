@@ -14383,11 +14383,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx42 = jsxWithValidationDynamic;
-        var jsxs31 = jsxWithValidationStatic;
+        var jsx43 = jsxWithValidationDynamic;
+        var jsxs32 = jsxWithValidationStatic;
         exports2.Fragment = REACT_FRAGMENT_TYPE;
-        exports2.jsx = jsx42;
-        exports2.jsxs = jsxs31;
+        exports2.jsx = jsx43;
+        exports2.jsxs = jsxs32;
       })();
     }
   }
@@ -49362,6 +49362,67 @@ var AutopayUpdate = ({
   ] });
 };
 
+// emails/autopay-connected.tsx
+var import_jsx_runtime43 = __toESM(require_jsx_runtime());
+var AutopayConnected = ({
+  branding,
+  customer_name,
+  bank_name,
+  account_last4
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(Layout, { branding, preview: "Your bank account is now connected for auto-pay", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Auto-Pay Connected"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: [
+          "Hi ",
+          customer_name,
+          ", your bank account (",
+          bank_name,
+          " ending in ",
+          account_last4,
+          ") has been successfully connected for automatic loan payments."
+        ]
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(InfoRow, { branding, label: "Bank Account", value: `${bank_name} ****${account_last4}` })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Payments will be debited automatically per your loan terms. You will receive advance notification before each debit."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: [
+          "If you have any questions or need to update your bank account, please contact us at",
+          " ",
+          branding.company_email || branding.company_phone ? [branding.company_email, branding.company_phone].filter(Boolean).join(" or ") : "your account representative",
+          "."
+        ]
+      }
+    )
+  ] });
+};
+
 // src/send.tsx
 var resend = new Resend(process.env.RESEND_API_KEY);
 function cleanEmailList(input) {
@@ -49396,7 +49457,8 @@ var templates = {
   "factory-loa-received": FactoryLoaReceived,
   "pre-approval": PreApproval,
   "autopay-setup": AutopaySetup,
-  "autopay-update": AutopayUpdate
+  "autopay-update": AutopayUpdate,
+  "autopay-connected": AutopayConnected
 };
 async function handler(req, res) {
   if (req.method === "GET") {

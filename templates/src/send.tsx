@@ -29,6 +29,7 @@ import { FactoryLoaReceived } from "../emails/factory-loa-received";
 import { PreApproval } from "../emails/pre-approval";
 import { AutopaySetup } from "../emails/autopay-setup";
 import { AutopayUpdate } from "../emails/autopay-update";
+import { AutopayConnected } from "../emails/autopay-connected";
 import { Branding } from "../emails/shared";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -96,6 +97,7 @@ const templates: Record<string, React.FC<any>> = {
   "pre-approval": PreApproval,
   "autopay-setup": AutopaySetup,
   "autopay-update": AutopayUpdate,
+  "autopay-connected": AutopayConnected,
 };
 
 // ============================================================================
