@@ -1,6 +1,5 @@
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
@@ -11,7 +10,7 @@ import {
   Text,
 } from "@react-email/components";
 import tailwindConfig from "../tailwind.config";
-import { Footer, Confidentiality, Logo, Branding, toTitleCase } from "./shared";
+import { Footer, Confidentiality, Logo, Button, Branding, toTitleCase } from "./shared";
 
 export interface MagicLinkEmailProps {
   branding: Branding;
@@ -115,23 +114,9 @@ export const MagicLinkEmail = ({
               </Text>
               <Section style={{ marginTop: "32px", marginBottom: "32px" }}>
                 <Button
-                  className="email-button"
-                  style={{
-                    backgroundColor: branding.primary_color,
-                    color: branding.button_text_color || "#ffffff",
-                    display: "inline-block",
-                    boxSizing: "border-box" as const,
-                    width: "100%",
-                    borderRadius: "4px",
-                    padding: "12px",
-                    textAlign: "center" as const,
-                    fontWeight: 500,
-                    fontSize: "16px",
-                    lineHeight: "1.2",
-                    textDecoration: "none",
-                    border: "none",
-                  }}
                   href={magic_link}
+                  color={branding.primary_color}
+                  textColor={branding.button_text_color}
                 >
                   Login
                 </Button>

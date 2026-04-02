@@ -1,5 +1,5 @@
-import { Heading, Text, Section, Button } from "@react-email/components";
-import { Layout, InfoCard, InfoRow, Branding, toTitleCase } from "./shared";
+import { Heading, Text, Section } from "@react-email/components";
+import { Layout, InfoCard, InfoRow, Button, Branding, toTitleCase } from "./shared";
 
 export { Branding } from "./shared";
 
@@ -50,23 +50,9 @@ export const RequestForQuotationEmail = ({
       {document_link && (
         <Section style={{ marginTop: "32px", marginBottom: "32px" }}>
           <Button
-            className="email-button"
-            style={{
-              backgroundColor: branding.primary_color,
-              color: branding.button_text_color || "#ffffff",
-              display: "inline-block",
-              boxSizing: "border-box" as const,
-              width: "100%",
-              borderRadius: "4px",
-              padding: "12px",
-              textAlign: "center" as const,
-              fontWeight: 500,
-              fontSize: "16px",
-              lineHeight: "1.2",
-              textDecoration: "none",
-              border: "none",
-            }}
             href={document_link}
+            color={branding.primary_color}
+            textColor={branding.button_text_color}
           >
             View Request for Quotation
           </Button>

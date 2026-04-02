@@ -47891,15 +47891,16 @@ var Button2 = ({ href, color, textColor, children }) => /* @__PURE__ */ (0, impo
       backgroundColor: color,
       color: textColor || "#ffffff",
       display: "inline-block",
-      padding: "12px 24px",
+      boxSizing: "border-box",
+      width: "100%",
+      padding: "12px",
       borderRadius: "4px",
-      fontWeight: 400,
+      fontWeight: 500,
       fontSize: "16px",
       lineHeight: "1.2",
       textDecoration: "none",
       textAlign: "center",
-      border: "none",
-      boxSizing: "border-box"
+      border: "none"
     },
     children
   }
@@ -48226,25 +48227,11 @@ var MagicLinkEmail = ({
                       }
                     ),
                     /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
-                      Button,
+                      Button2,
                       {
-                        className: "email-button",
-                        style: {
-                          backgroundColor: branding.primary_color,
-                          color: branding.button_text_color || "#ffffff",
-                          display: "inline-block",
-                          boxSizing: "border-box",
-                          width: "100%",
-                          borderRadius: "4px",
-                          padding: "12px",
-                          textAlign: "center",
-                          fontWeight: 500,
-                          fontSize: "16px",
-                          lineHeight: "1.2",
-                          textDecoration: "none",
-                          border: "none"
-                        },
                         href: magic_link,
+                        color: branding.primary_color,
+                        textColor: branding.button_text_color,
                         children: "Login"
                       }
                     ) }),
@@ -48478,25 +48465,11 @@ var RequestForQuotationEmail = ({
     ] }),
     custom_message && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Text3, { style: { color: branding.text_color, fontSize: "16px", lineHeight: "1.6", marginBottom: "24px" }, children: custom_message }),
     document_link && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-      Button,
+      Button2,
       {
-        className: "email-button",
-        style: {
-          backgroundColor: branding.primary_color,
-          color: branding.button_text_color || "#ffffff",
-          display: "inline-block",
-          boxSizing: "border-box",
-          width: "100%",
-          borderRadius: "4px",
-          padding: "12px",
-          textAlign: "center",
-          fontWeight: 500,
-          fontSize: "16px",
-          lineHeight: "1.2",
-          textDecoration: "none",
-          border: "none"
-        },
         href: document_link,
+        color: branding.primary_color,
+        textColor: branding.button_text_color,
         children: "View Request for Quotation"
       }
     ) })
@@ -48529,25 +48502,11 @@ var PasswordResetEmail = ({
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-      Button,
+      Button2,
       {
-        className: "email-button",
-        style: {
-          backgroundColor: branding.primary_color,
-          color: branding.button_text_color || "#ffffff",
-          display: "inline-block",
-          boxSizing: "border-box",
-          width: "100%",
-          borderRadius: "4px",
-          padding: "12px",
-          textAlign: "center",
-          fontWeight: 500,
-          fontSize: "16px",
-          lineHeight: "1.2",
-          textDecoration: "none",
-          border: "none"
-        },
         href: reset_link,
+        color: branding.primary_color,
+        textColor: branding.button_text_color,
         children: "Reset Password"
       }
     ) }),
@@ -48594,25 +48553,11 @@ var EmailVerificationEmail = ({
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
-      Button,
+      Button2,
       {
-        className: "email-button",
-        style: {
-          backgroundColor: branding.primary_color,
-          color: branding.button_text_color || "#ffffff",
-          display: "inline-block",
-          boxSizing: "border-box",
-          width: "100%",
-          borderRadius: "4px",
-          padding: "12px",
-          textAlign: "center",
-          fontWeight: 500,
-          fontSize: "16px",
-          lineHeight: "1.2",
-          textDecoration: "none",
-          border: "none"
-        },
         href: verification_link,
+        color: branding.primary_color,
+        textColor: branding.button_text_color,
         children: "Verify Email"
       }
     ) }),
@@ -48663,25 +48608,11 @@ var WelcomeEmail = ({
       }
     ),
     login_link && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
-      Button,
+      Button2,
       {
-        className: "email-button",
-        style: {
-          backgroundColor: branding.primary_color,
-          color: branding.button_text_color || "#ffffff",
-          display: "inline-block",
-          boxSizing: "border-box",
-          width: "100%",
-          borderRadius: "4px",
-          padding: "12px",
-          textAlign: "center",
-          fontWeight: 500,
-          fontSize: "16px",
-          lineHeight: "1.2",
-          textDecoration: "none",
-          border: "none"
-        },
         href: login_link,
+        color: branding.primary_color,
+        textColor: branding.button_text_color,
         children: "Log In"
       }
     ) })
@@ -48732,25 +48663,11 @@ var PaymentRequestEmail = ({
       }
     ),
     stripe_payment_url && /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Section, { style: { marginTop: "32px", marginBottom: "32px" }, children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-      Button,
+      Button2,
       {
-        className: "email-button",
-        style: {
-          backgroundColor: branding.primary_color,
-          color: branding.button_text_color || "#ffffff",
-          display: "inline-block",
-          boxSizing: "border-box",
-          width: "100%",
-          borderRadius: "4px",
-          padding: "12px",
-          textAlign: "center",
-          fontWeight: 500,
-          fontSize: "16px",
-          lineHeight: "1.2",
-          textDecoration: "none",
-          border: "none"
-        },
         href: stripe_payment_url,
+        color: branding.primary_color,
+        textColor: branding.button_text_color,
         children: "Pay Invoice"
       }
     ) })

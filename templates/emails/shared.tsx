@@ -93,15 +93,16 @@ export const Button = ({ href, color, textColor, children }: { href: string; col
       backgroundColor: color,
       color: textColor || "#ffffff",
       display: "inline-block",
-      padding: "12px 24px",
+      boxSizing: "border-box" as const,
+      width: "100%",
+      padding: "12px",
       borderRadius: "4px",
-      fontWeight: 400,
+      fontWeight: 500,
       fontSize: "16px",
       lineHeight: "1.2",
       textDecoration: "none",
       textAlign: "center" as const,
       border: "none",
-      boxSizing: "border-box" as const,
     }}
   >
     {children}
