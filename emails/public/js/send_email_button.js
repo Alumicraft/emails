@@ -34,8 +34,6 @@ emails.SUPPORTED_DOCTYPES.forEach(function(doctype) {
             emails.setup_send_email_button(frm);
         },
         after_submit: function(frm) {
-            // Payment Request auto-sends on submit via the override — skip prompt to avoid double-send
-            if (frm.doctype === "Payment Request") return;
             emails.prompt_send_email_after_submit(frm);
         }
     };
