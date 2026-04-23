@@ -49047,8 +49047,8 @@ var FlooringPacketSent = ({
     /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(InfoCard, { branding, children: [
       /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
       /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Loan Application", value: loan_application }),
-      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Advance Amount", value: `$${loan_amount}` }),
-      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoAmount, { branding, label: "Factory", value: factory_name })
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoRow, { branding, label: "Factory", value: factory_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(InfoAmount, { branding, label: "Advance Amount", value: `$${loan_amount}` })
     ] }),
     /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Section, { style: { textAlign: "center", marginTop: "8px", marginBottom: "24px" }, children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Button2, { href: signing_url, color: branding.primary_color, textColor: branding.button_text_color, children: "Sign Documents" }) })
   ] });

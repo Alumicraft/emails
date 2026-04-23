@@ -39,8 +39,8 @@ export const FlooringPacketSent = ({
       <InfoCard branding={branding}>
         <InfoRow branding={branding} label="Dealer" value={customer_name} />
         <InfoRow branding={branding} label="Loan Application" value={loan_application} />
-        <InfoRow branding={branding} label="Advance Amount" value={`$${loan_amount}`} />
-        <InfoAmount branding={branding} label="Factory" value={factory_name} />
+        <InfoRow branding={branding} label="Factory" value={factory_name} />
+        <InfoAmount branding={branding} label="Advance Amount" value={`$${loan_amount}`} />
       </InfoCard>
 
       <Section style={{ textAlign: "center", marginTop: "8px", marginBottom: "24px" }}>
