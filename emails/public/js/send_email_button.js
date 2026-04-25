@@ -4,11 +4,14 @@
 
 frappe.provide("emails");
 
+// Only doctypes with a dedicated React Email template in templates/emails/
+// get a Send Email button. Doctypes that would fall back to the generic
+// "document" template (e.g., Home Build Request, Loan) are excluded so
+// users aren't offered a button for an email that has no proper template.
 emails.SUPPORTED_DOCTYPES = [
     "Sales Invoice", "Quotation", "Sales Order", "Purchase Order",
     "Request for Quotation", "Payment Request", "Payment Entry",
-    "Home Build Request", "Customer", "Factory Assignment",
-    "Loan Application", "Loan", "Loan Disbursement"
+    "Factory Assignment"
 ];
 
 emails._safe_remove_button = function(frm, label) {

@@ -31,7 +31,10 @@ from emails.email_service.utils import (
 )
 from emails.emails.doctype.email_service_settings.email_service_settings import DOCTYPE_REGISTRY
 
-# Map ERPNext doctypes to Vercel react-email template names
+# Map ERPNext doctypes to Vercel react-email template names.
+# Only include doctypes that have a dedicated React Email template in
+# templates/emails/. Programmatic sends for other DCR doctypes pass
+# template_override directly, which bypasses this map.
 DOCTYPE_TEMPLATE_MAP = {
     "Sales Invoice": "sales-invoice",
     "Quotation": "quotation",
@@ -40,14 +43,7 @@ DOCTYPE_TEMPLATE_MAP = {
     "Request for Quotation": "request-for-quotation",
     "Payment Request": "payment-request",
     "Payment Entry": "payment-entry",
-    # DCR templates — these use template_override per-email, but registering
-    # the most common template lets the Send Email button work generically.
-    "Home Build Request": "document",
-    "Customer": "document",
     "Factory Assignment": "retailer-application",
-    "Loan Application": "document",
-    "Loan": "document",
-    "Loan Disbursement": "document",
 }
 
 
