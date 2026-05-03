@@ -187,8 +187,13 @@ def _send_via_vercel(
     # Get branding
     branding = get_company_branding(company_name)
 
-    # Determine template from DOCTYPE_TEMPLATE_MAP, fallback to generic "document"
-    template = template_override or DOCTYPE_TEMPLATE_MAP.get(doctype, "document")
+    # Determine template from DOCTYPE_TEMPLATE_MAP. Callers that send
+    # workflow-specific emails can still route explicitly with template_override.
+    template = template_override or DOCTYPE_TEMPLATE_MAP.get(doctype)
+    if not template:
+        frappe.throw(
+            _("No email template is configured for {0}.").format(doctype)
+        )
 
     try:
         result = vercel_send_email(
