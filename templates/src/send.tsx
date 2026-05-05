@@ -22,6 +22,8 @@ import { RetailerApplication } from "../emails/retailer-application";
 import { DealerWelcome } from "../emails/dealer-welcome";
 import { DealerAgreementSent } from "../emails/dealer-agreement-sent";
 import { DealerAgreementSigned } from "../emails/dealer-agreement-signed";
+import { MifaSent } from "../emails/mifa-sent";
+import { MifaSigned } from "../emails/mifa-signed";
 import { FlooringPacketSent } from "../emails/flooring-packet-sent";
 import { FlooringPacketSigned } from "../emails/flooring-packet-signed";
 import { LoanDisbursed } from "../emails/loan-disbursed";
@@ -90,6 +92,8 @@ const templates: Record<string, React.FC<any>> = {
   "dealer-welcome": DealerWelcome,
   "dealer-agreement-sent": DealerAgreementSent,
   "dealer-agreement-signed": DealerAgreementSigned,
+  "mifa-sent": MifaSent,
+  "mifa-signed": MifaSigned,
   "flooring-packet-sent": FlooringPacketSent,
   "flooring-packet-signed": FlooringPacketSigned,
   "loan-disbursed": LoanDisbursed,
