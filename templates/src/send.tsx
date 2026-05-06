@@ -29,6 +29,7 @@ import { FlooringPacketSigned } from "../emails/flooring-packet-signed";
 import { LoanDisbursed } from "../emails/loan-disbursed";
 import { FactoryLoaReceived } from "../emails/factory-loa-received";
 import { PreApproval } from "../emails/pre-approval";
+import { PayoffLetter } from "../emails/payoff-letter";
 import { AutopaySetup } from "../emails/autopay-setup";
 import { AutopayUpdate } from "../emails/autopay-update";
 import { AutopayConnected } from "../emails/autopay-connected";
@@ -99,6 +100,7 @@ const templates: Record<string, React.FC<any>> = {
   "loan-disbursed": LoanDisbursed,
   "factory-loa-received": FactoryLoaReceived,
   "pre-approval": PreApproval,
+  "payoff-letter": PayoffLetter,
   "autopay-setup": AutopaySetup,
   "autopay-update": AutopayUpdate,
   "autopay-connected": AutopayConnected,

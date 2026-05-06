@@ -14383,11 +14383,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx45 = jsxWithValidationDynamic;
-        var jsxs34 = jsxWithValidationStatic;
+        var jsx46 = jsxWithValidationDynamic;
+        var jsxs35 = jsxWithValidationStatic;
         exports2.Fragment = REACT_FRAGMENT_TYPE;
-        exports2.jsx = jsx45;
-        exports2.jsxs = jsxs34;
+        exports2.jsx = jsx46;
+        exports2.jsxs = jsxs35;
       })();
     }
   }
@@ -49269,22 +49269,21 @@ var PreApproval = ({
   ] });
 };
 
-// emails/autopay-setup.tsx
+// emails/payoff-letter.tsx
 var import_jsx_runtime43 = __toESM(require_jsx_runtime());
-var AutopaySetup = ({
+var PayoffLetter = ({
   branding,
   customer_name,
-  loan_name,
-  loan_amount,
-  setup_url
+  loan,
+  payoff_type
 }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(Layout, { branding, preview: `Set up auto-pay for Loan ${loan_name}`, children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(Layout, { branding, preview: `${payoff_type} payoff letter attached`, children: [
     /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
       Heading,
       {
         className: "text-[24px] font-medium email-heading",
         style: { color: branding.text_color, marginTop: 0 },
-        children: "Set Up Auto-Pay"
+        children: "Loan Payoff Letter"
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
@@ -49292,15 +49291,49 @@ var AutopaySetup = ({
       {
         className: "text-[15px] leading-6 email-text",
         style: { color: branding.text_color },
-        children: "Your loan has been created. Please connect your bank account to enable automatic payments."
+        children: "Please find attached your payoff letter for the loan below."
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime43.jsxs)(InfoCard, { branding, children: [
       /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
-      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(InfoRow, { branding, label: "Loan", value: loan_name }),
-      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(InfoAmount, { branding, label: "Loan Amount", value: `$${loan_amount}` })
+      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(InfoRow, { branding, label: "Loan", value: loan }),
+      /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(InfoRow, { branding, label: "Payoff Type", value: payoff_type })
+    ] })
+  ] });
+};
+
+// emails/autopay-setup.tsx
+var import_jsx_runtime44 = __toESM(require_jsx_runtime());
+var AutopaySetup = ({
+  branding,
+  customer_name,
+  loan_name,
+  loan_amount,
+  setup_url
+}) => {
+  return /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(Layout, { branding, preview: `Set up auto-pay for Loan ${loan_name}`, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
+      Heading,
+      {
+        className: "text-[24px] font-medium email-heading",
+        style: { color: branding.text_color, marginTop: 0 },
+        children: "Set Up Auto-Pay"
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
+      Text3,
+      {
+        className: "text-[15px] leading-6 email-text",
+        style: { color: branding.text_color },
+        children: "Your loan has been created. Please connect your bank account to enable automatic payments."
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(InfoRow, { branding, label: "Loan", value: loan_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(InfoAmount, { branding, label: "Loan Amount", value: `$${loan_amount}` })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(Section, { className: "my-8 text-center", children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(Section, { className: "my-8 text-center", children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
       Button2,
       {
         href: setup_url,
@@ -49313,14 +49346,14 @@ var AutopaySetup = ({
 };
 
 // emails/autopay-update.tsx
-var import_jsx_runtime44 = __toESM(require_jsx_runtime());
+var import_jsx_runtime45 = __toESM(require_jsx_runtime());
 var AutopayUpdate = ({
   branding,
   customer_name,
   setup_url
 }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(Layout, { branding, preview: "Update your auto-pay bank account", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(Layout, { branding, preview: "Update your auto-pay bank account", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
       Heading,
       {
         className: "text-[24px] font-medium email-heading",
@@ -49328,7 +49361,7 @@ var AutopayUpdate = ({
         children: "Update Auto-Pay"
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime44.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(
       Text3,
       {
         className: "text-[15px] leading-6 email-text",
@@ -49340,7 +49373,7 @@ var AutopayUpdate = ({
         ]
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(Section, { className: "my-8 text-center", children: /* @__PURE__ */ (0, import_jsx_runtime44.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(Section, { className: "my-8 text-center", children: /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
       Button2,
       {
         href: setup_url,
@@ -49353,15 +49386,15 @@ var AutopayUpdate = ({
 };
 
 // emails/autopay-connected.tsx
-var import_jsx_runtime45 = __toESM(require_jsx_runtime());
+var import_jsx_runtime46 = __toESM(require_jsx_runtime());
 var AutopayConnected = ({
   branding,
   customer_name,
   bank_name,
   account_last4
 }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(Layout, { branding, preview: "Your bank account is now connected for auto-pay", children: [
-    /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(Layout, { branding, preview: "Your bank account is now connected for auto-pay", children: [
+    /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
       Heading,
       {
         className: "text-[24px] font-medium email-heading",
@@ -49369,7 +49402,7 @@ var AutopayConnected = ({
         children: "Auto-Pay Connected"
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(
       Text3,
       {
         className: "text-[15px] leading-6 email-text",
@@ -49385,11 +49418,11 @@ var AutopayConnected = ({
         ]
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(InfoCard, { branding, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
-      /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(InfoRow, { branding, label: "Bank Account", value: `${bank_name} ****${account_last4}` })
+    /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(InfoCard, { branding, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
+      /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(InfoRow, { branding, label: "Bank Account", value: `${bank_name} ****${account_last4}` })
     ] }),
-    /* @__PURE__ */ (0, import_jsx_runtime45.jsx)(
+    /* @__PURE__ */ (0, import_jsx_runtime46.jsx)(
       Text3,
       {
         className: "text-[15px] leading-6 email-text",
@@ -49397,7 +49430,7 @@ var AutopayConnected = ({
         children: "Payments will be debited automatically per your loan terms. You will receive advance notification before each debit."
       }
     ),
-    /* @__PURE__ */ (0, import_jsx_runtime45.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime46.jsxs)(
       Text3,
       {
         className: "text-[15px] leading-6 email-text",
@@ -49448,6 +49481,7 @@ var templates = {
   "loan-disbursed": LoanDisbursed,
   "factory-loa-received": FactoryLoaReceived,
   "pre-approval": PreApproval,
+  "payoff-letter": PayoffLetter,
   "autopay-setup": AutopaySetup,
   "autopay-update": AutopayUpdate,
   "autopay-connected": AutopayConnected
