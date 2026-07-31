@@ -29,7 +29,7 @@ export const FlooringPacketSigned = ({
         className="text-[15px] leading-6 email-text"
         style={{ color: branding.text_color }}
       >
-        Your Exhibit A and ACH Approval have been fully executed. A signed copy is attached for your records.
+        Your New Home Info Sheet, Exhibit A, and ACH Recurring Payment Authorization have been fully executed. A signed copy is attached for your records.
       </Text>
 
       <InfoCard branding={branding}>

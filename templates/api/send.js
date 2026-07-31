@@ -49110,7 +49110,7 @@ var FlooringPacketSent = ({
       {
         className: "text-[15px] leading-6 email-text",
         style: { color: branding.text_color },
-        children: "Your Exhibit A and ACH Approval documents are ready for review and signature. Click the button below to sign your documents."
+        children: "Your New Home Info Sheet, Exhibit A, and ACH Recurring Payment Authorization are ready for review and signature. Click the button below to sign your documents."
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(InfoCard, { branding, children: [
@@ -49145,7 +49145,7 @@ var FlooringPacketSigned = ({
       {
         className: "text-[15px] leading-6 email-text",
         style: { color: branding.text_color },
-        children: "Your Exhibit A and ACH Approval have been fully executed. A signed copy is attached for your records."
+        children: "Your New Home Info Sheet, Exhibit A, and ACH Recurring Payment Authorization have been fully executed. A signed copy is attached for your records."
       }
     ),
     /* @__PURE__ */ (0, import_jsx_runtime39.jsxs)(InfoCard, { branding, children: [

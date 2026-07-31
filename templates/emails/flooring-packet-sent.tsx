@@ -33,7 +33,7 @@ export const FlooringPacketSent = ({
         className="text-[15px] leading-6 email-text"
         style={{ color: branding.text_color }}
       >
-        Your Exhibit A and ACH Approval documents are ready for review and signature. Click the button below to sign your documents.
+        Your New Home Info Sheet, Exhibit A, and ACH Recurring Payment Authorization are ready for review and signature. Click the button below to sign your documents.
       </Text>
 
       <InfoCard branding={branding}>
