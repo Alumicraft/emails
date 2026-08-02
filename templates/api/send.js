@@ -48924,7 +48924,8 @@ var import_jsx_runtime33 = __toESM(require_jsx_runtime());
 var DealerWelcome = ({
   branding,
   customer_name,
-  dcr_account_no
+  dcr_account_no,
+  portal_url
 }) => {
   return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(Layout, { branding, preview: `Welcome to Dealer Capital Resources, ${customer_name}`, children: [
     /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
@@ -48947,7 +48948,8 @@ var DealerWelcome = ({
       /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(InfoRow, { branding, label: "Dealer", value: customer_name }),
       /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(InfoRow, { branding, label: "DCR Account No", value: dcr_account_no }),
       /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(InfoAmount, { branding, label: "Status", value: "Approved" })
-    ] })
+    ] }),
+    portal_url && /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(Section, { style: { textAlign: "center", marginTop: "8px", marginBottom: "24px" }, children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(Button2, { href: portal_url, color: branding.primary_color, textColor: branding.button_text_color, children: "Open Dealer Portal" }) })
   ] });
 };
 

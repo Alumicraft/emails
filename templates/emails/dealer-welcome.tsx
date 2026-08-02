@@ -1,5 +1,5 @@
-import { Heading, Text } from "@react-email/components";
-import { Layout, InfoCard, InfoRow, InfoAmount, Branding } from "./shared";
+import { Heading, Text, Section } from "@react-email/components";
+import { Layout, Button, InfoCard, InfoRow, InfoAmount, Branding } from "./shared";
 
 export { Branding } from "./shared";
 
@@ -7,12 +7,14 @@ export interface DealerWelcomeProps {
   branding: Branding;
   customer_name: string;
   dcr_account_no: string;
+  portal_url?: string;
 }
 
 export const DealerWelcome = ({
   branding,
   customer_name,
   dcr_account_no,
+  portal_url,
 }: DealerWelcomeProps) => {
   return (
     <Layout branding={branding} preview={`Welcome to Dealer Capital Resources, ${customer_name}`}>
@@ -35,6 +37,14 @@ export const DealerWelcome = ({
         <InfoRow branding={branding} label="DCR Account No" value={dcr_account_no} />
         <InfoAmount branding={branding} label="Status" value="Approved" />
       </InfoCard>
+
+      {portal_url && (
+        <Section style={{ textAlign: "center", marginTop: "8px", marginBottom: "24px" }}>
+          <Button href={portal_url} color={branding.primary_color} textColor={branding.button_text_color}>
+            Open Dealer Portal
+          </Button>
+        </Section>
+      )}
     </Layout>
   );
 };
@@ -56,6 +66,7 @@ export default function DealerWelcomePreview() {
       }}
       customer_name="ABC Homes"
       dcr_account_no="DCR-001234"
+      portal_url="https://example.com/portal"
     />
   );
 }
