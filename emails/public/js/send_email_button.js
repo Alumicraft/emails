@@ -278,6 +278,7 @@ frappe.ui.form.on("Email Service Settings", {
                         { value: "payment-request", label: __("Payment Request") },
                         { value: "payment-entry", label: __("Payment Entry") },
                         { value: "document", label: __("Generic Document") },
+                        { value: "notification", label: __("Notification") },
                         { value: "ach-payment-failure", label: __("ACH Payment Failure") },
                         { value: "ach-payment-success", label: __("ACH Payment Success") },
                         { value: "ach-payment-upcoming", label: __("ACH Payment Upcoming") },

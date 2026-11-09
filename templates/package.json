@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "email dev",
+    "test": "npm run build && node --test tests/*.cjs",
     "build": "esbuild src/send.tsx --bundle --platform=node --target=node18 --outfile=api/send.js --format=cjs"
   },
   "dependencies": {

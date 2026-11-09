@@ -443,6 +443,13 @@ def send_test_email(template="magic-link"):
                 "customer_name": user_name,
             },
         },
+        "notification": {
+            "subject": _("Test notification from {0}").format(branding_doc.company or "Company"),
+            "data": {
+                "title": _("Test notification"),
+                "message": "<p>This is a test notification. No action is required.</p>",
+            },
+        },
         "password-reset": {
             "subject": _("Reset your {0} password").format(branding_doc.company or "Account"),
             "data": {

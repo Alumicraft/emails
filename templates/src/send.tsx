@@ -33,6 +33,7 @@ import { PayoffLetter } from "../emails/payoff-letter";
 import { AutopaySetup } from "../emails/autopay-setup";
 import { AutopayUpdate } from "../emails/autopay-update";
 import { AutopayConnected } from "../emails/autopay-connected";
+import { NotificationEmail } from "../emails/notification";
 import { Branding } from "../emails/shared";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -86,6 +87,7 @@ const templates: Record<string, React.FC<any>> = {
   "payment-request": PaymentRequestEmail,
   "payment-entry": PaymentEntryEmail,
   "document": DocumentEmail,
+  "notification": NotificationEmail,
   "ach-payment-upcoming": AchPaymentUpcoming,
   "ach-payment-success": AchPaymentSuccess,
   "ach-payment-failure": AchPaymentFailure,
