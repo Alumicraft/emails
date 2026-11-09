@@ -14383,11 +14383,11 @@ var require_react_jsx_runtime_development = __commonJS({
             return jsxWithValidation(type, props, key, false);
           }
         }
-        var jsx46 = jsxWithValidationDynamic;
-        var jsxs35 = jsxWithValidationStatic;
+        var jsx47 = jsxWithValidationDynamic;
+        var jsxs36 = jsxWithValidationStatic;
         exports2.Fragment = REACT_FRAGMENT_TYPE;
-        exports2.jsx = jsx46;
-        exports2.jsxs = jsxs35;
+        exports2.jsx = jsx47;
+        exports2.jsxs = jsxs36;
       })();
     }
   }
@@ -49448,6 +49448,27 @@ var AutopayConnected = ({
   ] });
 };
 
+// emails/notification.tsx
+var import_jsx_runtime47 = __toESM(require_jsx_runtime());
+var NotificationEmail = ({ branding, title, message }) => /* @__PURE__ */ (0, import_jsx_runtime47.jsxs)(Layout, { branding, children: [
+  /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+    Heading,
+    {
+      className: "email-heading",
+      style: { color: branding.text_color, marginTop: 0, fontSize: "24px", fontWeight: 500, lineHeight: "32px" },
+      children: title
+    }
+  ),
+  /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(Section, { children: /* @__PURE__ */ (0, import_jsx_runtime47.jsx)(
+    "div",
+    {
+      className: "email-text",
+      style: { color: branding.text_color, fontSize: "15px", lineHeight: "24px" },
+      dangerouslySetInnerHTML: { __html: message }
+    }
+  ) })
+] });
+
 // src/send.tsx
 var resend = new Resend(process.env.RESEND_API_KEY);
 function cleanEmailList(input) {
@@ -49469,6 +49490,7 @@ var templates = {
   "payment-request": PaymentRequestEmail,
   "payment-entry": PaymentEntryEmail,
   "document": DocumentEmail,
+  "notification": NotificationEmail,
   "ach-payment-upcoming": AchPaymentUpcoming,
   "ach-payment-success": AchPaymentSuccess,
   "ach-payment-failure": AchPaymentFailure,
